@@ -23,5 +23,6 @@ int main()
     }
     
     cout << "Hello, World!" << endl;
+    cout << "SFML Version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << endl;
     return 0;
 }

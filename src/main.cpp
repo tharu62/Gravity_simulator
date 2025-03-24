@@ -1,10 +1,16 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
+// #include "celestial_body.hpp"
+#include "planet.hpp"
+#include "sun.hpp"
+#include "black_hole.hpp"
 
 using namespace std;
 
 int main() 
 {
+    
+    Planet earth;
     auto window = sf::RenderWindow(sf::VideoMode({800u, 600u}), "CMake SFML Project");
     window.setFramerateLimit(144);
 

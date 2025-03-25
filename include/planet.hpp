@@ -11,10 +11,19 @@ class Planet : public Celestial_body{
     private:
 
     public:
+    Planet(){
+        type = planet;
+    }
 
-    void set_random_color(){
-        // the planets should have a dark color like dark blue, dark green, brown ecc...
-        set_color(rand() % 255, rand() % 255, rand() % 255);
+    /**
+     * @brief the planets should have a dark color like dark blue, dark green, brown ecc...
+     */
+    void set_color(){ 
+        Celestial_body::set_color(255, 0, 255);
+    }
+
+    void set_mass(){
+        Celestial_body::set_mass(rand()%50 + 200);
     }
 
 };

@@ -12,10 +12,17 @@ class Black_hole : public Celestial_body{
     int event_horizon;
 
     public:
+    Black_hole(){
+        type = black_hole;
+    }
 
-    void set_random_color(){
+    void set_color(){
         // the black hole should have a dark color like black
-        set_color(0, 0, 0);
+        Celestial_body::set_color(0, 0, 0);
+    }
+
+    void set_mass(){
+        Celestial_body::set_mass(rand()%50 + 5000);
     }
 
     void set_event_horizon(double r){

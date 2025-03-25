@@ -2,24 +2,33 @@
 #define CELESTIAL_BODY_HPP
 
 #include <vector>
+#include "SFML/Graphics.hpp"
+
+enum type{
+    planet,
+    sun,
+    black_hole
+};
 
 class Celestial_body
 {   
-    private:
+    public:
+    type type;
     double mass;
     double radius;
-    std::vector<int> color;
-    std::vector<double> position;    
-    std::vector<double> velocity;
-    std::vector<double> acceleration;
+    sf::Color color;
+    sf::Vector2f position;
+    sf::Vector2f prev_position;
+    sf::Vector2f velocity;
+    sf::Vector2f acceleration;
+
+    private:
 
     public:
+
     Celestial_body(){
         mass = 0;
         radius = 0;
-        position = {0,0,0};
-        velocity = {0,0,0};
-        acceleration = {0,0,0};
     }
 
     void set_mass(double m){
@@ -34,40 +43,16 @@ class Celestial_body
         color = {r, g, b};
     }
 
-    void set_position(std::vector<double> p){
+    void set_position(sf::Vector2f p){
         position = p;
     }
 
-    void set_velocity(std::vector<double> v){
+    void set_velocity(sf::Vector2f v){
         velocity = v;
     }
 
-    void set_acceleration(std::vector<double> a){
+    void set_acceleration(sf::Vector2f a){
         acceleration = a;
-    }
-
-    double get_mass(){
-        return mass;
-    }
-
-    double get_radius(){
-        return radius;
-    }
-
-    std::vector<int> get_color(){
-        return color;
-    }
-
-    std::vector<double> get_position(){
-        return position;
-    }
-
-    std::vector<double> get_velocity(){
-        return velocity;
-    }
-
-    std::vector<double> get_acceleration(){
-        return acceleration;
     }
 
 };

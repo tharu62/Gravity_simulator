@@ -11,10 +11,17 @@ class Sun : public Celestial_body{
     private:
 
     public:
+    Sun(){
+        type = sun;
+    }
 
-    void set_random_color(){
+    void set_color(){
         // the sun should have a bright color like yellow, orange, red ecc...
-        set_color(rand() % 255, rand() % 255, 0);
+        Celestial_body::set_color(255, 255, 0);
+    }
+
+    void set_mass(){
+        Celestial_body::set_mass(rand()%50 + 300);
     }
 
 };

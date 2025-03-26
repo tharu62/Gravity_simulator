@@ -22,7 +22,7 @@ class Black_hole : public Celestial_body{
     }
 
     void set_mass(){
-        Celestial_body::set_mass(1);
+        Celestial_body::set_mass(1090000);
     }
 
     void set_event_horizon(double r){

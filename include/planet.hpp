@@ -23,7 +23,7 @@ class Planet : public Celestial_body{
     }
 
     void set_mass(){
-        Celestial_body::set_mass(rand()%50 + 200);
+        Celestial_body::set_mass(0.01);
     }
 
 };

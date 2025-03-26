@@ -21,7 +21,7 @@ class Sun : public Celestial_body{
     }
 
     void set_mass(){
-        Celestial_body::set_mass(rand()%50 + 300);
+        Celestial_body::set_mass(0.1);
     }
 
 };

@@ -14,8 +14,8 @@ class Celestial_body
 {   
     public:
     type type;
-    double mass;
-    double radius;
+    float mass;
+    float radius;
     sf::Color color;
     sf::Vector2f position;
     sf::Vector2f prev_position;
@@ -31,15 +31,15 @@ class Celestial_body
         radius = 0;
     }
 
-    void set_mass(double m){
+    void set_mass(float m){
         mass = m;
     }
     
-    void set_radius(double r){
+    void set_radius(float r){
         radius = r;
     }
 
-    void set_color(int r, int g, int b){
+    void set_color(uint8_t r, uint8_t g, uint8_t b){
         color = {r, g, b};
     }
 

@@ -43,7 +43,6 @@ Celestial_body merge(Celestial_body &a, Celestial_body &b, type t)
         break;
     }
 
-    c.set_mass(a.get_mass() + b.get_mass());
     // c.set_radius(); boh
     // c.set_color(); boh
 

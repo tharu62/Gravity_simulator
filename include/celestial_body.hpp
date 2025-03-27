@@ -13,42 +13,26 @@ enum type{
 class Celestial_body
 {   
     public:
-    type type;
-    float mass;
-    float radius;
-    sf::Color color;
+    int mass;
+    int radius;
     sf::Vector2f position;
     sf::Vector2f prev_position;
-    sf::Vector2f velocity;
     sf::Vector2f acceleration;
 
     private:
 
     public:
 
-    Celestial_body(){
-        mass = 0;
-        radius = 0;
-    }
-
     void set_mass(float m){
         mass = m;
     }
     
-    void set_radius(float r){
+    void set_radius(int r){
         radius = r;
-    }
-
-    void set_color(uint8_t r, uint8_t g, uint8_t b){
-        color = {r, g, b};
     }
 
     void set_position(sf::Vector2f p){
         position = p;
-    }
-
-    void set_velocity(sf::Vector2f v){
-        velocity = v;
     }
 
     void set_acceleration(sf::Vector2f a){

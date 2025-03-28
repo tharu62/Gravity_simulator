@@ -13,6 +13,7 @@ class Planet : public Celestial_body{
     public:
 
     void set_mass(){
+
         Celestial_body::set_mass(1);
     }
 

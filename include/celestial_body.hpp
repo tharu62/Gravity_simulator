@@ -17,6 +17,7 @@ class Celestial_body
     int radius;
     sf::Vector2f position;
     sf::Vector2f prev_position;
+    sf::Vector2f velocity;
     sf::Vector2f acceleration;
 
     private:
@@ -33,6 +34,10 @@ class Celestial_body
 
     void set_position(sf::Vector2f p){
         position = p;
+    }
+
+    void set_velocity(sf::Vector2f v){
+        velocity = v;
     }
 
     void set_acceleration(sf::Vector2f a){

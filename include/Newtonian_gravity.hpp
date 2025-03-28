@@ -6,8 +6,9 @@
 #include "SFML/GpuPreference.hpp"
 #include "celestial_body.hpp"
 
-#define CORRECTION_FACTOR 1
-
+#define SCALING_FACTOR 2.f
+#define ACCEL_LIMIT 5
+#define G 1
 
 namespace Newton{
 
@@ -16,33 +17,46 @@ namespace Newton{
      */
     void compute_forces(Celestial_body *galaxy, sf::CircleShape *circle){
 
-        double F;           // Gravitational Force as scalar
-        double r_2;         // Square of the distance between celestial bodies
-        float magnitude;
-        sf::Vector2f direction;
+        // double r_2;                 // Distance squared between celestial bodies
+        float magnitude;            // Magnitude of the direction vector 
+        float magnitude_sq;         // Magnitude squared 
+        sf::Vector2f direction;     // Direction vector between two celestial bodies   
     
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             for(int j=0; j < GALAXY_DIMENSION; ++j){
     
-                r_2 = (galaxy[i].position.x - galaxy[j].position.x)*(galaxy[i].position.x - galaxy[j].position.x) + (galaxy[i].position.y - galaxy[j].position.y)*(galaxy[i].position.y - galaxy[j].position.y);
+                if(i != j){
+                    
+                    // Alternative method to calculate the acceleration:
+                    // r_2 = (galaxy[i].position.x - galaxy[j].position.x)*(galaxy[i].position.x - galaxy[j].position.x) + (galaxy[i].position.y - galaxy[j].position.y)*(galaxy[i].position.y - galaxy[j].position.y);
+                    // if(r_2 >= (galaxy[i].radius+galaxy[j].radius)*(galaxy[i].radius+galaxy[j].radius)){
+                    //     direction = galaxy[j].position - galaxy[i].position;
+                    //     direction /= (float) sqrt(direction.x * direction.x + direction.y * direction.y);
 
-                if(r_2 != 0.0 && sqrt(r_2) >= (galaxy[i].radius+galaxy[j].radius)){
-                    F = CORRECTION_FACTOR*(galaxy[i].mass + galaxy[j].mass) / r_2;
+                    //     // Hard code loss of acceleration due to conservation of energy of the system.
+                    //     if(galaxy[i].acceleration.length() < 10){
+                    //         galaxy[i].acceleration += direction * G*(galaxy[j].mass/r_2);
+                    //     }else{
+                    //         galaxy[i].acceleration += direction * G*(galaxy[j].mass/r_2);
+                    //     }
+                    // }
+
                     direction = galaxy[j].position - galaxy[i].position;
-                    magnitude = sqrt(direction.x * direction.x + direction.y * direction.y);
-                    if (magnitude != 0) {
-                        direction /= magnitude; // Normalize the vector
+                    magnitude_sq = direction.x*direction.x + direction.y*direction.y;
+                    if(magnitude_sq >= (galaxy[i].radius+galaxy[j].radius)*(galaxy[i].radius+galaxy[j].radius)){
+                        magnitude = sqrt(magnitude_sq);
+
+                        // Hard code loss of acceleration due to conservation of energy of the system.
+                        if(galaxy[i].acceleration.length() < ACCEL_LIMIT){
+                            galaxy[i].acceleration += direction * G*(galaxy[j].mass/(magnitude_sq * magnitude));
+                        }else{
+                            galaxy[i].acceleration -= galaxy[i].acceleration / SCALING_FACTOR;
+                        }
                     }
-                    galaxy[i].acceleration.x += direction.x * (F/galaxy[i].mass);
-                    galaxy[i].acceleration.y += direction.y * (F/galaxy[i].mass);
                 }
-                // std::cout << "dir " << direction.x << " " << direction.y << std::endl;
-                
             }
         }
-    
     }
-
 }
 
 

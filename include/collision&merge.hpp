@@ -5,44 +5,42 @@
 #include <iostream>
 #include <cmath>
 #include "celestial_body.hpp"
-#include "planet.hpp"
-#include "sun.hpp"
-#include "black_hole.hpp"
+
+extern int GALAXY_DIMENSION;
 
 /**
- * @brief Check if two celestial bodies have collided
+ * @brief Check if two celestial bodies have collided and corrects velocity in moudele and direction
  */
-bool collided(Celestial_body &a, Celestial_body &b)
+void collision_detecion(Celestial_body *galaxy)
 {
-    // double distance = sqrt(pow(a.get_position()[0] - b.get_position()[0], 2) + pow(a.get_position()[1] - b.get_position()[1], 2));
-    // if(distance < a.get_radius() + b.get_radius()){
-    //     return true;
-    // }
-    return false;
+    float distance_sq;
+    sf::Vector2f vel_dif;
+    sf::Vector2f dir;
+
+    for(int i = 0; i < GALAXY_DIMENSION; ++i){
+        for(int j = 0; j < GALAXY_DIMENSION; ++j){
+            if(i != j){
+                distance_sq = (galaxy[i].position.x - galaxy[j].position.x)*(galaxy[i].position.x - galaxy[j].position.x) + (galaxy[i].position.y - galaxy[j].position.y)*(galaxy[i].position.y - galaxy[j].position.y);
+                
+                if(distance_sq < (galaxy[i].radius + galaxy[j].radius)*(galaxy[i].radius + galaxy[j].radius)){
+
+                    vel_dif = (galaxy[i].velocity - galaxy[j].velocity);
+                    dir = (galaxy[i].position - galaxy[j].position);
+                    if(dir.length() != 0){
+                        galaxy[i].velocity = galaxy[i].velocity - ((2*galaxy[j].mass)/(galaxy[i].mass+galaxy[j].mass)) * (vel_dif.dot(dir) / dir.lengthSquared()) * dir;
+                    }
+                }
+            }
+        }
+    }
 }
 
 /**
- * @brief Merge two celestial bodies
+ * @brief Merge two celestial bodies upon collision
  */
 Celestial_body merge(Celestial_body &a, Celestial_body &b, type t)
 { 
     Celestial_body c;
-
-    switch (t){
-    case planet:
-        c = Planet();
-        break;
-    case sun:
-        c = Sun();
-        break;  
-    case black_hole:
-        c = Black_hole();
-        break;
-    default:
-        Celestial_body c;
-        break;
-    }
-
     // c.set_radius(); boh
     // c.set_color(); boh
 

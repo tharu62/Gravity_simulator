@@ -7,7 +7,6 @@
 #include "celestial_body.hpp"
 #include "vector_operator.hpp"
 
-#define MAX_VELOCITY 47000
 
 namespace Verlet{
     
@@ -41,9 +40,6 @@ namespace Euler{
     void update_position(Celestial_body &body, sf::CircleShape &circle){
 
         body.velocity += body.acceleration * dt;
-        // if(body.velocity.length() > MAX_VELOCITY){
-        //     body.velocity /= 1.5f;
-        // }
         body.position += body.velocity * dt;
 
         circle.setPosition(body.position);
@@ -51,5 +47,15 @@ namespace Euler{
 
 }
 
+namespace Runge_Kutta{
+
+    /**
+     * @todo
+     */
+    void update_position(Celestial_body &body, sf::CircleShape &circle){
+
+    }
+
+}
 
 #endif // POSINTEGRATION_HPP

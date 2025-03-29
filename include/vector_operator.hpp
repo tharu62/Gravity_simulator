@@ -30,4 +30,11 @@ sf::Vector2f operator /(const sf::Vector2f left, const sf::Vector2f right)
     return sf::Vector2f(X,Y);
 }
 
+sf::Vector2f operator /(const sf::Vector2f left, const float right)
+{
+    float X = left.x / right;
+    float Y = left.y / right;
+    return sf::Vector2f(X,Y);
+}
+
 #endif

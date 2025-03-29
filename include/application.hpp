@@ -26,9 +26,11 @@ class Application{
     public:
     unsigned int width;
     unsigned int height;
-    char set;
-
+    
     private:
+    char set;
+    bool moving = false;
+    sf::Vector2f oldPos;
 
     /**
      * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center.
@@ -75,11 +77,10 @@ class Application{
             temp.set_position({rand_1, rand_2});
             temp.prev_position = temp.position;
             direction = sf::Vector2f({640, 360}) - temp.position;
-            direction.rotatedBy(sf::degrees(180));
+            std::ignore = direction.rotatedBy(sf::degrees(180));
             direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-            // temp.set_velocity({-direction.y, direction.x});
-            // temp.set_acceleration({-direction.y, direction.x});
-            temp.set_velocity({0.f, 0.f});
+            temp.set_velocity({-direction.y, direction.x});
+            // temp.set_velocity({0.f, 0.f});
             temp.set_acceleration({0.f, 0.f});
             galaxy[i] = temp;
         }
@@ -206,21 +207,24 @@ class Application{
         {
             while (const std::optional event = window.pollEvent())
             {
-    
-                EventHandler(event, view, window);
-    
+                EventHandler(event, view, window, oldPos, moving);
             }
 
-            // code to handle simulation and drawing on window
+            // Code to handle simulation and drawing on window, the type of simulation method can be chosen by un-commenting the 
+            // prefered choice.
             
-            collision_detecion(galaxy);
+            // Collision detection methods
+            // collision_detecion(galaxy);
             
+            // Acceleration update methods
             Newton::compute_forces(galaxy, circle);
             // Burnes_Hut::compute_forces();
     
+            // Position update methods
             for(int i=0; i < GALAXY_DIMENSION; ++i){
                 // Verlet::update_position(galaxy[i], circle[i]);
                 Euler::update_position(galaxy[i], circle[i]);
+                // Runge_Kutta::update_position(galaxy[i], circle[i]);
             }
     
             // draw after clearing the window

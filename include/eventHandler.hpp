@@ -4,7 +4,8 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
-void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::Window &window){
+
+void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving){
 
     if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()){
         
@@ -15,6 +16,26 @@ void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::Window &wi
         }else{
             view.zoom(2);
             // std::cout << "wheel type: horizontal" << std::endl;
+        }
+    }
+
+    if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>()){
+        moving = true;
+        oldPos = window.mapPixelToCoords(sf::Vector2i(mouseButtonPressed->position.x, mouseButtonPressed->position.y));
+    }
+
+    if(const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()){
+        moving = false;
+    }
+
+    if(const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>()){
+        
+        if (moving){
+            const sf::Vector2f newPos = window.mapPixelToCoords(sf::Vector2i(mouseMoved->position.x, mouseMoved->position.y));
+            const sf::Vector2f deltaPos = oldPos - newPos;
+            view.setCenter(view.getCenter() + deltaPos);
+            window.setView(view);
+            oldPos = window.mapPixelToCoords(sf::Vector2i(mouseMoved->position.x, mouseMoved->position.y));
         }
     }
 

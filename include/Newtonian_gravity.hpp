@@ -13,7 +13,7 @@ namespace Newton{
     /**
      * @brief Computes the Gravitational forces between each celestial body to update the acceleration of each celestial body.
      */
-    void compute_forces(Celestial_body *galaxy, sf::CircleShape *circle){
+    void compute_forces(Celestial_body *galaxy){
 
         // double r_2;                 // Distance squared between celestial bodies
         float magnitude;            // Magnitude of the direction vector 

@@ -76,11 +76,11 @@ class Application{
             temp.set_radius(2);
             temp.set_position({rand_1, rand_2});
             temp.prev_position = temp.position;
-            direction = sf::Vector2f({640, 360}) - temp.position;
-            std::ignore = direction.rotatedBy(sf::degrees(180));
-            direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-            temp.set_velocity({-direction.y, direction.x});
-            // temp.set_velocity({0.f, 0.f});
+            // direction = sf::Vector2f({640, 360}) - temp.position;
+            // std::ignore = direction.rotatedBy(sf::degrees(180));
+            // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
+            // temp.set_velocity({-direction.y, direction.x});
+            temp.set_velocity({0.f, 0.f});
             temp.set_acceleration({0.f, 0.f});
             galaxy[i] = temp;
         }
@@ -217,8 +217,8 @@ class Application{
             // collision_detecion(galaxy);
             
             // Acceleration update methods
-            Newton::compute_forces(galaxy, circle);
-            // Burnes_Hut::compute_forces();
+            // Newton::compute_forces(galaxy);
+            Burnes_Hut::compute_forces(galaxy);
     
             // Position update methods
             for(int i=0; i < GALAXY_DIMENSION; ++i){

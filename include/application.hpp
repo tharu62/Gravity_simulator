@@ -93,7 +93,7 @@ class Application{
                 circle[i].setFillColor(sf::Color(200, 200, 200));
                 break;
             case 109:
-                circle[i].setFillColor(sf::Color(150, 150, 50));
+                circle[i].setFillColor(sf::Color(200, 200, 200));
                 break;
             case 5:
                 circle[i].setOutlineThickness(0.6);
@@ -196,7 +196,7 @@ class Application{
 
         auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
-        window.setFramerateLimit(120);
+        window.setFramerateLimit(60);
         
         Celestial_body galaxy[GALAXY_DIMENSION];
         sf::CircleShape circle[GALAXY_DIMENSION];
@@ -217,9 +217,9 @@ class Application{
             // collision_detecion(galaxy);
             
             // Acceleration update methods
-            // Newton::compute_forces(galaxy);
-            Burnes_Hut::compute_forces(galaxy);
-    
+            Newton::compute_forces(galaxy);
+            // Burnes_Hut::compute_forces(galaxy);
+
             // Position update methods
             for(int i=0; i < GALAXY_DIMENSION; ++i){
                 // Verlet::update_position(galaxy[i], circle[i]);

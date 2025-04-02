@@ -7,7 +7,6 @@
 #include "celestial_body.hpp"
 #include "vector_operator.hpp"
 
-
 namespace Verlet{
     
     sf::Vector2f temp;
@@ -16,16 +15,18 @@ namespace Verlet{
     /**
      * @brief Updates the position of any kind of celestial body using Verlet Integration (without velocities).
      */
-    void update_position(Celestial_body &body, sf::CircleShape &circle){
+    void update_position(Celestial_body *body, sf::CircleShape *circle){
         
-        temp = body.position;
+        for(int i=0; i < GALAXY_DIMENSION; ++i){
+            temp = body[i].position;
 
-        body.position.x = (temp.x * 2) - body.prev_position.x + (body.acceleration.x * (dt * dt));
-        body.position.y = (temp.y * 2) - body.prev_position.y + (body.acceleration.y * (dt * dt));
+            body[i].position.x = (temp.x * 2) - body[i].prev_position.x + (body[i].acceleration.x * (dt * dt));
+            body[i].position.y = (temp.y * 2) - body[i].prev_position.y + (body[i].acceleration.y * (dt * dt));
 
-        body.prev_position = temp;
+            body[i].prev_position = temp;
 
-        circle.setPosition(body.position);
+            circle[i].setPosition(body[i].position);
+        }
     }
 
 }
@@ -37,12 +38,14 @@ namespace Euler{
     /**
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
      */
-    void update_position(Celestial_body &body, sf::CircleShape &circle){
+    void update_position(Celestial_body *body, sf::CircleShape *circle){
 
-        body.velocity += body.acceleration * dt;
-        body.position += body.velocity * dt;
+        for(int i=0; i < GALAXY_DIMENSION; ++i){
+            body[i].velocity += body[i].acceleration * dt;
+            body[i].position += body[i].velocity * dt;
 
-        circle.setPosition(body.position);
+            circle[i].setPosition(body[i].position);
+        }
     }
 
 }
@@ -52,7 +55,7 @@ namespace Runge_Kutta{
     /**
      * @todo
      */
-    void update_position(Celestial_body &body, sf::CircleShape &circle){
+    void update_position(Celestial_body *body, sf::CircleShape *circle){
 
     }
 

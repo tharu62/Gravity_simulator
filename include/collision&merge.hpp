@@ -38,7 +38,7 @@ void collision_detecion(Celestial_body *galaxy)
 /**
  * @brief Merge two celestial bodies upon collision
  */
-Celestial_body merge(Celestial_body &a, Celestial_body &b, type t)
+Celestial_body merge(Celestial_body &a, Celestial_body &b)
 { 
     Celestial_body c;
     // c.set_radius(); boh

@@ -13,10 +13,10 @@
 #include "sun.hpp"
 #include "black_hole.hpp"
 #include "eventHandler.hpp"
-#include "position_integration.hpp"
 
 int GALAXY_DIMENSION;
 
+#include "position_integration.hpp"
 #include "Newtonian_gravity.hpp"
 #include "Barnes_Hut_algorithm.hpp"
 #include "collision&merge.hpp"
@@ -47,24 +47,24 @@ class Application{
         sf::Vector2f direction;
 
         // Black hole in the center of the screen
-        Black_hole temp = Black_hole();
-        temp.set_mass();
-        temp.set_radius(5);
-        temp.set_position({620, 360});
-        temp.prev_position = temp.position;
-        temp.set_velocity({0.f, 0.f});
-        temp.set_acceleration({0.f, 0.f});
-        galaxy[0] = temp;
+        Black_hole bh = Black_hole();
+        bh.set_mass();
+        bh.set_radius(5);
+        bh.set_position({620, 360});
+        bh.prev_position = bh.position;
+        bh.set_velocity({0.f, 0.f});
+        bh.set_acceleration({0.f, 0.f});
+        galaxy[0] = bh;
 
         // Sun in the center of the screen
-        // Sun temp = Sun();
-        // temp.set_mass();
-        // temp.set_radius(109);
-        // temp.set_position({620, 360});
-        // temp.prev_position = temp.position;
-        // temp.set_velocity({0.f, 0.f});
-        // temp.set_acceleration({0.f, 0.f});
-        // galaxy[0] = temp;
+        // Sun s = Sun();
+        // s.set_mass();
+        // s.set_radius(109);
+        // s.set_position({620, 360});
+        // s.prev_position = s.position;
+        // s.set_velocity({0.f, 0.f});
+        // s.set_acceleration({0.f, 0.f});
+        // galaxy[0] = s;
 
         for(int i = 1; i < GALAXY_DIMENSION; ++i){
 
@@ -197,11 +197,11 @@ class Application{
         auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
         window.setFramerateLimit(60);
-        
-        Celestial_body galaxy[GALAXY_DIMENSION];
-        sf::CircleShape circle[GALAXY_DIMENSION];
-        
-        setUp(galaxy, circle);   
+
+        Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
+        sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
+
+        setUp(galaxy, circle);
 
         while (window.isOpen())
         {
@@ -217,20 +217,18 @@ class Application{
             // collision_detecion(galaxy);
             
             // Acceleration update methods
-            Newton::compute_forces(galaxy);
+            // Newton::compute_forces(galaxy);
             // Burnes_Hut::compute_forces(galaxy);
 
             // Position update methods
-            for(int i=0; i < GALAXY_DIMENSION; ++i){
-                // Verlet::update_position(galaxy[i], circle[i]);
-                Euler::update_position(galaxy[i], circle[i]);
-                // Runge_Kutta::update_position(galaxy[i], circle[i]);
-            }
+            // Verlet::update_position(galaxy, circle);
+            // Euler::update_position(galaxy, circle);
+            // Runge_Kutta::update_position(galaxy, circle);
     
             // draw after clearing the window
             window.clear();
+            window.setView(view);
             for(int i = 0; i < GALAXY_DIMENSION; ++i){
-                window.setView(view);
                 window.draw(circle[i]);
             }
             window.display();

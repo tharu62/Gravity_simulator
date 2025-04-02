@@ -85,15 +85,21 @@ namespace Barnes_Hut_struct {
             }
             return -1;
         }
+
+        int find_quadrant_from(int i, sf::Vector2f pos){
+            for(int k=0; k<4; ++k){
+                if(abs(qtree[qtree[i].next[k]].center.x - pos.x) <= qtree[qtree[i].next[k]].size && abs(qtree[qtree[i].next[k]].center.y - pos.y) <= qtree[qtree[i].next[k]].size){
+                    return qtree[i].next[k];
+                }
+            }
+            return -1;
+        }
     
         void insert(int mass, sf::Vector2f pos){
             
-            int i = 0;
+            int i = find_quadrant(pos);
             int j = 0;
-            
             while(true){
-
-                i = find_quadrant(pos);
 
                 if(i == -1){
                     // std::cout << "object out of bound, mass: " << mass << " pos: "<< pos.x << " " << pos.y << std::endl;
@@ -104,11 +110,12 @@ namespace Barnes_Hut_struct {
                 if(qtree[i].mass != 0){
                     
                     subdivide(i);
-                    j = find_quadrant(qtree[i].centerOfMass);
+                    j = find_quadrant_from(i, qtree[i].centerOfMass);
                     qtree[j].centerOfMass = qtree[i].centerOfMass;
                     qtree[j].mass = qtree[i].mass;
-                    qtree[i].centerOfMass = (qtree[i].centerOfMass*qtree[i].mass +pos*mass) / (qtree[i].mass + mass);
+                    qtree[i].centerOfMass = (qtree[i].centerOfMass*qtree[i].mass + pos*mass) / (qtree[i].mass + mass);
                     qtree[i].mass += mass;
+                    i = find_quadrant_from(i, pos);
 
                 }else{
 
@@ -225,17 +232,18 @@ namespace Burnes_Hut{
             q.insert(galaxy[i].mass, galaxy[i].position);
         }
 
-        try{
-            for(int i=0; i < GALAXY_DIMENSION; ++i){
-                galaxy[i].acceleration = q.update_acceleration_(galaxy[i].mass, galaxy[i].position, 0);
-            }
-        }
-        catch(std::exception e){
-
-            std::cout << e.what() << std::endl;
-        }
+        // try{
+            // }
+            // catch(std::exception e){
+                // for(int i=0; i < GALAXY_DIMENSION; ++i){
+                //     galaxy[i].acceleration = q.update_acceleration_(galaxy[i].mass, galaxy[i].position, 0);
+                // } 
+            //     std::cout << e.what() << std::endl;
+            // }
+        // }
 
     }
+
 }
 
 #endif // BARNESHUT_HPP

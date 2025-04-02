@@ -4,12 +4,6 @@
 #include <vector>
 #include "SFML/Graphics.hpp"
 
-enum type{
-    planet,
-    sun,
-    black_hole
-};
-
 class Celestial_body
 {   
     public:
@@ -19,8 +13,6 @@ class Celestial_body
     sf::Vector2f prev_position;
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
-
-    private:
 
     public:
 

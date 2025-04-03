@@ -15,7 +15,6 @@ namespace Newton{
      */
     void compute_forces(Celestial_body *galaxy){
 
-        // double r_2;                 // Distance squared between celestial bodies
         float magnitude;            // Magnitude of the direction vector 
         float magnitude_sq;         // Magnitude squared 
         sf::Vector2f direction;     // Direction vector between two celestial bodies   
@@ -27,14 +26,6 @@ namespace Newton{
             for(int j=0; j < GALAXY_DIMENSION; ++j){
     
                 if(i != j){
-                    
-                    // Alternative method to calculate the acceleration:
-                    // r_2 = (galaxy[i].position.x - galaxy[j].position.x)*(galaxy[i].position.x - galaxy[j].position.x) + (galaxy[i].position.y - galaxy[j].position.y)*(galaxy[i].position.y - galaxy[j].position.y);
-                    // if(r_2 >= (galaxy[i].radius+galaxy[j].radius)*(galaxy[i].radius+galaxy[j].radius)){
-                    //     direction = galaxy[j].position - galaxy[i].position;
-                    //     direction /= (float) sqrt(direction.x * direction.x + direction.y * direction.y);
-                    //     galaxy[i].acceleration += direction * G*(galaxy[j].mass/r_2);
-                    // }
 
                     direction = galaxy[j].position - galaxy[i].position;
                     magnitude_sq = direction.x*direction.x + direction.y*direction.y;
@@ -43,6 +34,7 @@ namespace Newton{
                         
                         galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
                     }
+
                 }
             }
         }

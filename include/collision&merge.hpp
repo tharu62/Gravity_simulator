@@ -7,30 +7,46 @@
 #include "celestial_body.hpp"
 
 extern int GALAXY_DIMENSION;
+#define DETECTION_MARGIN 30
 
 /**
- * @brief Check if two celestial bodies have collided and corrects velocity in moudele and direction
+ * @brief Check if two celestial bodies have collided and corrects velocity in module and direction
  */
 void collision_detecion(Celestial_body *galaxy)
 {
     float distance_sq;
-    sf::Vector2f vel_dif;
+    float distance;
+    sf::Vector2f vel_dir;
     sf::Vector2f dir;
+    float penetration;
 
     for(int i = 0; i < GALAXY_DIMENSION; ++i){
         for(int j = 0; j < GALAXY_DIMENSION; ++j){
-            if(i != j){
+
+            if(i != j ){
+
                 distance_sq = (galaxy[i].position.x - galaxy[j].position.x)*(galaxy[i].position.x - galaxy[j].position.x) + (galaxy[i].position.y - galaxy[j].position.y)*(galaxy[i].position.y - galaxy[j].position.y);
                 
                 if(distance_sq < (galaxy[i].radius + galaxy[j].radius)*(galaxy[i].radius + galaxy[j].radius)){
-
-                    vel_dif = (galaxy[i].velocity - galaxy[j].velocity);
+                    
+                    vel_dir = (galaxy[i].velocity - galaxy[j].velocity);
                     dir = (galaxy[i].position - galaxy[j].position);
                     if(dir.length() != 0){
-                        galaxy[i].velocity = galaxy[i].velocity - ((2*galaxy[j].mass)/(galaxy[i].mass+galaxy[j].mass)) * (vel_dif.dot(dir) / dir.lengthSquared()) * dir;
+                        galaxy[i].velocity = galaxy[i].velocity - ((2*galaxy[j].mass)/(galaxy[i].mass+galaxy[j].mass)) * (vel_dir.dot(dir) / dir.lengthSquared()) * dir;
+                    }
+                    
+                    // This makes sure the bodies don't go inside each other (at least not often).
+                    if(galaxy[i].mass <= galaxy[j].mass){
+
+                        distance = sqrt(distance_sq);
+                        penetration = ((galaxy[i].radius + galaxy[j].radius) - distance);
+                        galaxy[i].position += penetration * ((galaxy[i].position - galaxy[j].position) / distance);
+
                     }
                 }
+
             }
+
         }
     }
 }
@@ -38,16 +54,9 @@ void collision_detecion(Celestial_body *galaxy)
 /**
  * @brief Merge two celestial bodies upon collision
  */
-Celestial_body merge(Celestial_body &a, Celestial_body &b)
+void merge(Celestial_body &a, Celestial_body &b)
 { 
-    Celestial_body c;
-    // c.set_radius(); boh
-    // c.set_color(); boh
 
-    // c.set_position({(a.get_position()[0] + b.get_position()[0])/2, (a.get_position()[1] + b.get_position()[1])/2});
-    // c.set_velocity(); boh
-    // c.set_acceleration(); boh
-    return c;
 
 }
 

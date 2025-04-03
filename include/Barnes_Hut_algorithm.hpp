@@ -127,90 +127,34 @@ namespace Barnes_Hut_struct {
             }
         }
 
-        sf::Vector2f update_acceleration_(int mass, sf::Vector2f pos, int node){
-            
-            // If the current node is an external node (and it is not body b), 
-            // calculate the force exerted by the current node on b, and add this amount to b’s net force.
-            if(qtree[node].next[0] == 0){
-                
-                if(qtree[node].centerOfMass == pos){
-                
-                    return {0.f,0.f};
+        void simple_insert(int mass, sf::Vector2f pos){
+            if(qtree[0].mass != 0){
+                    
+                qtree[0].centerOfMass = (qtree[0].centerOfMass*qtree[0].mass + pos*mass) / (qtree[0].mass + mass);
+                qtree[0].mass += mass;
+                return;
 
-                }else{
-
-                    // sf::Vector2f direction = qtree[node].centerOfMass - pos;
-                    // float magnitude_sq = direction.x*direction.x + direction.y*direction.y;
-                    float magnitude_sq = (qtree[node].centerOfMass - pos).x*(qtree[node].centerOfMass - pos).x + (qtree[node].centerOfMass - pos).y*(qtree[node].centerOfMass - pos).y;
-                    if(magnitude_sq >= 3.f){
-                        float magnitude = sqrt(magnitude_sq);
-                        return (qtree[node].centerOfMass - pos) * (qtree[node].mass/(magnitude * magnitude_sq));
-                    }
-                    return {0.f, 0.f};
-                }
-            }
-
-            // Otherwise, calculate the ratio s/d. (s = width of the node, d = distance between body and center of mass of node)
-            // If s/d < θ , treat this internal node as a single body, and calculate the force it exerts on body b, and add this amount to b’s net force.
-            // Otherwise, run the procedure recursively on each of the current node’s children.
-            if((qtree[node].size*2)/(pos - qtree[node].centerOfMass).length() < THETA){
-
-                float magnitude_sq = (qtree[node].centerOfMass - pos).x*(qtree[node].centerOfMass - pos).x + (qtree[node].centerOfMass - pos).y*(qtree[node].centerOfMass - pos).y;
-                if(magnitude_sq >= 3.f){
-                    float magnitude = sqrt(magnitude_sq);
-                    return (qtree[node].centerOfMass - pos) * (qtree[node].mass/(magnitude * magnitude_sq));
-                }
-                return {0.f, 0.f};
-          
             }else{
 
-                return update_acceleration_(mass, pos, qtree[node].next[0]) + update_acceleration_(mass, pos, qtree[node].next[1]) + update_acceleration_(mass, pos, qtree[node].next[2]) + update_acceleration_(mass, pos, qtree[node].next[3]);
+                qtree[0].centerOfMass = pos;
+                qtree[0].mass = mass;
+                return;
+
             }
-
-            return {0.f, 0.f};
-
         }
 
-        sf::Vector2f update_acceleration(int mass, sf::Vector2f pos){
+        sf::Vector2f simple_update_acceleration(int mass, sf::Vector2f pos){
 
             sf::Vector2f acc = {0.f, 0.f}; 
-
-            for(int i=0; i<qtree.size(); ++i){
-
-                if((qtree[i].size*2)/(pos - qtree[i].centerOfMass).length() < THETA){
-
-                    float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
-                    float magnitude = sqrt(magnitude_sq);
-                    acc += (qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq));
-                
-                }else{
-
-                    for(int j = qtree[i].next[0]; j<(qtree[i].next[0]+4); ++j){
-                        
-                        if((qtree[i].size*2)/(pos - qtree[i].centerOfMass).length() < THETA){
-
-                            float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
-                            float magnitude = sqrt(magnitude_sq);
-                            acc += (qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq));
-                        }
-                    }
-                }
-                
-                if(qtree[i].next[0] == 0 && qtree[i].centerOfMass != pos){
-
-                    float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
-                    float magnitude = sqrt(magnitude_sq);
-                    acc += (qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq));
-
-                }else{
-
-                }
-
+            if(pos == qtree[0].centerOfMass) return acc;
+            float magnitude_sq = (qtree[0].centerOfMass - pos).x*(qtree[0].centerOfMass - pos).x + (qtree[0].centerOfMass - pos).y*(qtree[0].centerOfMass - pos).y;
+            if(magnitude_sq >= 2.f){
+                float magnitude = sqrt(magnitude_sq);
+                acc = (qtree[0].centerOfMass - pos) * (qtree[0].mass/(magnitude * magnitude_sq));
             }
 
             return acc;
         }
-
 
     };
     
@@ -229,19 +173,14 @@ namespace Burnes_Hut{
         q.init();
 
         for(int i=0; i < GALAXY_DIMENSION; ++i){
-            q.insert(galaxy[i].mass, galaxy[i].position);
+            q.simple_insert(galaxy[i].mass, galaxy[i].position);
+            // q.insert(galaxy[i].mass, galaxy[i].position);
         }
-
-        // try{
-            // }
-            // catch(std::exception e){
-                // for(int i=0; i < GALAXY_DIMENSION; ++i){
-                //     galaxy[i].acceleration = q.update_acceleration_(galaxy[i].mass, galaxy[i].position, 0);
-                // } 
-            //     std::cout << e.what() << std::endl;
-            // }
-        // }
-
+        
+        for(int i=0; i < GALAXY_DIMENSION; ++i){
+            galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
+        } 
+            
     }
 
 }

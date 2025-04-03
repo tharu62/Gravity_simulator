@@ -16,6 +16,7 @@
 
 int GALAXY_DIMENSION;
 
+#include "setUp.hpp"
 #include "position_integration.hpp"
 #include "Newtonian_gravity.hpp"
 #include "Barnes_Hut_algorithm.hpp"
@@ -28,155 +29,11 @@ class Application{
     unsigned int height;
     
     private:
+    // unused var
     char set;
+    // <mooving> and <oldPos> are used for view movement
     bool moving = false;
     sf::Vector2f oldPos;
-
-    /**
-     * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center.
-     */
-    void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
-
-        std::random_device rd;
-        std::mt19937 eng(rd());
-        std::normal_distribution<double> distribution1{640.0, 640.0};
-        std::normal_distribution<double> distribution2(360.0, 360.0);
-
-        float rand_1;
-        float rand_2;
-        sf::Vector2f direction;
-
-        // Black hole in the center of the screen
-        Black_hole bh = Black_hole();
-        bh.set_mass();
-        bh.set_radius(5);
-        bh.set_position({620, 360});
-        bh.prev_position = bh.position;
-        bh.set_velocity({0.f, 0.f});
-        bh.set_acceleration({0.f, 0.f});
-        galaxy[0] = bh;
-
-        // Sun in the center of the screen
-        // Sun s = Sun();
-        // s.set_mass();
-        // s.set_radius(109);
-        // s.set_position({620, 360});
-        // s.prev_position = s.position;
-        // s.set_velocity({0.f, 0.f});
-        // s.set_acceleration({0.f, 0.f});
-        // galaxy[0] = s;
-
-        for(int i = 1; i < GALAXY_DIMENSION; ++i){
-
-            rand_1 = distribution1(eng);
-            rand_2 = distribution2(eng);
-
-            Planet temp = Planet();
-            temp.set_mass();
-            temp.set_radius(2);
-            temp.set_position({rand_1, rand_2});
-            temp.prev_position = temp.position;
-            // direction = sf::Vector2f({640, 360}) - temp.position;
-            // std::ignore = direction.rotatedBy(sf::degrees(180));
-            // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-            // temp.set_velocity({-direction.y, direction.x});
-            temp.set_velocity({0.f, 0.f});
-            temp.set_acceleration({0.f, 0.f});
-            galaxy[i] = temp;
-        }
-
-        for(int i = 0; i < GALAXY_DIMENSION; ++i){
-            circle[i].setRadius(galaxy[i].radius);
-            switch (galaxy[i].radius)
-            {
-            case 2:
-                circle[i].setFillColor(sf::Color(200, 200, 200));
-                break;
-            case 109:
-                circle[i].setFillColor(sf::Color(200, 200, 200));
-                break;
-            case 5:
-                circle[i].setOutlineThickness(0.6);
-                circle[i].setOutlineColor(sf::Color::White);
-                circle[i].setFillColor(sf::Color(0, 0, 0));
-                break;
-
-            default:
-                break;
-            }
-            circle[i].setPosition(galaxy[i].position);
-            circle[i].setOrigin({(float) galaxy[i].radius, (float) galaxy[i].radius});
-        }
-    }
-
-    /**
-     * @brief Variant of function setUp with all celestial bodies in random positions.
-     */
-    void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle){
-    
-        float rand_1;
-        float rand_2;
-        srand(time(0));
-
-        for(int i = 1; i < GALAXY_DIMENSION; ++i){
-            int seed = rand()%100;
-            rand_1 = rand()%1280;
-            rand_2 = rand()%720;
-
-            if(seed == 0 || seed > 2){
-                Planet temp = Planet();
-                temp.set_mass();
-                temp.set_radius(2);
-                temp.set_position({rand_1, rand_2});
-                temp.prev_position = temp.position;
-                temp.set_velocity({0, 0});
-                temp.set_acceleration({0, 0});
-                galaxy[i] = temp;
-            }
-            if(seed == 1){
-                Sun temp = Sun();
-                temp.set_mass();
-                temp.set_radius(109);
-                temp.set_position({rand_1, rand_2});
-                temp.prev_position = temp.position;
-                temp.set_velocity({0, 0});
-                temp.set_acceleration({0, 0});
-                galaxy[i] = temp;
-            }
-            if(seed == 2){
-                Black_hole temp = Black_hole();
-                temp.set_mass();
-                temp.set_radius(5);
-                temp.set_position({rand_1, rand_2});
-                temp.prev_position = temp.position;
-                temp.set_velocity({0, 0});
-                temp.set_acceleration({0, 0});
-                galaxy[i] = temp;
-            }
-        }
-
-        for(int i = 0; i < GALAXY_DIMENSION; ++i){
-            circle[i].setRadius(galaxy[i].radius);
-            switch (galaxy[i].radius)
-            {
-            case 1:
-                circle[i].setFillColor(sf::Color(200, 200, 200));
-                break;
-            case 109:
-                circle[i].setFillColor(sf::Color(150, 150, 200));
-                break;
-            case 5:
-                circle[i].setOutlineThickness(0.6);
-                circle[i].setOutlineColor(sf::Color::White);
-                break;
-
-            default:
-                break;
-            }
-            circle[i].setPosition(galaxy[i].position);
-            circle[i].setOrigin({(float) galaxy[i].radius, (float) galaxy[i].radius});
-        }
-    }
 
     public:
 
@@ -196,12 +53,14 @@ class Application{
 
         auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
-        window.setFramerateLimit(60);
+        window.setFramerateLimit(30);
 
         Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
-        sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
+        sf::CircleShape* circle = new sf::CircleShape[GALAXY_DIMENSION];
+        // sf::VertexArray points{sf::PrimitiveType::Points};
 
         setUp(galaxy, circle);
+        // setUp(galaxy, points);
 
         while (window.isOpen())
         {
@@ -211,26 +70,32 @@ class Application{
             }
 
             // Code to handle simulation and drawing on window, the type of simulation method can be chosen by un-commenting the 
-            // prefered choice.
+            // prefered choice:
             
             // Collision detection methods
-            // collision_detecion(galaxy);
+                collision_detecion(galaxy);
             
             // Acceleration update methods
-            // Newton::compute_forces(galaxy);
-            // Burnes_Hut::compute_forces(galaxy);
+                Newton::compute_forces(galaxy);
+                // Burnes_Hut::compute_forces(galaxy);
 
-            // Position update methods
-            // Verlet::update_position(galaxy, circle);
-            // Euler::update_position(galaxy, circle);
-            // Runge_Kutta::update_position(galaxy, circle);
-    
+            // Position update methods (CircleShape)
+                // Verlet::update_position(galaxy, circle);
+                Euler::update_position(galaxy, circle);
+                // Runge_Kutta::update_position(galaxy, circle);
+            
+            // Position update methods (Points)
+                // Verlet::update_position(galaxy, points);
+                // Euler::update_position(galaxy, points);
+                // Runge_Kutta::update_position(galaxy, points);
+
             // draw after clearing the window
             window.clear();
             window.setView(view);
             for(int i = 0; i < GALAXY_DIMENSION; ++i){
                 window.draw(circle[i]);
             }
+            // window.draw(points);
             window.display();
         }
         

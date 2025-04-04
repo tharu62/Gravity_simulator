@@ -33,8 +33,6 @@ namespace Verlet{
      * @brief Updates the position of any kind of celestial body using Verlet Integration (without velocities).
      */
     void update_position(Celestial_body *body, sf::VertexArray &points){
-        
-        sf::VertexArray v(sf::PrimitiveType::Points, GALAXY_DIMENSION); 
 
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             temp = body[i].position;
@@ -44,11 +42,10 @@ namespace Verlet{
 
             body[i].prev_position = temp;
 
-            v[i].position = body[i].position;
+            points[i].position = body[i].position;
         }
 
-        v[0].color = {255,0,0};
-        points = v;
+        points[0].color = {255,0,0};
     }
 
 }
@@ -74,18 +71,16 @@ namespace Euler{
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
      */
     void update_position(Celestial_body *body, sf::VertexArray &points){
-
-        sf::VertexArray e(sf::PrimitiveType::Points, GALAXY_DIMENSION); 
+ 
 
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
 
-            e[i].position = body[i].position;
+            points[i].position = body[i].position;
         }
 
-        e[0].color = {255,0,0};
-        points = e;
+        points[0].color = {255,0,0};
     }
 
 }

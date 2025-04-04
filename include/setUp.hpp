@@ -115,7 +115,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points){
     bh.set_acceleration({0.f, 0.f});
     galaxy[0] = bh;
     v[0].position = bh.position;
-    v[0].color = sf::Color(255, 0, 0);
+    v[0].color = sf::Color(255, 255, 255);
 
     // Sun in the center of the screen
     // Sun s = Sun();

@@ -21,6 +21,7 @@ void collision_detecion(Celestial_body *galaxy)
     float penetration;
 
     for(int i = 0; i < GALAXY_DIMENSION; ++i){
+        
         for(int j = 0; j < GALAXY_DIMENSION; ++j){
 
             if(i != j ){
@@ -36,7 +37,7 @@ void collision_detecion(Celestial_body *galaxy)
                     }
                     
                     // This makes sure the bodies don't go inside each other (at least not often).
-                    if(galaxy[i].mass <= galaxy[j].mass){
+                    if(galaxy[i].mass < galaxy[j].mass){
 
                         distance = sqrt(distance_sq);
                         penetration = ((galaxy[i].radius + galaxy[j].radius) - distance);
@@ -54,7 +55,7 @@ void collision_detecion(Celestial_body *galaxy)
 /**
  * @brief Merge two celestial bodies upon collision
  */
-void merge(Celestial_body &a, Celestial_body &b)
+void merge(Celestial_body *galaxy)
 { 
 
 

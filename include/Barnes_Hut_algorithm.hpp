@@ -7,7 +7,7 @@
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
 
-#define MAX_SIZE 10000
+#define MAX_SIZE 2000
 #define THETA 0.5
 
 namespace Barnes_Hut_struct {
@@ -31,22 +31,29 @@ namespace Barnes_Hut_struct {
     struct Quadtree {
 
         std::vector<Node> qtree;
+        bool initialized = false;
 
         void init(){
             
-            qtree.clear();
             qtree.insert(qtree.begin() , Node());
-            qtree[0].next[0] = 0;
             qtree[0].center = {640, 360};
             qtree[0].size = MAX_SIZE;
+            initialized = true;
 
+        }
+
+        void clear(){
+            for(int i=0; i < qtree.size(); ++i){
+                qtree[i].mass = 0;
+                qtree[i].centerOfMass = {0.f, 0.f};
+            }
         }
 
         void subdivide(int node){
             
             int qtree_size = qtree.size();
             float new_node_size = qtree[node].size/2;
-            
+
             // node I
             qtree.insert(qtree.end(), Node());
             qtree[qtree_size].center = {(qtree[node].center.x + (qtree[node].size/2)), (qtree[node].center.y - (qtree[node].size/2))};
@@ -73,58 +80,71 @@ namespace Barnes_Hut_struct {
 
         }
 
-        int find_quadrant(sf::Vector2f pos){
-            for(int i=0; i<qtree.size(); ++i){
-                if(abs(qtree[i].center.x - pos.x) <= qtree[i].size && abs(qtree[i].center.y - pos.y) <= qtree[i].size){
-                    if(qtree[i].next[0] == 0){
-                        return i;
-                    }else{
-                        i = qtree[i].next[0] - 1;
-                    }
-                }
-            }
-            return -1;
-        }
-
-        int find_quadrant_from(int i, sf::Vector2f pos){
-            for(int k=0; k<4; ++k){
-                if(abs(qtree[qtree[i].next[k]].center.x - pos.x) <= qtree[qtree[i].next[k]].size && abs(qtree[qtree[i].next[k]].center.y - pos.y) <= qtree[qtree[i].next[k]].size){
-                    return qtree[i].next[k];
-                }
-            }
-            return -1;
-        }
-    
         void insert(int mass, sf::Vector2f pos){
-            
-            int i = find_quadrant(pos);
-            int j = 0;
-            while(true){
 
-                if(i == -1){
-                    // std::cout << "object out of bound, mass: " << mass << " pos: "<< pos.x << " " << pos.y << std::endl;
-                    // exit(-1);
-                    return;
-                }
+            if(abs(pos.x) > MAX_SIZE || abs(pos.y) > MAX_SIZE){
+                // std::cout << "Position out of bounds!" << std::endl;
+                return;
+            }
 
-                if(qtree[i].mass != 0){
-                    
-                    subdivide(i);
-                    j = find_quadrant_from(i, qtree[i].centerOfMass);
-                    qtree[j].centerOfMass = qtree[i].centerOfMass;
-                    qtree[j].mass = qtree[i].mass;
-                    qtree[i].centerOfMass = (qtree[i].centerOfMass*qtree[i].mass + pos*mass) / (qtree[i].mass + mass);
-                    qtree[i].mass += mass;
-                    i = find_quadrant_from(i, pos);
+            for(int i=0; i<qtree.size(); ++i){
+
+                if(abs(qtree[i].center.x - pos.x) <= qtree[i].size && abs(qtree[i].center.y - pos.y) <= qtree[i].size){
+                    if(qtree[i].mass == 0 && qtree[i].centerOfMass == sf::Vector2f(0.f, 0.f)){
+                        
+                        qtree[i].centerOfMass = pos;
+                        qtree[i].mass = mass;
+                        return;
+
+                    }else{
+
+                        if(qtree[i].next[0] == 0){
+                            subdivide(i);
+                        }
+                        for(int j = qtree[i].next[0]; j < (qtree[i].next[0]+4); ++j){
+                            if(abs(qtree[j].center.x - qtree[i].centerOfMass.x) <= qtree[j].size && abs(qtree[j].center.y - qtree[i].centerOfMass.y) <= qtree[j].size){
+                                qtree[j].centerOfMass = qtree[i].centerOfMass;
+                                qtree[j].mass = qtree[i].mass;
+                                break;
+                            }
+                        }
+                        qtree[i].centerOfMass = (qtree[i].centerOfMass*qtree[i].mass + pos*mass) / (qtree[i].mass + mass);
+                        qtree[i].mass += mass;
+                        i = qtree[i].next[0] -1;
+                    }
+                } 
+                
+            }
+
+        }
+
+        sf::Vector2f update_acceleration(sf::Vector2f pos, int i){
+
+            if(abs(pos.x) > MAX_SIZE || abs(pos.y) > MAX_SIZE){
+                // std::cout << "Position out of bounds!" << std::endl;
+                return {0.f, 0.f};
+            }
+            if(qtree[i].centerOfMass != pos){
+
+                if((qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA || qtree[i].next[0] == 0){
+
+                    float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
+                    if(magnitude_sq >= 2.f){
+                        float magnitude = sqrt(magnitude_sq);
+                        return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
+                    }
 
                 }else{
 
-                    qtree[i].centerOfMass = pos;
-                    qtree[i].mass = mass;
-                    return;
-
+                    return update_acceleration(pos, qtree[i].next[0]) + 
+                           update_acceleration(pos, qtree[i].next[1]) +
+                           update_acceleration(pos, qtree[i].next[2]) +
+                           update_acceleration(pos, qtree[i].next[3]);
                 }
+
             }
+            return {0.f, 0.f};
+
         }
 
         void simple_insert(int mass, sf::Vector2f pos){
@@ -145,15 +165,14 @@ namespace Barnes_Hut_struct {
 
         sf::Vector2f simple_update_acceleration(int mass, sf::Vector2f pos){
 
-            sf::Vector2f acc = {0.f, 0.f}; 
-            if(pos == qtree[0].centerOfMass) return acc;
+            if(pos == qtree[0].centerOfMass) return {0.f, 0.f};
             float magnitude_sq = (qtree[0].centerOfMass - pos).x*(qtree[0].centerOfMass - pos).x + (qtree[0].centerOfMass - pos).y*(qtree[0].centerOfMass - pos).y;
             if(magnitude_sq >= 2.f){
                 float magnitude = sqrt(magnitude_sq);
-                acc = (qtree[0].centerOfMass - pos) * (qtree[0].mass/(magnitude * magnitude_sq));
+                return (qtree[0].centerOfMass - pos) * (qtree[0].mass/(magnitude * magnitude_sq));
             }
 
-            return acc;
+            return {0.f, 0.f};
         }
 
     };
@@ -167,20 +186,29 @@ namespace Burnes_Hut{
     /**
      * @brief 
      */
-    void compute_forces(Celestial_body *galaxy){
-        
-        Quadtree q;
-        q.init();
+    void compute_forces(Celestial_body *galaxy, Quadtree &q){
+
+        if(q.initialized){
+            q.clear();
+        }else{
+            q.init();
+        }
 
         for(int i=0; i < GALAXY_DIMENSION; ++i){
-            q.simple_insert(galaxy[i].mass, galaxy[i].position);
-            // q.insert(galaxy[i].mass, galaxy[i].position);
+            q.insert(galaxy[i].mass, galaxy[i].position);
+            // q.simple_insert(galaxy[i].mass, galaxy[i].position);
         }
         
+        // for(int i=0; i < q.qtree.size(); ++i){
+        // }
+        
+        // std::cout << q.qtree[0].centerOfMass.x << " " << q.qtree[0].centerOfMass.y << std::endl;
+        // exit(0);
+        
         for(int i=0; i < GALAXY_DIMENSION; ++i){
-            galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
+            // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
+            galaxy[i].acceleration =  q.update_acceleration(galaxy[i].position, 0);
         } 
-            
     }
 
 }

@@ -25,24 +25,24 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
     sf::Vector2f direction;
 
     // Black hole in the center of the screen
-        Black_hole bh = Black_hole();
-        bh.set_mass();
-        bh.set_radius(5);
-        bh.set_position({620, 360});
-        bh.prev_position = bh.position;
-        bh.set_velocity({0.f, 0.f});
-        bh.set_acceleration({0.f, 0.f});
-        galaxy[0] = bh;
+        // Black_hole bh = Black_hole();
+        // bh.set_mass();
+        // bh.radius = 5;
+        // bh.position = {620, 360};
+        // bh.prev_position = bh.position;
+        // bh.velocity = {0.f, 0.f};
+        // bh.acceleration = {0.f, 0.f};
+        // galaxy[0] = bh;
 
     // Sun in the center of the screen
-        // Sun s = Sun();
-        // s.set_mass();
-        // s.set_radius(109);
-        // s.set_position({620, 360});
-        // s.prev_position = s.position;
-        // s.set_velocity({0.f, 0.f});
-        // s.set_acceleration({0.f, 0.f});
-        // galaxy[0] = s;
+        Sun s = Sun();
+        s.set_mass();
+        s.radius = 109;
+        s.position = {620, 360};
+        s.prev_position = s.position;
+        s.velocity = {0.f, 0.f};
+        s.acceleration = {0.f, 0.f};
+        galaxy[0] = s;
 
     for(int i = 1; i < GALAXY_DIMENSION; ++i){
 
@@ -51,15 +51,15 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
 
         Planet temp = Planet();
         temp.set_mass();
-        temp.set_radius(2);
-        temp.set_position({rand_1, rand_2});
+        temp.radius = 2;
+        temp.position = {rand_1, rand_2};
         temp.prev_position = temp.position;
         // direction = sf::Vector2f({640, 360}) - temp.position;
         // std::ignore = direction.rotatedBy(sf::degrees(180));
         // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-        // temp.set_velocity({-direction.y, direction.x});
-        temp.set_velocity({0.f, 0.f});
-        temp.set_acceleration({0.f, 0.f});
+        // temp.velocity = {-direction.y, direction.x};
+        temp.velocity = {0.f, 0.f};
+        temp.acceleration = {0.f, 0.f};
         galaxy[i] = temp;
 
     }
@@ -95,7 +95,6 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
  */
 void setUp(Celestial_body *galaxy, sf::VertexArray &points){
 
-    sf::VertexArray v(sf::PrimitiveType::Points, GALAXY_DIMENSION);
     std::random_device rd;
     std::mt19937 eng(rd());
     std::normal_distribution<double> distribution1{640.0, 640.0};
@@ -106,28 +105,28 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points){
     sf::Vector2f direction;
 
     // Black hole in the center of the screen
-    Black_hole bh = Black_hole();
-    bh.set_mass();
-    bh.set_radius(5);
-    bh.set_position({620, 360});
-    bh.prev_position = bh.position;
-    bh.set_velocity({0.f, 0.f});
-    bh.set_acceleration({0.f, 0.f});
-    galaxy[0] = bh;
-    v[0].position = bh.position;
-    v[0].color = sf::Color(255, 255, 255);
+        // Black_hole bh = Black_hole();
+        // bh.set_mass();
+        // bh.radius = 5;
+        // bh.position = {641, 361};
+        // bh.prev_position = bh.position;
+        // bh.velocity = {0.f, 0.f};
+        // bh.acceleration = {0.f, 0.f};
+        // galaxy[0] = bh;
+        // points[0].position = bh.position;
+        // points[0].color = sf::Color(255, 0, 0);
 
     // Sun in the center of the screen
-    // Sun s = Sun();
-    // s.set_mass();
-    // s.set_radius(109);
-    // s.set_position({620, 360});
-    // s.prev_position = s.position;
-    // s.set_velocity({0.f, 0.f});
-    // s.set_acceleration({0.f, 0.f});
-    // galaxy[0] = s;
-    // v[0].position = s.position;
-    // v[0].color = sf::Color(0, 0, 255);
+        Sun s = Sun();
+        s.set_mass();
+        s.radius = 109;
+        s.position = {620, 360};
+        s.prev_position = s.position;
+        s.velocity = {0.f, 0.f};
+        s.acceleration = {0.f, 0.f};
+        galaxy[0] = s;
+        points[0].position = s.position;
+        points[0].color = sf::Color(255, 0, 0);
 
     for(int i = 1; i < GALAXY_DIMENSION; ++i){
 
@@ -136,21 +135,20 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points){
 
         Planet temp = Planet();
         temp.set_mass();
-        temp.set_radius(2);
-        temp.set_position({rand_1, rand_2});
+        temp.radius = 2;
+        temp.position = {rand_1, rand_2};
         temp.prev_position = temp.position;
         // direction = sf::Vector2f({640, 360}) - temp.position;
         // std::ignore = direction.rotatedBy(sf::degrees(180));
         // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
         // temp.set_velocity({-direction.y, direction.x});
-        temp.set_velocity({0.f, 0.f});
-        temp.set_acceleration({0.f, 0.f});
+        temp.velocity = {0.f, 0.f};
+        temp.acceleration = {0.f, 0.f};
         galaxy[i] = temp;
-        v[i].position = temp.position;
-        v[i].color = sf::Color(255, 255, 255);
+        points[i].position = temp.position;
+        points[i].color = sf::Color(255, 255, 255);
     }
 
-    points = v;
 }
 
 /**
@@ -170,31 +168,31 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle){
         if(seed == 0 || seed > 2){
             Planet temp = Planet();
             temp.set_mass();
-            temp.set_radius(2);
-            temp.set_position({rand_1, rand_2});
+            temp.radius = 2;
+            temp.position = {rand_1, rand_2};
             temp.prev_position = temp.position;
-            temp.set_velocity({0, 0});
-            temp.set_acceleration({0, 0});
+            temp.velocity = {0, 0};
+            temp.acceleration = {0, 0};
             galaxy[i] = temp;
         }
         if(seed == 1){
             Sun temp = Sun();
             temp.set_mass();
-            temp.set_radius(109);
-            temp.set_position({rand_1, rand_2});
+            temp.radius = 109;
+            temp.position = {rand_1, rand_2};
             temp.prev_position = temp.position;
-            temp.set_velocity({0, 0});
-            temp.set_acceleration({0, 0});
+            temp.velocity = {0, 0};
+            temp.acceleration = {0, 0};
             galaxy[i] = temp;
         }
         if(seed == 2){
             Black_hole temp = Black_hole();
             temp.set_mass();
-            temp.set_radius(5);
-            temp.set_position({rand_1, rand_2});
+            temp.radius = 5;
+            temp.position = {rand_1, rand_2};
             temp.prev_position = temp.position;
-            temp.set_velocity({0, 0});
-            temp.set_acceleration({0, 0});
+            temp.velocity = {0, 0};
+            temp.acceleration = {0, 0};
             galaxy[i] = temp;
         }
     }

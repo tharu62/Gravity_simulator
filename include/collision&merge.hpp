@@ -8,6 +8,7 @@
 
 extern int GALAXY_DIMENSION;
 #define DETECTION_MARGIN 30
+#define RESISTANCE_FACTOR 0.99
 
 /**
  * @brief Check if two celestial bodies have collided and corrects velocity in module and direction
@@ -33,7 +34,7 @@ void collision_detecion(Celestial_body *galaxy)
                     vel_dir = (galaxy[i].velocity - galaxy[j].velocity);
                     dir = (galaxy[i].position - galaxy[j].position);
                     if(dir.length() != 0){
-                        galaxy[i].velocity = galaxy[i].velocity - ((2*galaxy[j].mass)/(galaxy[i].mass+galaxy[j].mass)) * (vel_dir.dot(dir) / dir.lengthSquared()) * dir;
+                        galaxy[i].velocity = (galaxy[i].velocity - ((2*galaxy[j].mass)/(galaxy[i].mass+galaxy[j].mass)) * (vel_dir.dot(dir) / dir.lengthSquared()) * dir) * RESISTANCE_FACTOR;
                     }
                     
                     // This makes sure the bodies don't go inside each other (at least not often).

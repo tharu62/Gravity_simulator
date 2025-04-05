@@ -6,22 +6,19 @@
 #include <iostream>
 #include "celestial_body.hpp"
 
-class Black_hole : public Celestial_body{
+struct Black_hole : public Celestial_body{
 
-    private:
-    int event_horizon;
-
-    public:
+    // int event_horizon;
 
     void set_mass(){
-        Celestial_body::set_mass(1090000);
+        mass = 1265400000;
     }   
 
-    void set_event_horizon(double r){
-        // the event horizon is the point of no return
-        // the radius of the black hole should be smaller than the event horizon
-        event_horizon = r*2;
-    }
+    // void set_event_horizon(double r){
+    //     // the event horizon is the point of no return
+    //     // the radius of the black hole should be smaller than the event horizon
+    //     event_horizon = r*2;
+    // }
 
 };
 

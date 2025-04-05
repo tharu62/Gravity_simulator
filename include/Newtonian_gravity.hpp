@@ -29,9 +29,8 @@ namespace Newton{
 
                     direction = galaxy[j].position - galaxy[i].position;
                     magnitude_sq = direction.x*direction.x + direction.y*direction.y;
-                    if(magnitude_sq >= (galaxy[i].radius+galaxy[j].radius)*(galaxy[i].radius+galaxy[j].radius)){
+                    if(magnitude_sq >= 0.1f){
                         magnitude = sqrt(magnitude_sq);
-                        
                         galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
                     }
 

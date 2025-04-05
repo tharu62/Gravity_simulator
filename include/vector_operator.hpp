@@ -7,7 +7,7 @@
 sf::Vector2f operator *(sf::Vector2f left, int right){
     int X = left.x * right;
     int Y = left.y * right;
-    return sf::Vector2f(X,Y);
+    return sf::Vector2f((float)X,(float)Y);
 }
 
 sf::Vector2f operator *(sf::Vector2f left, float right){
@@ -21,6 +21,18 @@ sf::Vector2f operator *(sf::Vector2f left, double right){
     double Y = left.y * right;
     return sf::Vector2f((float) X,(float) Y);
 } 
+
+sf::Vector2f operator *(sf::Vector2f left, unsigned int right){
+    float X = left.x * right;
+    float Y = left.y * right;
+    return sf::Vector2f(X,Y);
+}
+
+sf::Vector2f operator *(sf::Vector2f left, unsigned long int right){
+    float X = left.x * right;
+    float Y = left.y * right;
+    return sf::Vector2f(X,Y);
+}
 
 template<typename T>
 sf::Vector2f operator /(const sf::Vector2f left, const sf::Vector2f right)

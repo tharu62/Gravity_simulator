@@ -38,6 +38,17 @@ class Application{
 
     public:
 
+    void draw_box(sf::RenderWindow &window, sf::Vector2f pos, float size){
+        sf::RectangleShape box;
+        box.setSize({size*2, size*2});
+        box.setOrigin({size, size});
+        box.setPosition(pos);
+        box.setOutlineColor(sf::Color::Red);
+        box.setOutlineThickness(1.f);
+        box.setFillColor(sf::Color::Transparent);
+        window.draw(box);
+    }
+
     Application(unsigned int x, unsigned int y, int galaxy_dimention, char *set): width(x), height(y){
         // width = x;
         // height = y;
@@ -55,11 +66,11 @@ class Application{
 
         auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
-        // window.setFramerateLimit(60);
+        window.setFramerateLimit(60);
 
         Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
         // sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
-        sf::VertexArray points{sf::PrimitiveType::Points};
+        sf::VertexArray points{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
         // setUp(galaxy, circle);
         setUp(galaxy, points);
@@ -109,12 +120,19 @@ class Application{
             // for(int i = 0; i < GALAXY_DIMENSION; ++i){
             //     window.draw(circle[i]);
             // }
+            // for(int i=0; i<q->qtree.size(); ++i){
+            //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
+            // }
+            sf::VertexArray point(sf::PrimitiveType::Points, 1);
+            point[0].position = q->qtree[0].centerOfMass;
+            point[0].color = sf::Color::Green;
+            window.draw(point);
+
             window.draw(points);
             window.display();
         }
 
         delete galaxy;
-        // delete circle;
         delete q;
         
         std::cout << "Simulator closed!" << std::endl;

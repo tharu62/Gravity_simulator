@@ -6,15 +6,10 @@
 #include <iostream>
 #include "celestial_body.hpp"
 
-class Planet : public Celestial_body{
-
-    private:
-
-    public:
+struct Planet : public Celestial_body{
 
     void set_mass(){
-
-        Celestial_body::set_mass(1);
+        mass = 1000;
     }
 
 };

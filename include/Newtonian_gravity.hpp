@@ -31,7 +31,7 @@ namespace Newton{
                     magnitude_sq = direction.x*direction.x + direction.y*direction.y;
                     if(magnitude_sq >= 0.1f){
                         magnitude = sqrt(magnitude_sq);
-                        galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
+                        galaxy[i].acceleration += direction * (galaxy[j].mass/(magnitude_sq * magnitude));
                     }
 
                 }

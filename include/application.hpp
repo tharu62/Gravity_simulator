@@ -8,6 +8,7 @@
 #include <map>
 #include <unistd.h>
 #include <thread>
+#include <chrono>
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
 #include "planet.hpp"
@@ -90,19 +91,20 @@ class Application{
             // Collision detection and merge methods
                 // collision_detecion(galaxy);
                 // merge(galaxy);
-                std::thread t1(collision_detecion, galaxy);
+                // std::thread t1(collision_detecion, galaxy);
                 // std::thread t2(merge, galaxy);
             
             // Acceleration update methods
                 // Newton::compute_forces(galaxy);
-                // Burnes_Hut::compute_forces(galaxy, *q);
+                Burnes_Hut::compute_forces(galaxy, *q);
                 // std::thread t3(Newton::compute_forces, galaxy);
-                std::thread t4([galaxy, q](){ Burnes_Hut::compute_forces(galaxy, *q); });
+                // std::thread t4([galaxy, q](){ Burnes_Hut::compute_forces(galaxy, *q); });
 
-            t1.join();
+            // t1.join();
             // t2.join();
             // t3.join();
-            t4.join();
+            // t4.join();
+
 
             // Position update methods (CircleShape)
                 // Verlet::update_position(galaxy, circle);
@@ -118,18 +120,22 @@ class Application{
             window.clear();
             window.setView(view);
             // for(int i = 0; i < GALAXY_DIMENSION; ++i){
-            //     window.draw(circle[i]);
-            // }
-            // for(int i=0; i<q->qtree.size(); ++i){
-            //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
-            // }
-            sf::VertexArray point(sf::PrimitiveType::Points, 1);
-            point[0].position = q->qtree[0].centerOfMass;
-            point[0].color = sf::Color::Green;
-            window.draw(point);
-
-            window.draw(points);
+                //     window.draw(circle[i]);
+                // }
+                // for(int i=0; i<q->qtree.size(); ++i){
+                //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
+                // }
+                window.draw(points);
+                // sf::VertexArray point(sf::PrimitiveType::Points, 1);
+                // point[0].position = q->qtree[0].centerOfMass;
+                // point[0].color = sf::Color::Green;
+                // window.draw(point);
+                
             window.display();
+                // clock_t start = clock();
+                // clock_t end = clock();
+                // double elapsed = double(end - start)/CLOCKS_PER_SEC;
+                // std::cout << elapsed << std::endl;
         }
 
         delete galaxy;

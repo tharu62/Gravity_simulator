@@ -10,6 +10,15 @@
 #include "sun.hpp"
 #include "black_hole.hpp"
 
+
+void sort(Celestial_body *galaxy, sf::VertexArray &points){
+
+    for(int i=0; i<GALAXY_DIMENSION; ++i){
+        
+    }
+
+}
+
 /**
  * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center.
  */
@@ -38,7 +47,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
         Sun s = Sun();
         s.set_mass();
         s.radius = 109;
-        s.position = {620, 360};
+        s.position = {640, 360};
         s.prev_position = s.position;
         s.velocity = {0.f, 0.f};
         s.acceleration = {0.f, 0.f};
@@ -57,6 +66,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
         // direction = sf::Vector2f({640, 360}) - temp.position;
         // std::ignore = direction.rotatedBy(sf::degrees(180));
         // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
+        // direction *=  (float)sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
         // temp.velocity = {-direction.y, direction.x};
         temp.velocity = {0.f, 0.f};
         temp.acceleration = {0.f, 0.f};
@@ -105,28 +115,28 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points){
     sf::Vector2f direction;
 
     // Black hole in the center of the screen
-        // Black_hole bh = Black_hole();
-        // bh.set_mass();
-        // bh.radius = 5;
-        // bh.position = {641, 361};
-        // bh.prev_position = bh.position;
-        // bh.velocity = {0.f, 0.f};
-        // bh.acceleration = {0.f, 0.f};
-        // galaxy[0] = bh;
-        // points[0].position = bh.position;
-        // points[0].color = sf::Color(255, 0, 0);
+        Black_hole bh = Black_hole();
+        bh.set_mass();
+        bh.radius = 5;
+        bh.position = {640, 360};
+        bh.prev_position = bh.position;
+        bh.velocity = {0.f, 0.f};
+        bh.acceleration = {0.f, 0.f};
+        galaxy[0] = bh;
+        points[0].position = bh.position;
+        points[0].color = sf::Color(255, 0, 0);
 
     // Sun in the center of the screen
-        Sun s = Sun();
-        s.set_mass();
-        s.radius = 109;
-        s.position = {620, 360};
-        s.prev_position = s.position;
-        s.velocity = {0.f, 0.f};
-        s.acceleration = {0.f, 0.f};
-        galaxy[0] = s;
-        points[0].position = s.position;
-        points[0].color = sf::Color(255, 0, 0);
+        // Sun s = Sun();
+        // s.set_mass();
+        // s.radius = 109;
+        // s.position = {620, 360};
+        // s.prev_position = s.position;
+        // s.velocity = {0.f, 0.f};
+        // s.acceleration = {0.f, 0.f};
+        // galaxy[0] = s;
+        // points[0].position = s.position;
+        // points[0].color = sf::Color(255, 0, 0);
 
     for(int i = 1; i < GALAXY_DIMENSION; ++i){
 
@@ -138,11 +148,12 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points){
         temp.radius = 2;
         temp.position = {rand_1, rand_2};
         temp.prev_position = temp.position;
-        // direction = sf::Vector2f({640, 360}) - temp.position;
-        // std::ignore = direction.rotatedBy(sf::degrees(180));
-        // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-        // temp.set_velocity({-direction.y, direction.x});
-        temp.velocity = {0.f, 0.f};
+        direction = sf::Vector2f({640, 360}) - temp.position;
+        std::ignore = direction.rotatedBy(sf::degrees(180));
+        direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+        direction *=  (float)sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
+        temp.velocity = {-direction.y, direction.x};
+        // temp.velocity = {0.f, 0.f};
         temp.acceleration = {0.f, 0.f};
         galaxy[i] = temp;
         points[i].position = temp.position;

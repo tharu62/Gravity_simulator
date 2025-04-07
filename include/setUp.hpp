@@ -11,10 +11,13 @@
 #include "black_hole.hpp"
 
 
-void sort(Celestial_body *galaxy, sf::VertexArray &points){
+void sort(Celestial_body *galaxy, sf::VertexArray &points)
+{
+
+    int *arr = new int[GALAXY_DIMENSION];
 
     for(int i=0; i<GALAXY_DIMENSION; ++i){
-        
+
     }
 
 }
@@ -22,7 +25,8 @@ void sort(Celestial_body *galaxy, sf::VertexArray &points){
 /**
  * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center.
  */
-void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
+void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
+{
 
     std::random_device rd;
     std::mt19937 eng(rd());
@@ -103,7 +107,8 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle){
 /**
  * @brief 
  */
-void setUp(Celestial_body *galaxy, sf::VertexArray &points){
+void setUp(Celestial_body *galaxy, sf::VertexArray &points)
+{
 
     std::random_device rd;
     std::mt19937 eng(rd());
@@ -165,7 +170,8 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points){
 /**
  * @brief Variant of function setUp with all celestial bodies in random positions.
  */
-void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle){
+void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
+{
 
     float rand_1;
     float rand_2;

@@ -24,7 +24,8 @@ int GALAXY_DIMENSION;
 #include "Barnes_Hut_algorithm.hpp"
 #include "collision&merge.hpp"
 
-class Application{
+class Application
+{
 
     public:
     unsigned int width;
@@ -39,6 +40,9 @@ class Application{
 
     public:
 
+    /**
+     * @brief Debug function that draws the bounding boxes of the quadtree produced by the Barnes-Hut method for updating acceleration.
+     */
     void draw_box(sf::RenderWindow &window, sf::Vector2f pos, float size){
         sf::RectangleShape box;
         box.setSize({size*2, size*2});
@@ -85,8 +89,7 @@ class Application{
                 EventHandler(event, view, window, oldPos, moving);
             }
 
-            // Code to handle simulation and drawing on window, the type of simulation method can be chosen by un-commenting the 
-            // prefered choice:
+            // Code to handle simulation and drawing on window
             
             // Collision detection and merge methods
                 // collision_detecion(galaxy);

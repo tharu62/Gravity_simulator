@@ -13,14 +13,17 @@
 
 namespace Barnes_Hut_struct {
     
+    /**
+     * @param next is an array that contains the indices of the 4 node children of this node.
+     * In order : next[0] quadrant 1, next[1] quadrant 2, next[2] quadrant 3, next[4] quadrant 4. 
+     * In use Euclidean 2D space quadrant notation. 
+     * @param center is the geometric center of the node, wich is a square, with width and height <size>*2.
+     * @param CenterOfMass is the center of mass of the node that has total mass of <mass>.   
+     */
     struct Node {
         
-        // <next> is an array that contains the indices of the 4 children node of this node. 
-        // In order : next[0] node 1, next[1] node 2, next[2] node 3, next[4] node 4. 
-        // In use Euclidean 2D space node notation. 
         int next[4] = {0, 0, 0, 0};
 
-        // <center> is the geometric center of the node, wich is a square, with width and height <size>*2. 
         sf::Vector2f center;
         float size;
 
@@ -29,6 +32,11 @@ namespace Barnes_Hut_struct {
 
     };
     
+    /**
+     * @brief
+     * @param qtree
+     * @param stack 
+     */
     struct Quadtree {
 
         std::vector<Node> qtree;
@@ -78,6 +86,9 @@ namespace Barnes_Hut_struct {
 
         }
 
+        /**
+         * @brief Insert ONE body mass and position in the quadtree using itarative method.
+         */
         void insert(int mass, sf::Vector2f pos){
 
             for(int i=0; i<qtree.size(); ++i){
@@ -110,7 +121,7 @@ namespace Barnes_Hut_struct {
         }
 
         /**
-         * * @brief Returns the acceleration of a body in the quadtree using a recursive method.
+         * * @brief Returns the acceleration of a body in the quadtree using recursive method.
          */
         sf::Vector2f update_acceleration(sf::Vector2f pos, int i){
 
@@ -142,7 +153,7 @@ namespace Barnes_Hut_struct {
         }
 
         /**
-         * @brief Returns the acceleration of a body in the quadtree using a iterative method.
+         * @brief Returns the acceleration of a body in the quadtree using iterative method.
          */
         sf::Vector2f update_acceleration(sf::Vector2f pos){
 
@@ -184,6 +195,9 @@ namespace Barnes_Hut_struct {
 
         }
 
+        /**
+         * @brief Insert ALL bodies mass and position in the quadtree using iterative method.
+         */
         void insert(Celestial_body *galaxy){
 
             int mass;
@@ -207,9 +221,7 @@ namespace Barnes_Hut_struct {
         
                             }else{
         
-                                if(qtree[i].next[0] == 0){
-                                    subdivide(i);
-                                }
+                                subdivide(i);
                                 for(int j = qtree[i].next[0]; j < (qtree[i].next[0]+4); ++j){
                                     if(abs(qtree[j].center.x - qtree[i].centerOfMass.x) <= qtree[j].size && abs(qtree[j].center.y - qtree[i].centerOfMass.y) <= qtree[j].size){
                                         qtree[j].centerOfMass = qtree[i].centerOfMass;
@@ -230,6 +242,9 @@ namespace Barnes_Hut_struct {
 
         }
 
+        /**
+         * @brief Updates the acceleration of ALL bodies in the quadtree using iterative method.
+         */
         void update_acceleration(Celestial_body *galaxy){
 
             int i;
@@ -284,6 +299,10 @@ namespace Barnes_Hut_struct {
 
         }
 
+
+        /**
+         * @brief Insertion method used for testing purposes.
+         */
         void simple_insert(int mass, sf::Vector2f pos){
             if(qtree[0].mass != 0){
                     
@@ -306,6 +325,9 @@ namespace Barnes_Hut_struct {
             }
         }
 
+        /**
+         * @brief Update accelleration method used for testing purposes.
+         */
         sf::Vector2f simple_update_acceleration(int mass, sf::Vector2f pos){
 
             if(pos == qtree[0].centerOfMass) return {0.f, 0.f};
@@ -327,7 +349,7 @@ namespace Burnes_Hut{
     using namespace Barnes_Hut_struct;
 
     /**
-     * @brief 
+     * @brief Computes the Gravitational forces between each celestial body to update the acceleration of each celestial body.
      */
     void compute_forces(Celestial_body *galaxy, Quadtree &q){
         
@@ -340,7 +362,6 @@ namespace Burnes_Hut{
 
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
                 q.insert(galaxy[i].mass, galaxy[i].position);
-                // q.simple_insert(galaxy[i].mass, galaxy[i].position);
             }
         }
         
@@ -350,7 +371,6 @@ namespace Burnes_Hut{
         
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
-            // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
         } 
         
     }

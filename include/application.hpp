@@ -141,7 +141,7 @@ class Application
                 // std::cout << elapsed << std::endl;
         }
 
-        delete galaxy;
+        delete[] galaxy;
         delete q;
         
         std::cout << "Simulator closed!" << std::endl;

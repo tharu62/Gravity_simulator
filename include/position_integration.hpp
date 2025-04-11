@@ -44,8 +44,7 @@ namespace Verlet{
 
             points[i].position = body[i].position;
         }
-
-        points[0].color = {255,0,0};
+        
     }
 
 }
@@ -80,7 +79,6 @@ namespace Euler{
             points[i].position = body[i].position;
         }
 
-        points[0].color = {255,0,0};
     }
 
 }

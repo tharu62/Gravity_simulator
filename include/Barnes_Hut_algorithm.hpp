@@ -22,20 +22,22 @@ namespace Barnes_Hut_struct {
      */
     struct Node {
         
-        int next[4] = {0, 0, 0, 0};
+        int next[4];
 
         sf::Vector2f center;
         float size;
 
         sf::Vector2f centerOfMass;
-        unsigned long int mass = 0;
+        unsigned long int mass;
+
+        Node() : next{0,0,0,0}, center(0.f, 0.f), size(0.f), centerOfMass(0.f, 0.f), mass(0) {}
 
     };
     
     /**
-     * @brief
-     * @param qtree
-     * @param stack 
+     * @brief A Quadtree is a tree data structure in which each node, apart from the leafs, has four children. 
+     * @param qtree is the vector that contains the Nodes of the quadtree.
+     * @param stack is the Stack used in the iterative method for updating acceleration.
      */
     struct Quadtree {
 
@@ -48,15 +50,13 @@ namespace Barnes_Hut_struct {
             qtree[0].size = MAX_SIZE;
         }
 
-        void clear(){
-            for(int i=0; i < qtree.size(); ++i){
-                qtree[i].mass = 0;
-                qtree[i].centerOfMass = {0.f, 0.f};
-            }
-        }
-
         void subdivide(int node){
             
+            if (node < 0 || node >= qtree.size()) {
+                std::cerr << "Error: Node index out of bounds in subdivide()." << std::endl;
+                return;
+            }
+
             int qtree_size = qtree.size();
             float new_node_size = qtree[node].size/2;
 
@@ -101,7 +101,6 @@ namespace Barnes_Hut_struct {
                         return;
 
                     }else{
-
                         subdivide(i);
                         for(int j = qtree[i].next[0]; j < (qtree[i].next[0]+4); ++j){
                             if(abs(qtree[j].center.x - qtree[i].centerOfMass.x) <= qtree[j].size && abs(qtree[j].center.y - qtree[i].centerOfMass.y) <= qtree[j].size){
@@ -164,6 +163,7 @@ namespace Barnes_Hut_struct {
             stack.push(0);
             sf::Vector2f acc = {0,0};
             int i;
+            float magnitude = 0.f;
 
             while(!stack.empty()){
                 i = stack.top();
@@ -173,7 +173,7 @@ namespace Barnes_Hut_struct {
     
                         float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                         if(magnitude_sq > 0.1f){
-                            float magnitude = sqrt(magnitude_sq);
+                            magnitude = sqrt(magnitude_sq);
                             acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
                         }
                         stack.pop();
@@ -299,7 +299,6 @@ namespace Barnes_Hut_struct {
 
         }
 
-
         /**
          * @brief Insertion method used for testing purposes.
          */
@@ -332,7 +331,7 @@ namespace Barnes_Hut_struct {
 
             if(pos == qtree[0].centerOfMass) return {0.f, 0.f};
             float magnitude_sq = (qtree[0].centerOfMass - pos).x*(qtree[0].centerOfMass - pos).x + (qtree[0].centerOfMass - pos).y*(qtree[0].centerOfMass - pos).y;
-            if(magnitude_sq >= 100.f){
+            if(magnitude_sq >= 0.1f){
                 float magnitude = sqrt(magnitude_sq);
                 return (qtree[0].centerOfMass - pos) * (qtree[0].mass/(magnitude_sq * magnitude));
             }
@@ -354,6 +353,7 @@ namespace Burnes_Hut{
     void compute_forces(Celestial_body *galaxy, Quadtree &q){
         
         q.qtree.clear();
+        while (!q.stack.empty()) q.stack.pop();
         q.init();
 
         // clock_t start = clock();
@@ -362,6 +362,7 @@ namespace Burnes_Hut{
 
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
                 q.insert(galaxy[i].mass, galaxy[i].position);
+                // q.simple_insert(galaxy[i].mass, galaxy[i].position);
             }
         }
         
@@ -371,6 +372,7 @@ namespace Burnes_Hut{
         
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
+            // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
         } 
         
     }

@@ -61,6 +61,12 @@ class Application
         setter = *set;
     }
 
+    Application(unsigned int x, unsigned int y, int galaxy_dimention): width(x), height(y){
+        // width = x;
+        // height = y;
+        GALAXY_DIMENSION = galaxy_dimention;
+    }
+
     ~Application(){ std::cout << "Simulator deconstracted!" << std::endl; }
 
     /**
@@ -107,7 +113,6 @@ class Application
             // t2.join();
             // t3.join();
             // t4.join();
-
 
             // Position update methods (CircleShape)
                 // Verlet::update_position(galaxy, circle);

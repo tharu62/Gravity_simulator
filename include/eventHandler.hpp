@@ -5,7 +5,18 @@
 #include "SFML/Graphics.hpp"
 
 
-void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving){
+void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving, bool &paused){
+
+    if(const auto* PkeyPressed = event->getIf<sf::Event::KeyPressed>()){
+        if(PkeyPressed->scancode == sf::Keyboard::Scan::P){
+            paused = !paused;
+            if(paused){
+                std::cout << "Simulation paused!" << std::endl;
+            }else{
+                std::cout << "Simulation resumed!" << std::endl;
+            }
+        }
+    }
 
     if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()){
         

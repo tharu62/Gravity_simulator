@@ -28,7 +28,7 @@ namespace Barnes_Hut_struct {
         float size;
 
         sf::Vector2f centerOfMass;
-        unsigned long int mass;
+        long long int mass;
 
         Node() : next{0,0,0,0}, center(0.f, 0.f), size(0.f), centerOfMass(0.f, 0.f), mass(0) {}
 

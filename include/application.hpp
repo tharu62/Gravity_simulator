@@ -36,7 +36,9 @@ class Application
     char setter;
     // <mooving> and <oldPos> are used for view movement
     bool moving = false;
+    bool paused = false;
     sf::Vector2f oldPos;
+
 
     public:
 
@@ -92,37 +94,40 @@ class Application
         {
             while (const std::optional event = window.pollEvent())
             {
-                EventHandler(event, view, window, oldPos, moving);
+                EventHandler(event, view, window, oldPos, moving, paused);
             }
 
             // Code to handle simulation and drawing on window
-            
-            // Collision detection and merge methods
-                // collision_detecion(galaxy);
-                // merge(galaxy);
-                // std::thread t1(collision_detecion, galaxy);
-                // std::thread t2(merge, galaxy);
-            
-            // Acceleration update methods
-                // Newton::compute_forces(galaxy);
-                Burnes_Hut::compute_forces(galaxy, *q);
-                // std::thread t3(Newton::compute_forces, galaxy);
-                // std::thread t4([galaxy, q](){ Burnes_Hut::compute_forces(galaxy, *q); });
+            if(!paused){
 
-            // t1.join();
-            // t2.join();
-            // t3.join();
-            // t4.join();
+                // Collision detection and merge methods
+                    // collision_detecion(galaxy);
+                    // merge(galaxy);
+                    // std::thread t1(collision_detecion, galaxy);
+                    // std::thread t2(merge, galaxy);
+                
+                // Acceleration update methods
+                    // Newton::compute_forces(galaxy);
+                    Burnes_Hut::compute_forces(galaxy, *q);
+                    // std::thread t3(Newton::compute_forces, galaxy);
+                    // std::thread t4([galaxy, q](){ Burnes_Hut::compute_forces(galaxy, *q); });
+    
+                // t1.join();
+                // t2.join();
+                // t3.join();
+                // t4.join();
+    
+                // Position update methods (CircleShape)
+                    // Verlet::update_position(galaxy, circle);
+                    // Euler::update_position(galaxy, circle);
+                    // Runge_Kutta::update_position(galaxy, circle);
+                
+                // Position update methods (Points)
+                    // Verlet::update_position(galaxy, points);
+                    Euler::update_position(galaxy, points);
+                    // Runge_Kutta::update_position(galaxy, points);
 
-            // Position update methods (CircleShape)
-                // Verlet::update_position(galaxy, circle);
-                // Euler::update_position(galaxy, circle);
-                // Runge_Kutta::update_position(galaxy, circle);
-            
-            // Position update methods (Points)
-                // Verlet::update_position(galaxy, points);
-                Euler::update_position(galaxy, points);
-                // Runge_Kutta::update_position(galaxy, points);
+            }
 
             // draw after clearing the window
             window.clear();

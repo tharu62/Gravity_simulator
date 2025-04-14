@@ -10,6 +10,12 @@
 #include "sun.hpp"
 #include "black_hole.hpp"
 
+float G  = 6.6743e-11;
+// float G = 1;
+float AU = 149597870700;
+float RADIUS_SCALE = 250000/AU;
+float DISTANCE_SCALE = 2500/AU;
+
 
 void sort(Celestial_body *galaxy, sf::VertexArray &points)
 {
@@ -81,22 +87,16 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
     for(int i = 0; i < GALAXY_DIMENSION; ++i){
 
         circle[i].setRadius(galaxy[i].radius);
-        switch (galaxy[i].radius)
-        {
-        case 2:
+        if(galaxy[i].radius == 2){
             circle[i].setFillColor(sf::Color(255, 255, 255));
-            break;
-        case 109:
+        }    
+        if(galaxy[i].radius == 109){
             circle[i].setFillColor(sf::Color(255, 255, 255));
-            break;
-        case 5:
+        }
+        if(galaxy[i].radius == 5){
             circle[i].setOutlineThickness(0.6);
             circle[i].setOutlineColor(sf::Color(255, 255, 255));
             circle[i].setFillColor(sf::Color(0, 0, 0));
-            break;
-
-        default:
-            break;
         }
         circle[i].setPosition(galaxy[i].position);
         circle[i].setOrigin({(float) galaxy[i].radius, (float) galaxy[i].radius});
@@ -156,7 +156,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points)
         direction = sf::Vector2f({640, 360}) - temp.position;
         std::ignore = direction.rotatedBy(sf::degrees(180));
         direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
-        direction *=  (float)sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
+        direction *=  (float) sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
         temp.velocity = {-direction.y, direction.x};
         // temp.velocity = {0.f, 0.f};
         temp.acceleration = {0.f, 0.f};
@@ -216,23 +216,183 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 
     for(int i = 0; i < GALAXY_DIMENSION; ++i){
         circle[i].setRadius(galaxy[i].radius);
-        switch (galaxy[i].radius)
-        {
-        case 1:
-            circle[i].setFillColor(sf::Color(200, 200, 200));
-            break;
-        case 109:
-            circle[i].setFillColor(sf::Color(150, 150, 200));
-            break;
-        case 5:
+        if(galaxy[i].radius == 2){
+            circle[i].setFillColor(sf::Color(255, 255, 255));
+        }    
+        if(galaxy[i].radius == 109){
+            circle[i].setFillColor(sf::Color(255, 255, 255));
+        }
+        if(galaxy[i].radius == 5){
             circle[i].setOutlineThickness(0.6);
-            circle[i].setOutlineColor(sf::Color::White);
-            break;
-
-        default:
-            break;
+            circle[i].setOutlineColor(sf::Color(255, 255, 255));
+            circle[i].setFillColor(sf::Color(0, 0, 0));
         }
         circle[i].setPosition(galaxy[i].position);
         circle[i].setOrigin({(float) galaxy[i].radius, (float) galaxy[i].radius});
     }
+}
+
+void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
+
+    // 1 pixel = AU = 149597870700 [m]
+
+    sf::Vector2f direction;
+
+    // Sun in the center of the screen
+    galaxy[0] = Planet();
+    galaxy[0].mass = 1.989e30;
+    galaxy[0].radius = 696340000;
+    galaxy[0].position = {640, 360};
+    galaxy[0].prev_position = galaxy[1].position;
+    galaxy[0].velocity = {0, 0};
+    galaxy[0].acceleration = {0.f, 0.f};
+    circle[0].setRadius(galaxy[0].radius * RADIUS_SCALE);
+    circle[0].setFillColor(sf::Color(255, 255, 255));
+    circle[0].setPosition(galaxy[0].position);
+    circle[0].setOrigin({galaxy[0].radius * RADIUS_SCALE, galaxy[0].radius * RADIUS_SCALE});
+
+    // Mercury
+    galaxy[1] = Planet();
+    galaxy[1].mass = 3.285e23;
+    galaxy[1].radius = 2439700;
+    galaxy[1].position = {640.f + 0.4 * AU, 360.f};
+    galaxy[1].prev_position = galaxy[1].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[1].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass / (0.4 * AU));
+    galaxy[1].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[1].acceleration = {0.f, 0.f};
+    circle[1].setRadius(galaxy[1].radius * RADIUS_SCALE);
+    circle[1].setFillColor(sf::Color(183, 184, 185));    
+    circle[1].setPosition({galaxy[1].position.x * DISTANCE_SCALE, galaxy[1].position.y});
+    circle[1].setOrigin({galaxy[1].radius * RADIUS_SCALE, galaxy[1].radius * RADIUS_SCALE});
+
+    // Venus
+    galaxy[2] = Planet();
+    galaxy[2].mass = 4.867e24;
+    galaxy[2].radius = 6052000;
+    galaxy[2].position = {640 + 0.72 * AU, 360};
+    galaxy[2].prev_position = galaxy[2].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[2].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(0.72 * AU));
+    galaxy[2].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[2].acceleration = {0.f, 0.f};
+    circle[2].setRadius(galaxy[2].radius * RADIUS_SCALE);
+    circle[2].setFillColor(sf::Color(238,203,139));
+    circle[2].setPosition({galaxy[2].position.x * DISTANCE_SCALE, galaxy[2].position.y});
+    circle[2].setOrigin({galaxy[2].radius * RADIUS_SCALE, galaxy[2].radius * RADIUS_SCALE});
+
+    // Earth
+    galaxy[3] = Planet();
+    galaxy[3].mass = 5.972e24;
+    galaxy[3].radius = 6378000;
+    galaxy[3].position = {640 + AU, 360};
+    galaxy[3].prev_position = galaxy[3].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[3].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(AU));
+    galaxy[3].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[3].acceleration = {0.f, 0.f};
+    circle[3].setRadius(galaxy[3].radius * RADIUS_SCALE);
+    circle[3].setFillColor(sf::Color(79,76,176));
+    circle[3].setPosition({galaxy[3].position.x * DISTANCE_SCALE, galaxy[3].position.y});
+    circle[3].setOrigin({galaxy[3].radius * RADIUS_SCALE, galaxy[3].radius * RADIUS_SCALE});
+
+    // Mars
+    galaxy[4] = Planet();
+    galaxy[4].mass = 6.39e23;
+    galaxy[4].radius = 3389500;
+    galaxy[4].position = {640 + 1.52 * AU, 360};
+    galaxy[4].prev_position = galaxy[4].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[4].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(1.52 * AU));
+    galaxy[4].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[4].acceleration = {0.f, 0.f};
+    circle[4].setRadius(galaxy[4].radius * RADIUS_SCALE);
+    circle[4].setFillColor(sf::Color(193,68,14));
+    circle[4].setPosition({galaxy[4].position.x * DISTANCE_SCALE, galaxy[4].position.y});
+    circle[4].setOrigin({galaxy[4].radius * RADIUS_SCALE, galaxy[4].radius * RADIUS_SCALE});
+
+    // Jupiter
+    galaxy[5] = Planet();
+    galaxy[5].mass = 1.89813e27;
+    galaxy[5].radius = 69911000;
+    galaxy[5].position = {640 + 5.2 * AU, 360};
+    galaxy[5].prev_position = galaxy[5].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[5].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(5.2 * AU));
+    galaxy[5].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[5].acceleration = {0.f, 0.f};
+    circle[5].setRadius(galaxy[5].radius * RADIUS_SCALE);
+    circle[5].setFillColor(sf::Color(201,144,57));
+    circle[5].setPosition({galaxy[5].position.x * DISTANCE_SCALE, galaxy[5].position.y});
+    circle[5].setOrigin({galaxy[5].radius * RADIUS_SCALE, galaxy[5].radius * RADIUS_SCALE});   
+
+    // Saturn
+    galaxy[6] = Planet();
+    galaxy[6].mass = 5.683e26;
+    galaxy[6].radius = 60268000;
+    galaxy[6].position = {640 + 9.5 * AU, 360};
+    galaxy[6].prev_position = galaxy[6].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[6].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(9.5 * AU));
+    galaxy[6].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[6].acceleration = {0.f, 0.f};
+    circle[6].setRadius(galaxy[6].radius * RADIUS_SCALE);
+    circle[6].setFillColor(sf::Color(206,184,184));
+    circle[6].setPosition({galaxy[6].position.x * DISTANCE_SCALE, galaxy[6].position.y});
+    circle[6].setOrigin({galaxy[6].radius * RADIUS_SCALE, galaxy[6].radius * RADIUS_SCALE});
+
+    // Uranus
+    galaxy[7] = Planet();
+    galaxy[7].mass = 8,681e25;
+    galaxy[7].radius = 25362000;
+    galaxy[7].position = {640 + 19.2 * AU, 360};
+    galaxy[7].prev_position = galaxy[7].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[7].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(19.2 * AU));
+    galaxy[7].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[7].acceleration = {0.f, 0.f};
+    circle[7].setRadius(galaxy[7].radius * RADIUS_SCALE);
+    circle[7].setFillColor(sf::Color(172, 229, 238));
+    circle[7].setPosition({galaxy[7].position.x * DISTANCE_SCALE, galaxy[7].position.y});
+    circle[7].setOrigin({galaxy[7].radius * RADIUS_SCALE, galaxy[7].radius * RADIUS_SCALE});
+
+    // Neptune
+    galaxy[8] = Planet();
+    galaxy[8].mass = 1,024e26;
+    galaxy[8].radius = 24622000;
+    galaxy[8].position = {640 + 30.1 * AU, 360};
+    galaxy[8].prev_position = galaxy[8].position;
+    direction = sf::Vector2f({640, 360}) - galaxy[8].position;
+    std::ignore = direction.rotatedBy(sf::degrees(180));
+    direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
+    direction *=  (float) sqrt(G * galaxy[0].mass/(30.1 * AU));
+    galaxy[8].velocity = {-direction.y, direction.x};
+    // temp.velocity = {0.f, 0.f};
+    galaxy[8].acceleration = {0.f, 0.f};
+    circle[8].setRadius(galaxy[8].radius * RADIUS_SCALE);
+    circle[8].setFillColor(sf::Color(91,93,223));
+    circle[8].setPosition({galaxy[8].position.x * DISTANCE_SCALE, galaxy[8].position.y});
+    circle[8].setOrigin({galaxy[8].radius * RADIUS_SCALE, galaxy[8].radius * RADIUS_SCALE});
+
 }

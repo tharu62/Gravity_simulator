@@ -82,11 +82,12 @@ class Application
         window.setFramerateLimit(60);
 
         Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
-        // sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
-        sf::VertexArray points{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
+        sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
+        // sf::VertexArray points{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
         // setUp(galaxy, circle);
-        setUp(galaxy, points);
+        // setUp(galaxy, points);
+        set_up_Solar_System(galaxy, circle);
         
         Barnes_Hut_struct::Quadtree *q = new Barnes_Hut_struct::Quadtree();
 
@@ -107,8 +108,8 @@ class Application
                     // std::thread t2(merge, galaxy);
                 
                 // Acceleration update methods
-                    // Newton::compute_forces(galaxy);
-                    Burnes_Hut::compute_forces(galaxy, *q);
+                    Newton::compute_forces(galaxy);
+                    // Burnes_Hut::compute_forces(galaxy, *q);
                     // std::thread t3(Newton::compute_forces, galaxy);
                     // std::thread t4([galaxy, q](){ Burnes_Hut::compute_forces(galaxy, *q); });
     
@@ -119,26 +120,26 @@ class Application
     
                 // Position update methods (CircleShape)
                     // Verlet::update_position(galaxy, circle);
-                    // Euler::update_position(galaxy, circle);
+                    Euler::update_position(galaxy, circle);
                     // Runge_Kutta::update_position(galaxy, circle);
                 
                 // Position update methods (Points)
                     // Verlet::update_position(galaxy, points);
-                    Euler::update_position(galaxy, points);
+                    // Euler::update_position(galaxy, points);
                     // Runge_Kutta::update_position(galaxy, points);
 
             }
 
             // draw after clearing the window
             window.clear();
-            window.setView(view);
-            // for(int i = 0; i < GALAXY_DIMENSION; ++i){
-                //     window.draw(circle[i]);
-                // }
+            for(int i = 0; i < GALAXY_DIMENSION; ++i){
+                window.setView(view);
+                window.draw(circle[i]);
+            }
                 // for(int i=0; i<q->qtree.size(); ++i){
                 //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
                 // }
-                window.draw(points);
+                // window.draw(points);
                 // sf::VertexArray point(sf::PrimitiveType::Points, 1);
                 // point[0].position = q->qtree[0].centerOfMass;
                 // point[0].color = sf::Color::Green;
@@ -152,6 +153,7 @@ class Application
         }
 
         delete[] galaxy;
+        delete[] circle;
         delete q;
         
         std::cout << "Simulator closed!" << std::endl;

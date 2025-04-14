@@ -6,8 +6,8 @@
 
 struct Celestial_body
 {   
-    long int mass;
-    int radius;
+    double mass;
+    float radius;
     sf::Vector2f position;
     sf::Vector2f prev_position;
     sf::Vector2f velocity;

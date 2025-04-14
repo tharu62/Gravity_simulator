@@ -6,7 +6,8 @@
 #include "SFML/GpuPreference.hpp"
 #include "celestial_body.hpp"
 
-#define G 1
+#define G 6.6743e-11
+// #define G 1
 
 namespace Newton{
 
@@ -28,10 +29,10 @@ namespace Newton{
                 if(i != j){
 
                     direction = galaxy[j].position - galaxy[i].position;
-                    magnitude_sq = direction.x*direction.x + direction.y*direction.y;
+                    magnitude_sq = (direction.x*direction.x + direction.y*direction.y);
                     if(magnitude_sq >= 0.1f){
                         magnitude = sqrt(magnitude_sq);
-                        galaxy[i].acceleration += direction * (galaxy[j].mass/(magnitude_sq * magnitude));
+                        galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
                     }
 
                 }

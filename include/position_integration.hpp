@@ -52,6 +52,9 @@ namespace Verlet{
 namespace Euler{
 
     float dt = 0.01;
+    // float AU = 149597870700;
+    // float RADIUS_SCALE = 250000/AU;
+    // float DISTANCE_SCALE = 2500/AU;
     
     /**
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
@@ -63,6 +66,7 @@ namespace Euler{
             body[i].position += body[i].velocity * dt;
 
             circle[i].setPosition(body[i].position);
+            // circle[i].setPosition(circle[i].getPosition() + body[i].velocity * dt * DISTANCE_SCALE);
         }
     }
 

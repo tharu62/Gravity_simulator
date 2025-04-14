@@ -9,7 +9,7 @@
 #include "vector_operator.hpp"
 
 #define MAX_SIZE 4000.f
-#define THETA 0.5
+#define THETA 0.1f
 
 namespace Barnes_Hut_struct {
     
@@ -155,7 +155,7 @@ namespace Barnes_Hut_struct {
          * @brief Returns the acceleration of a body in the quadtree using iterative method.
          */
         sf::Vector2f update_acceleration(sf::Vector2f pos){
-
+            
             if(abs(pos.x) > MAX_SIZE*2 || abs(pos.y) > MAX_SIZE*2){
                 return {0.f, 0.f};
             }
@@ -163,6 +163,7 @@ namespace Barnes_Hut_struct {
             stack.push(0);
             sf::Vector2f acc = {0,0};
             int i;
+            float magnitude_sq = 0.f; 
             float magnitude = 0.f;
 
             while(!stack.empty()){
@@ -171,7 +172,7 @@ namespace Barnes_Hut_struct {
 
                     if((qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA || qtree[i].next[0] == 0){
     
-                        float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
+                        magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                         if(magnitude_sq > 0.1f){
                             magnitude = sqrt(magnitude_sq);
                             acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));

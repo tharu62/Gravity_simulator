@@ -17,6 +17,9 @@ float RADIUS_SCALE = 250000/AU;
 float DISTANCE_SCALE = 2500/AU;
 
 
+/**
+ * @brief Sorts the Celestial bodies in order of...
+ */
 void sort(Celestial_body *galaxy, sf::VertexArray &points)
 {
 
@@ -29,7 +32,7 @@ void sort(Celestial_body *galaxy, sf::VertexArray &points)
 }
 
 /**
- * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center.
+ * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center (Celestial bodies as CircleShape).
  */
 void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
 {
@@ -105,7 +108,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
 }
 
 /**
- * @brief 
+ * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center (Celestial bodies as Points).
  */
 void setUp(Celestial_body *galaxy, sf::VertexArray &points)
 {
@@ -232,9 +235,10 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
     }
 }
 
+/**
+ * @brief Variant of function setUp for setting up the SOlar system with the Sun at the center and the 8 main planets in orbit.
+ */
 void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
-
-    // 1 pixel = AU = 149597870700 [m]
 
     sf::Vector2f direction;
 
@@ -255,7 +259,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[1] = Planet();
     galaxy[1].mass = 3.285e23;
     galaxy[1].radius = 2439700;
-    galaxy[1].position = {640.f + 0.4 * AU, 360.f};
+    galaxy[1].position = {640.f + 0.4f * (float) AU, 360.f};
     galaxy[1].prev_position = galaxy[1].position;
     direction = sf::Vector2f({640, 360}) - galaxy[1].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
@@ -273,7 +277,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[2] = Planet();
     galaxy[2].mass = 4.867e24;
     galaxy[2].radius = 6052000;
-    galaxy[2].position = {640 + 0.72 * AU, 360};
+    galaxy[2].position = {640.f + 0.72f * (float) AU, 360};
     galaxy[2].prev_position = galaxy[2].position;
     direction = sf::Vector2f({640, 360}) - galaxy[2].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
@@ -309,7 +313,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[4] = Planet();
     galaxy[4].mass = 6.39e23;
     galaxy[4].radius = 3389500;
-    galaxy[4].position = {640 + 1.52 * AU, 360};
+    galaxy[4].position = {640.f + 1.52f * (float) AU, 360};
     galaxy[4].prev_position = galaxy[4].position;
     direction = sf::Vector2f({640, 360}) - galaxy[4].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
@@ -327,7 +331,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[5] = Planet();
     galaxy[5].mass = 1.89813e27;
     galaxy[5].radius = 69911000;
-    galaxy[5].position = {640 + 5.2 * AU, 360};
+    galaxy[5].position = {640.f + 5.2f * (float) AU, 360};
     galaxy[5].prev_position = galaxy[5].position;
     direction = sf::Vector2f({640, 360}) - galaxy[5].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
@@ -345,7 +349,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[6] = Planet();
     galaxy[6].mass = 5.683e26;
     galaxy[6].radius = 60268000;
-    galaxy[6].position = {640 + 9.5 * AU, 360};
+    galaxy[6].position = {640.f + 9.5f * (float) AU, 360};
     galaxy[6].prev_position = galaxy[6].position;
     direction = sf::Vector2f({640, 360}) - galaxy[6].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
@@ -363,7 +367,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[7] = Planet();
     galaxy[7].mass = 8,681e25;
     galaxy[7].radius = 25362000;
-    galaxy[7].position = {640 + 19.2 * AU, 360};
+    galaxy[7].position = {640.f + 19.2f * (float) AU, 360};
     galaxy[7].prev_position = galaxy[7].position;
     direction = sf::Vector2f({640, 360}) - galaxy[7].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
@@ -381,7 +385,7 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[8] = Planet();
     galaxy[8].mass = 1,024e26;
     galaxy[8].radius = 24622000;
-    galaxy[8].position = {640 + 30.1 * AU, 360};
+    galaxy[8].position = {640.f + 30.1f * (float) AU, 360};
     galaxy[8].prev_position = galaxy[8].position;
     direction = sf::Vector2f({640, 360}) - galaxy[8].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));

@@ -6,6 +6,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 # add_compile_options(-fsanitize=address)
 # add_link_options(-fsanitize=address)
+# add_compile_options(-fno-fast-math)
+# add_compile_options(-fexcess-precision=standard)
+# add_compile_options(-ffloat-store)
 
 include(FetchContent)
 FetchContent_Declare(SFML

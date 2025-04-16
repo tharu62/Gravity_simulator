@@ -7,6 +7,8 @@
 #include "celestial_body.hpp"
 #include "vector_operator.hpp"
 
+extern int GALAXY_DIMENSION;
+
 namespace Verlet{
     
     sf::Vector2f temp;

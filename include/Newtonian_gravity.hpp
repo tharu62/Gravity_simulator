@@ -9,6 +9,8 @@
 // #define G 6.6743e-11
 #define G 1
 
+extern int GALAXY_DIMENSION;
+
 namespace Newton{
 
     /**

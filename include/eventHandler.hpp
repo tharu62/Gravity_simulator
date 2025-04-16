@@ -5,7 +5,7 @@
 #include "SFML/Graphics.hpp"
 
 
-void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving, bool &paused){
+void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving, bool &paused, sf::Text &framerate){
 
     if(const auto* PkeyPressed = event->getIf<sf::Event::KeyPressed>()){
         if(PkeyPressed->scancode == sf::Keyboard::Scan::P){
@@ -22,11 +22,17 @@ void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWind
         
         if(mouseWheelScrolled->delta > 0){
             view.zoom(0.5);
-            // std::cout << "wheel type: vertical" << std::endl;
+            const sf::Vector2f frameratePos = framerate.getPosition()*0.5;
+            framerate.setPosition(frameratePos);
+            framerate.setCharacterSize(framerate.getCharacterSize()/2);
+            // std::cout << "zoom down" << std::endl;
 
         }else{
             view.zoom(2);
-            // std::cout << "wheel type: horizontal" << std::endl;
+            const sf::Vector2f frameratePos = framerate.getPosition()*2 - sf::Vector2f(window.getSize().x/2, window.getSize().y/2);
+            framerate.setPosition(frameratePos);
+            framerate.setCharacterSize(framerate.getCharacterSize()*2);
+            // std::cout << "zoom up" << std::endl;
         }
     }
 
@@ -47,21 +53,6 @@ void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWind
             view.setCenter(view.getCenter() + deltaPos);
             window.setView(view);
             oldPos = window.mapPixelToCoords(sf::Vector2i(mouseMoved->position.x, mouseMoved->position.y));
-        }
-    }
-
-    if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()){
-        
-        if (keyPressed->scancode == sf::Keyboard::Scan::U){
-
-            view.zoom(2);
-            // std::cout << "zoom up" << std::endl;
-        }
-
-        if (keyPressed->scancode == sf::Keyboard::Scan::D){
-
-            view.zoom(0.5);
-            // std::cout << "zoom down" << std::endl;
         }
     }
     

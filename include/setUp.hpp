@@ -1,3 +1,6 @@
+#ifndef SETUP_HPP
+#define SETUP_HPP
+
 #include <iostream>
 #include <random>
 #include <cmath>
@@ -16,23 +19,10 @@ float AU = 149597870700;
 float RADIUS_SCALE = 250000/AU;
 float DISTANCE_SCALE = 2500/AU;
 
+extern int GALAXY_DIMENSION;
 
 /**
- * @brief Sorts the Celestial bodies in order of...
- */
-void sort(Celestial_body *galaxy, sf::VertexArray &points)
-{
-
-    int *arr = new int[GALAXY_DIMENSION];
-
-    for(int i=0; i<GALAXY_DIMENSION; ++i){
-
-    }
-
-}
-
-/**
- * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center (Celestial bodies as CircleShape).
+ * @brief Initialization of the galaxy with a random numeber of planets and a sun or a black hole at the center (Celestial bodies as CircleShape).
  */
 void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
 {
@@ -108,7 +98,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
 }
 
 /**
- * @brief Initialization of the galaxy with a random numeber of planets and a suns or black holes at the center (Celestial bodies as Points).
+ * @brief Initialization of the galaxy with a random numeber of planets and a sun or a black hole at the center (Celestial bodies as Points).
  */
 void setUp(Celestial_body *galaxy, sf::VertexArray &points)
 {
@@ -236,7 +226,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 }
 
 /**
- * @brief Variant of function setUp for setting up the SOlar system with the Sun at the center and the 8 main planets in orbit.
+ * @brief Variant of function setUp for setting up the Solar System with the Sun at the center and the 8 main planets in orbit.
  */
 void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
 
@@ -400,3 +390,5 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     circle[8].setOrigin({galaxy[8].radius * RADIUS_SCALE, galaxy[8].radius * RADIUS_SCALE});
 
 }
+
+#endif // SETUP_HPP

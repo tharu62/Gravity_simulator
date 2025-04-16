@@ -10,6 +10,8 @@ extern int GALAXY_DIMENSION;
 #define DETECTION_MARGIN 30
 #define RESISTANCE_FACTOR 0.99
 
+extern int GALAXY_DIMENSION;
+
 /**
  * @brief Check if two celestial bodies have collided and corrects velocity in module and direction
  */

@@ -9,20 +9,22 @@
 #include <unistd.h>
 #include <thread>
 #include <chrono>
+
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
 #include "planet.hpp"
 #include "sun.hpp"
 #include "black_hole.hpp"
 #include "eventHandler.hpp"
-
-int GALAXY_DIMENSION;
-
 #include "setUp.hpp"
 #include "position_integration.hpp"
 #include "Newtonian_gravity.hpp"
 #include "Barnes_Hut_algorithm.hpp"
 #include "collision&merge.hpp"
+#include "sort_celestial_body.hpp"
+
+int GALAXY_DIMENSION;
+
 
 class Application
 {
@@ -74,7 +76,17 @@ class Application
 
         auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
-        window.setFramerateLimit(60);
+        window.setVerticalSyncEnabled(true);
+        // window.setFramerateLimit(60);
+
+        sf::Font font;
+        std::ignore = font.openFromFile("/home/utontol/Documents/C++/Gravity_simulation/include/arial_narrow_7/arial_narrow_7.ttf");
+        sf::Text framerate(font);
+        framerate.setString("0");
+        framerate.setCharacterSize(30);
+        framerate.setFillColor(sf::Color::Red);
+        framerate.setStyle(sf::Text::Bold);
+        framerate.setPosition({width - 45.f, 10.f});
 
         Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
         // sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
@@ -83,24 +95,28 @@ class Application
         // setUp(galaxy, circle);
         setUp(galaxy, points);
         // set_up_Solar_System(galaxy, circle);
+
         
         Barnes_Hut_struct::Quadtree *q = new Barnes_Hut_struct::Quadtree();
-
+        
         while (window.isOpen())
         {
+            clock_t start = clock();
+
             while (const std::optional event = window.pollEvent())
             {
-                EventHandler(event, view, window, oldPos, moving, paused);
+                EventHandler(event, view, window, oldPos, moving, paused, framerate);
             }
-
+            
             // Code to handle simulation and drawing on window
             if(!paused){
-
-                // Collision detection and merge methods
+                
+                // Collision detection, merge and sort methods
                     // collision_detecion(galaxy);
                     // merge(galaxy);
                     // std::thread t1(collision_detecion, galaxy);
                     // std::thread t2(merge, galaxy);
+                    sort(galaxy, points);
                 
                 // Acceleration update methods
                     // Newton::compute_forces(galaxy);
@@ -140,11 +156,16 @@ class Application
                 // point[0].color = sf::Color::Green;
                 // window.draw(point);
                 
+            clock_t end = clock();
+            // double elapsed = double(end - start)/CLOCKS_PER_SEC;
+            // std::cout << elapsed << std::endl;
+            framerate.setString(std::to_string((int) (CLOCKS_PER_SEC / double(end - start))));
+            // const sf::Vector2f frameratePos{view.getCenter().x + width/2 - 45.f, view.getCenter().y - height/2 + 10.f};
+            // framerate.setPosition(frameratePos);
+            window.draw(framerate);
+
             window.display();
-                // clock_t start = clock();
-                // clock_t end = clock();
-                // double elapsed = double(end - start)/CLOCKS_PER_SEC;
-                // std::cout << elapsed << std::endl;
+                
         }
 
         delete[] galaxy;

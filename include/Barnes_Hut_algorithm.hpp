@@ -12,6 +12,8 @@
 #define THETA 0.1f
 #define LINUX_SCALE_FACTOR 0.25
 
+extern int GALAXY_DIMENSION;
+
 namespace Barnes_Hut_struct {
     
     /**
@@ -171,9 +173,8 @@ namespace Barnes_Hut_struct {
             while(!stack.empty()){
                 i = stack.top();
                 if(qtree[i].centerOfMass != pos){
-
-                    if((qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA || qtree[i].next[0] == 0){
-    
+                    
+                    if((qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA || qtree[i].next[0] == 0){  
                         magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                         if(magnitude_sq > 0.1f){
                             magnitude = sqrt(magnitude_sq);
@@ -359,25 +360,26 @@ namespace Burnes_Hut{
         while (!q.stack.empty()) q.stack.pop();
         q.init();
 
-        // clock_t start = clock();
+        // q.insert(galaxy);
+        // q.update_acceleration(galaxy);
         
-        for(int i=0; i < GALAXY_DIMENSION; ++i){
-
+        for(int i=0; i < GALAXY_DIMENSION; ++i){    
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
                 q.insert(galaxy[i].mass, galaxy[i].position);
                 // q.simple_insert(galaxy[i].mass, galaxy[i].position);
             }
         }
-        
-        // clock_t end = clock();
-        // double elapsed = double(end - start)/CLOCKS_PER_SEC;
-        // std::cout << elapsed << std::endl;
+
         
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
             // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
         } 
         
+        // clock_t start = clock();
+        // clock_t end = clock();
+        // double elapsed = double(end - start)/CLOCKS_PER_SEC;
+        // std::cout << elapsed << std::endl;
     }
 
 }

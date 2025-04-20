@@ -5,7 +5,7 @@
 #include "SFML/Graphics.hpp"
 
 
-void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving, bool &paused, sf::Text &framerate){
+void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWindow &window, sf::Vector2f &oldPos, bool &moving, bool &paused){
 
     if(const auto* PkeyPressed = event->getIf<sf::Event::KeyPressed>()){
         if(PkeyPressed->scancode == sf::Keyboard::Scan::P){
@@ -22,16 +22,10 @@ void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWind
         
         if(mouseWheelScrolled->delta > 0){
             view.zoom(0.5);
-            const sf::Vector2f frameratePos = framerate.getPosition()*0.5;
-            framerate.setPosition(frameratePos);
-            framerate.setCharacterSize(framerate.getCharacterSize()/2);
             // std::cout << "zoom down" << std::endl;
 
         }else{
             view.zoom(2);
-            const sf::Vector2f frameratePos = framerate.getPosition()*2 - sf::Vector2f(window.getSize().x/2, window.getSize().y/2);
-            framerate.setPosition(frameratePos);
-            framerate.setCharacterSize(framerate.getCharacterSize()*2);
             // std::cout << "zoom up" << std::endl;
         }
     }

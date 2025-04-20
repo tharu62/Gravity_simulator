@@ -76,6 +76,8 @@ class Application
 
         auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
+        sf::View view2(sf::FloatRect({0.f, 0.f}, {30.f, 30.f}));
+        view2.setViewport(sf::FloatRect({0.96f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
         // window.setFramerateLimit(60);
 
@@ -83,10 +85,10 @@ class Application
         std::ignore = font.openFromFile("/home/utontol/Documents/C++/Gravity_simulation/include/arial_narrow_7/arial_narrow_7.ttf");
         sf::Text framerate(font);
         framerate.setString("0");
-        framerate.setCharacterSize(30);
+        framerate.setCharacterSize(20);
         framerate.setFillColor(sf::Color::Red);
         framerate.setStyle(sf::Text::Bold);
-        framerate.setPosition({width - 45.f, 10.f});
+        framerate.setPosition({0.f, 0.f});
 
         Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
         // sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
@@ -99,13 +101,16 @@ class Application
         
         Barnes_Hut_struct::Quadtree *q = new Barnes_Hut_struct::Quadtree();
         
+        clock_t start = 0;
+        clock_t end = 0;
         while (window.isOpen())
         {
-            clock_t start = clock();
+
+            start = clock();
 
             while (const std::optional event = window.pollEvent())
             {
-                EventHandler(event, view, window, oldPos, moving, paused, framerate);
+                EventHandler(event, view, window, oldPos, moving, paused);
             }
             
             // Code to handle simulation and drawing on window
@@ -143,26 +148,28 @@ class Application
 
             // draw after clearing the window
             window.clear();
+
+            window.setView(view2);
+            window.draw(framerate);
+            
             window.setView(view);
+            window.draw(points);
                 // for(int i = 0; i < GALAXY_DIMENSION; ++i){
                 //     window.draw(circle[i]);
                 // }
                 // for(int i=0; i<q->qtree.size(); ++i){
                 //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
                 // }
-                window.draw(points);
                 // sf::VertexArray point(sf::PrimitiveType::Points, 1);
                 // point[0].position = q->qtree[0].centerOfMass;
                 // point[0].color = sf::Color::Green;
                 // window.draw(point);
                 
-            clock_t end = clock();
-            // double elapsed = double(end - start)/CLOCKS_PER_SEC;
-            // std::cout << elapsed << std::endl;
+                // double elapsed = double(end - start)/CLOCKS_PER_SEC;
+                // std::cout << elapsed << std::endl;
+                    
+            end = clock();
             framerate.setString(std::to_string((int) (CLOCKS_PER_SEC / double(end - start))));
-            // const sf::Vector2f frameratePos{view.getCenter().x + width/2 - 45.f, view.getCenter().y - height/2 + 10.f};
-            // framerate.setPosition(frameratePos);
-            window.draw(framerate);
 
             window.display();
                 

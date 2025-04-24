@@ -47,12 +47,19 @@ namespace Barnes_Hut_struct {
         std::vector<Node> qtree;
         std::stack<int> stack;
 
+        /**
+         * @brief Initializes the quadtree with the root node and reserves space for the quadtree vector with a size of GALAXY_DIMENSION*2*log2(GALAXY_DIMENSION).
+         */
         void init(){
+            qtree.reserve(GALAXY_DIMENSION * 2 *log2(GALAXY_DIMENSION));
             qtree.insert(qtree.begin() , Node());
             qtree[0].center = {640, 360};
             qtree[0].size = MAX_SIZE;
         }
 
+        /**
+         * @brief Subdivides the given node into 4 children nodes.
+         */
         void subdivide(int node){
             
             if (node < 0 || node >= qtree.size()) {
@@ -369,13 +376,12 @@ namespace Burnes_Hut{
                 // q.simple_insert(galaxy[i].mass, galaxy[i].position);
             }
         }
-
         
         for(int i=0; i < GALAXY_DIMENSION; ++i){
             galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
             // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
         } 
-        
+
         // clock_t start = clock();
         // clock_t end = clock();
         // double elapsed = double(end - start)/CLOCKS_PER_SEC;

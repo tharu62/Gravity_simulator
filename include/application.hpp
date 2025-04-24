@@ -95,9 +95,9 @@ class Application
         sf::VertexArray points{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
         // setUp(galaxy, circle);
-        setUp(galaxy, points);
         // set_up_Solar_System(galaxy, circle);
-
+        setUp(galaxy, points);
+        sort_all(galaxy, points);
         
         Barnes_Hut_struct::Quadtree *q = new Barnes_Hut_struct::Quadtree();
         
@@ -115,13 +115,14 @@ class Application
             
             // Code to handle simulation and drawing on window
             if(!paused){
-                
+
                 // Collision detection, merge and sort methods
                     // collision_detecion(galaxy);
                     // merge(galaxy);
                     // std::thread t1(collision_detecion, galaxy);
                     // std::thread t2(merge, galaxy);
                     sort(galaxy, points);
+                    // sort_all(galaxy, points);
                 
                 // Acceleration update methods
                     // Newton::compute_forces(galaxy);

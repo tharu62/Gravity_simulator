@@ -97,7 +97,7 @@ class Application
         // setUp(galaxy, circle);
         // set_up_Solar_System(galaxy, circle);
         setUp(galaxy, points);
-        sort_all(galaxy, points);
+        // sort_all(galaxy, points);
         
         Barnes_Hut_struct::Quadtree *q = new Barnes_Hut_struct::Quadtree();
         

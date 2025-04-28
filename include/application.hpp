@@ -40,6 +40,10 @@ class Application
     bool moving = false;
     bool paused = false;
     sf::Vector2f oldPos;
+    Celestial_body *galaxy;
+    sf::CircleShape *circle;
+    sf::VertexArray points;
+    Barnes_Hut_struct::Quadtree *q;
 
 
     public:
@@ -66,7 +70,12 @@ class Application
         GALAXY_DIMENSION = galaxy_dimention;
     }
 
-    ~Application(){ std::cout << "Simulator deconstracted!" << std::endl; }
+    ~Application(){ 
+        delete[] galaxy;
+        delete[] circle;
+        delete q;
+        std::cout << "Simulator deconstracted!" << std::endl; 
+    }
 
     /**
      * @brief Main loop for simulation of celestial bodies and graphical output on window.
@@ -90,16 +99,16 @@ class Application
         framerate.setStyle(sf::Text::Bold);
         framerate.setPosition({0.f, 0.f});
 
-        Celestial_body *galaxy = new Celestial_body[GALAXY_DIMENSION];
-        // sf::CircleShape *circle = new sf::CircleShape[GALAXY_DIMENSION];
-        sf::VertexArray points{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
+        galaxy = new Celestial_body[GALAXY_DIMENSION];
+        // circle = new sf::CircleShape[GALAXY_DIMENSION];
+        points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
         // setUp(galaxy, circle);
         // set_up_Solar_System(galaxy, circle);
         setUp(galaxy, points);
         // sort_all(galaxy, points);
         
-        Barnes_Hut_struct::Quadtree *q = new Barnes_Hut_struct::Quadtree();
+        q = new Barnes_Hut_struct::Quadtree();
         
         clock_t start = 0;
         clock_t end = 0;
@@ -176,10 +185,6 @@ class Application
                 
         }
 
-        delete[] galaxy;
-        // delete[] circle;
-        delete q;
-        
         std::cout << "Simulator closed!" << std::endl;
     }
 

@@ -12,14 +12,14 @@ extern int GALAXY_DIMENSION;
 namespace Verlet{
     
     sf::Vector2f temp;
-    float dt = 0.01;
+    const float dt = 0.01;
     
     /**
      * @brief Updates the position of any kind of celestial body using Verlet Integration (without velocities).
      */
     void update_position(Celestial_body *body, sf::CircleShape *circle){
         
-        for(int i=0; i < GALAXY_DIMENSION; ++i){
+        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
             temp = body[i].position;
 
             body[i].position.x = (temp.x * 2) - body[i].prev_position.x + (body[i].acceleration.x * (dt * dt));
@@ -36,7 +36,7 @@ namespace Verlet{
      */
     void update_position(Celestial_body *body, sf::VertexArray &points){
 
-        for(int i=0; i < GALAXY_DIMENSION; ++i){
+        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
             temp = body[i].position;
 
             body[i].position.x = (temp.x * 2) - body[i].prev_position.x + (body[i].acceleration.x * (dt * dt));
@@ -53,7 +53,7 @@ namespace Verlet{
 
 namespace Euler{
 
-    float dt = 0.01;
+    const float dt = 0.01;
     // float AU = 149597870700;
     // float RADIUS_SCALE = 250000/AU;
     // float DISTANCE_SCALE = 2500/AU;
@@ -63,7 +63,7 @@ namespace Euler{
      */
     void update_position(Celestial_body *body, sf::CircleShape *circle){
 
-        for(int i=0; i < GALAXY_DIMENSION; ++i){
+        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
 
@@ -78,7 +78,7 @@ namespace Euler{
     void update_position(Celestial_body *body, sf::VertexArray &points){
  
 
-        for(int i=0; i < GALAXY_DIMENSION; ++i){
+        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
 

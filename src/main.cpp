@@ -6,7 +6,7 @@
 int main(int argc, char *argv[]) 
 {
     
-    handle(argc, argv);
+    // handle(argc, argv);
 
     std::cout << "Running Simulation on SFML Version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << std::endl;
 

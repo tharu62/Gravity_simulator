@@ -56,7 +56,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
         s.acceleration = {0.f, 0.f};
         galaxy[0] = s;
 
-    for(int i = 1; i < GALAXY_DIMENSION; ++i){
+    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
 
         rand_1 = distribution1(eng);
         rand_2 = distribution2(eng);
@@ -77,7 +77,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
 
     }
 
-    for(int i = 0; i < GALAXY_DIMENSION; ++i){
+    for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
 
         circle[i].setRadius(galaxy[i].radius);
         if(galaxy[i].radius == 2){
@@ -136,7 +136,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points)
         // points[0].position = s.position;
         // points[0].color = sf::Color(255, 0, 0);
 
-    for(int i = 1; i < GALAXY_DIMENSION; ++i){
+    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
 
         rand_1 = distribution1(eng);
         rand_2 = distribution2(eng);
@@ -151,7 +151,6 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points)
         direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
         direction *=  (float) sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
         temp.velocity = {-direction.y, direction.x};
-        // temp.velocity = {0.f, 0.f};
         temp.acceleration = {0.f, 0.f};
         galaxy[i] = temp;
         points[i].position = temp.position;
@@ -170,7 +169,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
     float rand_2;
     srand(time(0));
 
-    for(int i = 1; i < GALAXY_DIMENSION; ++i){
+    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
         int seed = rand()%100;
         rand_1 = rand()%1280;
         rand_2 = rand()%720;
@@ -207,7 +206,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
         }
     }
 
-    for(int i = 0; i < GALAXY_DIMENSION; ++i){
+    for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
         circle[i].setRadius(galaxy[i].radius);
         if(galaxy[i].radius == 2){
             circle[i].setFillColor(sf::Color(255, 255, 255));

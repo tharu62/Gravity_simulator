@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
     static Application simulator(1280u, 720u, std::atoi(argv[1]));
     // static Application simulator(1280u, 720u, std::atoi(argv[1]), argv[2]);
     simulator.run();
-    // simulator.~Application();
 
     return 0;
 }

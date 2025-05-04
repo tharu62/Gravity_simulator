@@ -88,7 +88,6 @@ class Application
         sf::View view2(sf::FloatRect({0.f, 0.f}, {30.f, 30.f}));
         view2.setViewport(sf::FloatRect({0.96f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
-        // window.setFramerateLimit(60);
 
         sf::Font font;
         std::ignore = font.openFromFile("/home/utontol/Documents/C++/Gravity_simulation/include/arial_narrow_7/arial_narrow_7.ttf");
@@ -122,7 +121,7 @@ class Application
                 EventHandler(event, view, window, oldPos, moving, paused);
             }
             
-            // Code to handle simulation and drawing on window
+            // Code to handle simulation and drawing on window. You can add your own code here. (use Pause key = p to pause or resume the simulation)
             if(!paused){
 
                 // Collision detection, merge and sort methods

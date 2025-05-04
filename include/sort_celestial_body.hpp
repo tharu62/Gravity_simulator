@@ -11,7 +11,7 @@ float distance(Celestial_body *galaxy, int i, int j)
 }
 
 /**
- * @brief Sorts the Celestial bodies in order of...
+ * @brief Sorts the Celestial bodies in order of distance from the first body.
  */
 void sort(Celestial_body *galaxy, sf::VertexArray &points)
 {
@@ -27,6 +27,9 @@ void sort(Celestial_body *galaxy, sf::VertexArray &points)
 
 }
 
+/**
+ * @brief Sorts the Celestial bodies in order of distance from the first body.
+ */
 void sort_all(Celestial_body *galaxy, sf::VertexArray &points)
 {
 

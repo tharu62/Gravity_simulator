@@ -1,6 +1,8 @@
 # Gravity_simulation
 This program is a simulator for small galaxies made with clusters of planets orbiting a Black Hole or a Sun. The simulator use SFML 3 for the graphic rendering on screen while the physics of the galaxy is computed with custum C++ scripts (As it is a simulator made for real time computation, the physics are not necessarily 100% accurate but tries to emulate realistic behaveours with some approximations). READ THE WARNINGS BEFORE RUNNING THE PROGRAM.
 
+![alt text](image.png)
+
 ## INSTALL
 To run the program, first download the repository in your prefered folder, you can use this command from terminal :
 ```bash

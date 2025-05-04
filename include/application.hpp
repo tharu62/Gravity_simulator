@@ -128,21 +128,12 @@ class Application
                 // Collision detection, merge and sort methods
                     // collision_detecion(galaxy);
                     // merge(galaxy);
-                    // std::thread t1(collision_detecion, galaxy);
-                    // std::thread t2(merge, galaxy);
-                    sort(galaxy, points);
+                    // sort(galaxy, points);
                     // sort_all(galaxy, points);
                 
                 // Acceleration update methods
                     // Newton::compute_forces(galaxy);
                     Burnes_Hut::compute_forces(galaxy, *q);
-                    // std::thread t3(Newton::compute_forces, galaxy);
-                    // std::thread t4([galaxy, q](){ Burnes_Hut::compute_forces(galaxy, *q); });
-    
-                // t1.join();
-                // t2.join();
-                // t3.join();
-                // t4.join();
     
                 // Position update methods (CircleShape)
                     // Verlet::update_position(galaxy, circle);
@@ -152,6 +143,7 @@ class Application
                 // Position update methods (Points)
                     // Verlet::update_position(galaxy, points);
                     Euler::update_position(galaxy, points);
+                    // Euler::update_position_solar_system(galaxy, circle);
                     // Runge_Kutta::update_position(galaxy, points);
 
             }

@@ -389,10 +389,6 @@ namespace Burnes_Hut{
             galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
         } 
 
-        // clock_t start = clock();
-        // clock_t end = clock();
-        // double elapsed = double(end - start)/CLOCKS_PER_SEC;
-        // std::cout << elapsed << std::endl;
     }
 
 }

@@ -54,9 +54,7 @@ namespace Verlet{
 namespace Euler{
 
     const float dt = 0.01;
-    // float AU = 149597870700;
-    // float RADIUS_SCALE = 250000/AU;
-    // float DISTANCE_SCALE = 2500/AU;
+   
     
     /**
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
@@ -68,7 +66,6 @@ namespace Euler{
             body[i].position += body[i].velocity * dt;
 
             circle[i].setPosition(body[i].position);
-            // circle[i].setPosition(circle[i].getPosition() + body[i].velocity * dt * DISTANCE_SCALE);
         }
     }
 
@@ -85,6 +82,23 @@ namespace Euler{
             points[i].position = body[i].position;
         }
 
+    }
+
+
+    float AU = 149597870700;
+    float RADIUS_SCALE = 250000/AU;
+    float DISTANCE_SCALE = 2500/AU;
+    /**
+     * @brief Updates the position of any kind of celestial body using Euler's Method with velocities for the Solar System.
+     */
+    void update_position_solar_system(Celestial_body *body, sf::CircleShape *circle){
+
+        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+            body[i].velocity += body[i].acceleration * dt;
+            body[i].position += body[i].velocity * dt;
+
+            circle[i].setPosition(circle[i].getPosition() + body[i].velocity * dt * DISTANCE_SCALE);
+        }
     }
 
 }

@@ -10,7 +10,12 @@
 
 #define MAX_SIZE 4000.f
 #define THETA 0.1f
-#define LINUX_SCALE_FACTOR 0.25
+
+// #ifdef _WIN32
+//     #define LINUX_SCALE_FACTOR 1.0
+// #else
+//     #define LINUX_SCALE_FACTOR 0.25
+// #endif
 
 extern int GALAXY_DIMENSION;
 
@@ -145,7 +150,8 @@ namespace Barnes_Hut_struct {
                     float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                     if(magnitude_sq >= 0.1f){
                         float magnitude = sqrt(magnitude_sq);
-                        return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)) * LINUX_SCALE_FACTOR);
+                        // return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)) * LINUX_SCALE_FACTOR);
+                        return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
                     }
 
                 }else{
@@ -185,7 +191,8 @@ namespace Barnes_Hut_struct {
                         magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                         if(magnitude_sq > 0.1f){
                             magnitude = sqrt(magnitude_sq);
-                            acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq))) * LINUX_SCALE_FACTOR;
+                            // acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq))) * LINUX_SCALE_FACTOR;
+                            acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
                         }
                         stack.pop();
     
@@ -285,7 +292,8 @@ namespace Barnes_Hut_struct {
                                 float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                                 if(magnitude_sq > 0.1f){
                                     float magnitude = sqrt(magnitude_sq);
-                                    acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)) * LINUX_SCALE_FACTOR);
+                                    // acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)) * LINUX_SCALE_FACTOR);
+                                    acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
                                 }
                                 stack.pop();
             

@@ -11,12 +11,6 @@
 #define MAX_SIZE 4000.f
 #define THETA 0.1f
 
-// #ifdef _WIN32
-//     #define LINUX_SCALE_FACTOR 1.0
-// #else
-//     #define LINUX_SCALE_FACTOR 0.25
-// #endif
-
 extern int GALAXY_DIMENSION;
 
 namespace Barnes_Hut_struct {

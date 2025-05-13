@@ -42,4 +42,4 @@ The Newton:: compute_forces(...) method has a time complexity of O(n^2) which me
 
 Some functions are working in progress : Merge(...) , Runge_Kutta::update_position(...) and Euler::update_position_solar_system().
 
-On Linux the behaviour of the Barnes_Hut algorithm is significantly different (it could be becouse of different compilers optimization), to fix this problem i have added a variable called "LINUX_SCALE_FACTOR 0.25" in the Barnes_Hut_algorithm.hpp file. By default is set to Linux, if you want to run on Windows set it to 1.
+<!-- On Linux the behaviour of the Barnes_Hut algorithm is significantly different (it could be becouse of different compilers optimization), to fix this problem i have added a variable called "LINUX_SCALE_FACTOR 0.25" in the Barnes_Hut_algorithm.hpp file. By default is set to Linux, if you want to run on Windows set it to 1. -->

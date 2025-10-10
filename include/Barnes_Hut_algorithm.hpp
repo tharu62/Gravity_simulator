@@ -185,7 +185,6 @@ namespace Barnes_Hut_struct {
                         magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
                         if(magnitude_sq > 0.1f){
                             magnitude = sqrt(magnitude_sq);
-                            // acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq))) * LINUX_SCALE_FACTOR;
                             acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
                         }
                         stack.pop();
@@ -368,6 +367,8 @@ namespace Burnes_Hut{
 
     /**
      * @brief Computes the Gravitational forces between each celestial body to update the acceleration of each celestial body.
+     * @todo CORRECT ERROR : Black hole moves too fast suddenly.
+     * @todo CORRECT ERROR : Bodies behavior is erratic compared to Newtonian gravity.
      */
     void compute_forces(Celestial_body *galaxy, Quadtree &q){
         
@@ -381,15 +382,21 @@ namespace Burnes_Hut{
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
                 q.insert(galaxy[i].mass, galaxy[i].position);
                 // q.simple_insert(galaxy[i].mass, galaxy[i].position);
+            }else{
+                galaxy[i].acceleration = {0.f, 0.f}; 
+                galaxy[i].velocity = {0.f, 0.f};
             }
         }
         
         // q.update_acceleration(galaxy);
 
         for(int i=0; i < GALAXY_DIMENSION; ++i){
-            // galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
-            galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
-        } 
+
+            if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
+                galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
+                // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
+            }
+        }
 
     }
 

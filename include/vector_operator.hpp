@@ -49,6 +49,7 @@ sf::Vector2f operator *(sf::Vector2f left, long double right){
 template<typename T>
 sf::Vector2f operator /(const sf::Vector2f left, const sf::Vector2f right)
 {
+    if(right.x == 0 || right.y == 0) return left;    
     T X = left.x / right.x;
     T Y = left.y / right.y;
     return sf::Vector2f(X,Y);
@@ -56,6 +57,7 @@ sf::Vector2f operator /(const sf::Vector2f left, const sf::Vector2f right)
 
 sf::Vector2f operator /(const sf::Vector2f left, const float right)
 {
+    if(right == 0) return left;
     float temp = 1.f / right;
     float X = left.x * temp;
     float Y = left.y * temp;
@@ -64,13 +66,16 @@ sf::Vector2f operator /(const sf::Vector2f left, const float right)
 
 sf::Vector2f operator /(const sf::Vector2f left, const double right)
 {
+    if(right == 0) return left;
     double temp = 1.0 / right;
     double X = left.x * temp;
     double Y = left.y * temp;
     return sf::Vector2f((float)X,(float)Y);
 }
+
 sf::Vector2f operator /(const sf::Vector2f left, const long double right)
 {
+    if(right == 0) return left;
     long double temp = 1.f / right;
     long double X = left.x * temp;
     long double Y = left.y * temp;

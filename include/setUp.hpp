@@ -9,9 +9,7 @@
 #include <unistd.h>
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
-#include "planet.hpp"
-#include "sun.hpp"
-#include "black_hole.hpp"
+#include "celestial_body.hpp"
 
 float G  = 6.6743e-11;
 // float G = 1;
@@ -151,7 +149,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points)
         direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
         direction *=  (float) sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
         temp.velocity = {-direction.y, direction.x};
-        temp.acceleration = {0.f, 0.f};
+        temp.acceleration = temp.velocity * (sf::Vector2f({640, 360}) - temp.position).lengthSquared();
         galaxy[i] = temp;
         points[i].position = temp.position;
         points[i].color = sf::Color(255, 255, 255);

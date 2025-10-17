@@ -19,18 +19,20 @@ namespace Barnes_Hut_struct {
      * @param next is an array that contains the indices of the 4 node children of this node.
      * In order : next[0] quadrant 1, next[1] quadrant 2, next[2] quadrant 3, next[4] quadrant 4. 
      * In use Euclidean 2D space quadrant notation. 
-     * @param center is the geometric center of the node, wich is a square, with width and height <size>*2.
-     * @param CenterOfMass is the center of mass of the node that has total mass of <mass>.   
+     * @param center is the geometric center of the node, wich is a square.
+     * @param size is half the width/height of the node square.
+     * @param mass is the total mass of all bodies inserted in this node.
+     * @param CenterOfMass is the center of mass of the node.   
      * @details total size of struct = 8*4 + 4*2 + 8*2 = 56 bytes.
      */
     struct Node {
         
         u_int32_t next[4];  //8x4 bytes
-        float size;         //4 bytes
-        float mass;         //4 bytes
+        float size;         //4 bytes => max float = 3.40282e+38
+        float mass;         //4 bytes => max float = 3.40282e+38
 
-        sf::Vector2f center;        //8 bytes
-        sf::Vector2f centerOfMass;  //8 bytes
+        sf::Vector2f center;        //8 bytes => max float = 3.40282e+38
+        sf::Vector2f centerOfMass;  //8 bytes => max float = 3.40282e+38
 
         Node() : next{0,0,0,0}, center(0.f, 0.f), size(0.f), centerOfMass(0.f, 0.f), mass(0) {}
 
@@ -97,6 +99,8 @@ namespace Barnes_Hut_struct {
 
         /**
          * @brief Insert ONE body mass and position in the quadtree using itarative method.
+         * @param <mass> Mass of the body to insert.
+         * @param <pos> Position of the body to insert.
          */
         void insert(float mass, sf::Vector2f pos){
 
@@ -119,6 +123,10 @@ namespace Barnes_Hut_struct {
                             }
                         }
                         qtree[i].centerOfMass = (qtree[i].centerOfMass*qtree[i].mass + pos*mass) / (qtree[i].mass + mass);
+                        if(qtree[i].mass > 3.4e+38){
+                            std::cout << "Critical Mass, too many celestial bodies!" << std::endl;
+                            exit(1);
+                        }
                         qtree[i].mass += mass;
                         i = qtree[i].next[0] -1;
                     }
@@ -129,23 +137,28 @@ namespace Barnes_Hut_struct {
         }
 
         /**
-         * * @brief Returns the acceleration of a body in the quadtree using recursive method.
+         * @brief Returns the acceleration of a body in the quadtree using recursive method.
+         * @param <pos> Position of the body to update acceleration for.
+         * @param <i> Current node index in the quadtree.
          */
         sf::Vector2f update_acceleration(sf::Vector2f pos, u_int32_t i){
 
-            if(abs(pos.x) > MAX_SIZE*2 || abs(pos.y) > MAX_SIZE*2){
-                // std::cout << "Position out of bounds!" << std::endl;
-                return {0.f, 0.f};
-            }
+            // if(abs(pos.x) > MAX_SIZE*2 || abs(pos.y) > MAX_SIZE*2){
+            //     // std::cout << "Position out of bounds!" << std::endl;
+            //     return {0.f, 0.f};
+            // }
             if(qtree[i].centerOfMass != pos){
 
-                if((qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA || qtree[i].next[0] == 0){
+                if((qtree[i].next[0] == 0 || qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA){
 
-                    float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
+                    // float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
+                    // if(magnitude_sq >= 0.1f){
+                    //     float magnitude = sqrt(magnitude_sq);
+                    //     return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
+                    // }
+                    float magnitude_sq = (qtree[i].centerOfMass - pos).lengthSquared();
                     if(magnitude_sq >= 0.1f){
-                        float magnitude = sqrt(magnitude_sq);
-                        // return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)) * LINUX_SCALE_FACTOR);
-                        return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
+                        return (qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude_sq * (qtree[i].centerOfMass - pos).length()));
                     }
 
                 }else{
@@ -166,29 +179,22 @@ namespace Barnes_Hut_struct {
          */
         sf::Vector2f update_acceleration(sf::Vector2f pos){
             
-            if(abs(pos.x) > MAX_SIZE*2 || abs(pos.y) > MAX_SIZE*2){
-                return {0.f, 0.f};
-            }
-            
             stack.push(0);
             u_int32_t i;
             float magnitude_sq = 0.f; 
-            float magnitude = 0.f;
-            sf::Vector2f acc = {0,0};
+            sf::Vector2f acc = {0.f,0.f};
 
 
             while(!stack.empty()){
                 i = stack.top();
                 if(qtree[i].centerOfMass != pos){
-                    
-                    if((qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA || qtree[i].next[0] == 0){  
-                        magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
-                        if(magnitude_sq > 0.1f){
-                            magnitude = sqrt(magnitude_sq);
-                            acc += ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
+
+                    if(qtree[i].next[0] == 0 || (qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA){  
+                        magnitude_sq = (float)(qtree[i].centerOfMass - pos).lengthSquared();
+                        if(magnitude_sq > 1.f){
+                            acc += (qtree[i].centerOfMass - pos) * (qtree[i].mass/((qtree[i].centerOfMass - pos).length() * magnitude_sq));
                         }
                         stack.pop();
-    
                     }else{
                         stack.pop();
                         stack.push(qtree[i].next[0]);
@@ -367,7 +373,6 @@ namespace Burnes_Hut{
 
     /**
      * @brief Computes the Gravitational forces between each celestial body to update the acceleration of each celestial body.
-     * @todo CORRECT ERROR : Black hole moves too fast suddenly.
      * @todo CORRECT ERROR : Bodies behavior is erratic compared to Newtonian gravity.
      */
     void compute_forces(Celestial_body *galaxy, Quadtree &q){
@@ -376,8 +381,9 @@ namespace Burnes_Hut{
         while (!q.stack.empty()) q.stack.pop();
         q.init();
 
-        // q.insert(galaxy);
-        
+        /**
+         * @brief INSERTING BODIES IN QUADTREE
+         */
         for(int i=0; i < GALAXY_DIMENSION; ++i){    
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
                 q.insert(galaxy[i].mass, galaxy[i].position);
@@ -387,16 +393,20 @@ namespace Burnes_Hut{
                 galaxy[i].velocity = {0.f, 0.f};
             }
         }
+        // q.insert(galaxy);
         
-        // q.update_acceleration(galaxy);
-
+         /**
+         * @brief UPDATING ACCELERATIONS OF BODIES
+         */
         for(int i=0; i < GALAXY_DIMENSION; ++i){
 
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
                 galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
                 // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
             }
+
         }
+        // q.update_acceleration(galaxy);
 
     }
 

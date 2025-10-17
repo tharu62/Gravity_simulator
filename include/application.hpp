@@ -12,9 +12,6 @@
 
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
-#include "planet.hpp"
-#include "sun.hpp"
-#include "black_hole.hpp"
 #include "eventHandler.hpp"
 #include "setUp.hpp"
 #include "position_integration.hpp"
@@ -47,6 +44,31 @@ class Application
 
 
     public:
+    
+    /**
+     * @todo add setter functionality for different initial galaxy setups.
+     */
+    Application(unsigned int x, unsigned int y, int nob, char *set): width(x), height(y), setter(*set){
+        GALAXY_DIMENSION = nob;
+    }
+
+    /**
+     * @brief Main constructor for Application class.
+     */
+    Application(unsigned int x, unsigned int y, int nob): width(x), height(y){
+        GALAXY_DIMENSION = nob;
+        std::cout << "Simulator constructed!" << std::endl;
+    }
+
+    /**
+     * @brief Deconstructor for Application class.
+     */
+    ~Application(){ 
+        delete[] galaxy;
+        delete[] circle;
+        delete q;
+        std::cout << "Simulator deconstracted!" << std::endl; 
+    }
 
     /**
      * @brief Debug function that draws the bounding boxes of the quadtree produced by the Barnes-Hut method for updating acceleration.
@@ -62,35 +84,24 @@ class Application
         window.draw(box);
     }
 
-    Application(unsigned int x, unsigned int y, int galaxy_dimention, char *set): width(x), height(y), setter(*set){
-        GALAXY_DIMENSION = galaxy_dimention;
-    }
-
-    Application(unsigned int x, unsigned int y, int galaxy_dimention): width(x), height(y){
-        GALAXY_DIMENSION = galaxy_dimention;
-    }
-
-    ~Application(){ 
-        delete[] galaxy;
-        delete[] circle;
-        delete q;
-        std::cout << "Simulator deconstracted!" << std::endl; 
-    }
-
     /**
      * @brief Main loop for simulation of celestial bodies and graphical output on window.
      */
     void run(){
-        std::cout << "Simulator open!" << std::endl;
+        std::cout << "Simulator running!" << std::endl;
 
-        auto window = sf::RenderWindow(sf::VideoMode({width, height}), "Gravity Simulator");
+        
+        auto window = sf::RenderWindow(sf::VideoMode(sf::Vector2u{width, height}), "Gravity Simulator");
+        // std::cout << "Galaxy initialized with " << GALAXY_DIMENSION << " celestial bodies!" <<  std::endl;
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
         sf::View view2(sf::FloatRect({0.f, 0.f}, {30.f, 30.f}));
         view2.setViewport(sf::FloatRect({0.96f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
 
+        
+
         sf::Font font;
-        std::ignore = font.openFromFile("/home/utontol/Documents/C++/Gravity_simulation/include/arial_narrow_7/arial_narrow_7.ttf");
+        std::ignore = font.openFromFile("/home/deshan/Documents/Code/C++/Gravity_simulator/include/arial_narrow_7/arial_narrow_7.ttf");
         sf::Text framerate(font);
         framerate.setString("0");
         framerate.setCharacterSize(20);
@@ -176,7 +187,7 @@ class Application
                 
         }
 
-        std::cout << "Simulator closed!" << std::endl;
+        std::cout << "Simulator stopped!" << std::endl;
     }
 
 };

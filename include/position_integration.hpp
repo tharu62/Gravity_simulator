@@ -81,13 +81,13 @@ namespace Euler{
 
             // dampening of velocity and acceleration to avoid overshooting and extreme values
             // if(body[i].acceleration.x < 0.00001f || body[i].acceleration.y < 0.00001f){
-            //     body[i].acceleration *= 1.00001f;
+            //     body[i].acceleration *= 1.001f;
             // }
-            // if(body[i].acceleration.x > 10000000.f || body[i].acceleration.y > 10000000.f){
-            //     body[i].acceleration.x /= 1.00001f;
+            // if(body[i].acceleration.x > 100000.f || body[i].acceleration.y > 100000.f){
+            //     body[i].acceleration.x /= 1.001f;
             // }
-            // if(not(body[i].velocity.x < 3000000.f && body[i].velocity.y < 3000000.f && body[i].velocity.x > -3000000.f && body[i].velocity.y > -3000000.f)){
-            //     body[i].velocity /= 1.00001f;
+            // if(not(body[i].velocity.x < 300000.f && body[i].velocity.y < 300000.f && body[i].velocity.x > -300000.f && body[i].velocity.y > -300000.f)){
+            //     body[i].velocity /= 1.001f;
             // }
             
             body[i].velocity += body[i].acceleration * dt;
@@ -95,6 +95,7 @@ namespace Euler{
 
             points[i].position = body[i].position;
         }
+        
 
     }
 

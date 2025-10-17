@@ -19,9 +19,9 @@ namespace Barnes_Hut_struct {
      * @param next is an array that contains the indices of the 4 node children of this node.
      * In order : next[0] quadrant 1, next[1] quadrant 2, next[2] quadrant 3, next[4] quadrant 4. 
      * In use Euclidean 2D space quadrant notation. 
-     * @param center is the geometric center of the node, wich is a square.
      * @param size is half the width/height of the node square.
      * @param mass is the total mass of all bodies inserted in this node.
+     * @param center is the geometric center of the node, wich is a square.
      * @param CenterOfMass is the center of mass of the node.   
      * @details total size of struct = 8*4 + 4*2 + 8*2 = 56 bytes.
      */
@@ -99,10 +99,10 @@ namespace Barnes_Hut_struct {
 
         /**
          * @brief Insert ONE body mass and position in the quadtree using itarative method.
-         * @param <mass> Mass of the body to insert.
-         * @param <pos> Position of the body to insert.
+         * @param mass Mass of the body to insert.
+         * @param pos Position of the body to insert.
          */
-        void insert(float mass, sf::Vector2f pos){
+        void insert_(float mass, sf::Vector2f pos){
 
             for(u_int i=0; i<qtree.size(); ++i){
 
@@ -138,8 +138,8 @@ namespace Barnes_Hut_struct {
 
         /**
          * @brief Returns the acceleration of a body in the quadtree using recursive method.
-         * @param <pos> Position of the body to update acceleration for.
-         * @param <i> Current node index in the quadtree.
+         * @param pos Position of the body to update acceleration for.
+         * @param i Current node index in the quadtree.
          */
         sf::Vector2f update_acceleration(sf::Vector2f pos, u_int32_t i){
 
@@ -151,11 +151,6 @@ namespace Barnes_Hut_struct {
 
                 if((qtree[i].next[0] == 0 || qtree[i].size*2)/abs((qtree[i].centerOfMass - pos).length()) < THETA){
 
-                    // float magnitude_sq = (qtree[i].centerOfMass - pos).x*(qtree[i].centerOfMass - pos).x + (qtree[i].centerOfMass - pos).y*(qtree[i].centerOfMass - pos).y;
-                    // if(magnitude_sq >= 0.1f){
-                    //     float magnitude = sqrt(magnitude_sq);
-                    //     return ((qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude * magnitude_sq)));
-                    // }
                     float magnitude_sq = (qtree[i].centerOfMass - pos).lengthSquared();
                     if(magnitude_sq >= 0.1f){
                         return (qtree[i].centerOfMass - pos) * (qtree[i].mass/(magnitude_sq * (qtree[i].centerOfMass - pos).length()));
@@ -176,8 +171,9 @@ namespace Barnes_Hut_struct {
 
         /**
          * @brief Returns the acceleration of a body in the quadtree using iterative method.
+         * @param pos Position of the body to update acceleration for.
          */
-        sf::Vector2f update_acceleration(sf::Vector2f pos){
+        sf::Vector2f update_acceleration_(sf::Vector2f pos){
             
             stack.push(0);
             u_int32_t i;
@@ -213,12 +209,9 @@ namespace Barnes_Hut_struct {
         }
 
         /**
-         * @brief Insert ALL bodies mass and position in the quadtree using iterative method.
+         * @brief Insert the mass and position of ALL bodies in the quadtree using iterative method.
          */
         void insert(Celestial_body *galaxy){
-
-            // float mass;
-            // sf::Vector2f pos;
 
             for(u_int32_t k=0; k<GALAXY_DIMENSION; ++k){
 
@@ -386,8 +379,7 @@ namespace Burnes_Hut{
          */
         for(int i=0; i < GALAXY_DIMENSION; ++i){    
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
-                q.insert(galaxy[i].mass, galaxy[i].position);
-                // q.simple_insert(galaxy[i].mass, galaxy[i].position);
+                q.insert_(galaxy[i].mass, galaxy[i].position);
             }else{
                 galaxy[i].acceleration = {0.f, 0.f}; 
                 galaxy[i].velocity = {0.f, 0.f};
@@ -401,8 +393,7 @@ namespace Burnes_Hut{
         for(int i=0; i < GALAXY_DIMENSION; ++i){
 
             if(abs(galaxy[i].position.x) <= MAX_SIZE*2 && abs(galaxy[i].position.y) <= MAX_SIZE*2){
-                galaxy[i].acceleration = q.update_acceleration(galaxy[i].position);
-                // galaxy[i].acceleration = q.simple_update_acceleration(galaxy[i].mass, galaxy[i].position);
+                galaxy[i].acceleration = q.update_acceleration_(galaxy[i].position);
             }
 
         }

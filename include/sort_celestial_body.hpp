@@ -35,7 +35,7 @@ void sort_all(Celestial_body *galaxy, sf::VertexArray &points)
 
     for(int i=0; i<GALAXY_DIMENSION-1; ++i){
 
-        for(int j=i+1; j<GALAXY_DIMENSION; ++j){
+        for(int j=i+1; j<GALAXY_DIMENSION-1; ++j){
 
             if(distance(galaxy, i, 0) > distance(galaxy, j, 0)){
                 std::swap(galaxy[i], galaxy[j]);

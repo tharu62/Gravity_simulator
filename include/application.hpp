@@ -2,13 +2,7 @@
 #define APPLICATION_HPP
 
 #include <iostream>
-#include <random>
-#include <cmath>
 #include <ctime>
-#include <map>
-#include <unistd.h>
-#include <thread>
-#include <chrono>
 
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
@@ -41,7 +35,6 @@ class Application
     sf::CircleShape *circle;
     sf::VertexArray points;
     Barnes_Hut_struct::Quadtree *q;
-
 
     public:
     
@@ -89,16 +82,12 @@ class Application
      */
     void run(){
         std::cout << "Simulator running!" << std::endl;
-
         
         auto window = sf::RenderWindow(sf::VideoMode(sf::Vector2u{width, height}), "Gravity Simulator");
-        // std::cout << "Galaxy initialized with " << GALAXY_DIMENSION << " celestial bodies!" <<  std::endl;
         sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
-        sf::View view2(sf::FloatRect({0.f, 0.f}, {30.f, 30.f}));
-        view2.setViewport(sf::FloatRect({0.96f, 0.f}, {0.04f, 0.04f}));
+        sf::View view2(sf::FloatRect({0.f, 0.f}, {40.f, 30.f}));
+        view2.setViewport(sf::FloatRect({0.f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
-
-        
 
         sf::Font font;
         std::ignore = font.openFromFile("/home/deshan/Documents/Code/C++/Gravity_simulator/include/arial_narrow_7/arial_narrow_7.ttf");
@@ -113,11 +102,8 @@ class Application
         // circle = new sf::CircleShape[GALAXY_DIMENSION];
         points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
-        // setUp(galaxy, circle);
-        // set_up_Solar_System(galaxy, circle);
-        setUp(galaxy, points);
-        // sort_all(galaxy, points);
-        
+        setUp(galaxy, circle, points, "Points", "black_hole_centered");
+        // sort(galaxy, points);
         q = new Barnes_Hut_struct::Quadtree();
         
         clock_t start = 0;
@@ -169,6 +155,7 @@ class Application
                 // for(int i = 0; i < GALAXY_DIMENSION; ++i){
                 //     window.draw(circle[i]);
                 // }
+                
                 // for(int i=0; i<q->qtree.size(); ++i){
                 //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
                 // }

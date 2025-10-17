@@ -58,7 +58,6 @@ namespace Euler{
     
     /**
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
-     * @todo add dampening to avoid overshooting and extreme values.
      */
     void update_position(Celestial_body *body, sf::CircleShape *circle){
 
@@ -72,23 +71,11 @@ namespace Euler{
 
     /**
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
-     * @todo add dampening to avoid overshooting and extreme values.
      */
     void update_position(Celestial_body *body, sf::VertexArray &points){
  
 
         for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
-
-            // dampening of velocity and acceleration to avoid overshooting and extreme values
-            // if(body[i].acceleration.x < 0.00001f || body[i].acceleration.y < 0.00001f){
-            //     body[i].acceleration *= 1.001f;
-            // }
-            // if(body[i].acceleration.x > 100000.f || body[i].acceleration.y > 100000.f){
-            //     body[i].acceleration.x /= 1.001f;
-            // }
-            // if(not(body[i].velocity.x < 300000.f && body[i].velocity.y < 300000.f && body[i].velocity.x > -300000.f && body[i].velocity.y > -300000.f)){
-            //     body[i].velocity /= 1.001f;
-            // }
             
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
@@ -107,7 +94,6 @@ namespace Euler{
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities for the Solar System.
      * @note This method is specifically designed for simulating the Solar System, where distances and sizes are scaled down for better visualization.
      * @note The method uses different scaling factors for distances and sizes to ensure that celestial bodies are visible and proportionate on the screen.
-     * @todo add dampening to avoid overshooting and extreme values.
      */
     void update_position_solar_system(Celestial_body *body, sf::CircleShape *circle){
 

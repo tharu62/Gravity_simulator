@@ -22,7 +22,7 @@ extern int GALAXY_DIMENSION;
 /**
  * @brief Initialization of the galaxy with a random numeber of planets and a sun or a black hole at the center (Celestial bodies as CircleShape).
  */
-void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
+void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "default")
 {
 
     std::random_device rd;
@@ -35,16 +35,18 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
     sf::Vector2f direction;
 
     // Black hole in the center of the screen
-        // Black_hole bh = Black_hole();
-        // bh.set_mass();
-        // bh.radius = 5;
-        // bh.position = {620, 360};
-        // bh.prev_position = bh.position;
-        // bh.velocity = {0.f, 0.f};
-        // bh.acceleration = {0.f, 0.f};
-        // galaxy[0] = bh;
-
+    if(type == "default" || type == "black_hole_centered"){
+        Black_hole bh = Black_hole();
+        bh.set_mass();
+        bh.radius = 5;
+        bh.position = {640, 360};
+        bh.prev_position = bh.position;
+        bh.velocity = {0.f, 0.f};
+        bh.acceleration = {0.f, 0.f};
+        galaxy[0] = bh;
+    }
     // Sun in the center of the screen
+    else if(type == "sun_centered"){
         Sun s = Sun();
         s.set_mass();
         s.radius = 109;
@@ -53,6 +55,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
         s.velocity = {0.f, 0.f};
         s.acceleration = {0.f, 0.f};
         galaxy[0] = s;
+    }
 
     for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
 
@@ -64,11 +67,11 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
         temp.radius = 2;
         temp.position = {rand_1, rand_2};
         temp.prev_position = temp.position;
-        // direction = sf::Vector2f({640, 360}) - temp.position;
-        // std::ignore = direction.rotatedBy(sf::degrees(180));
-        // direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-        // direction *=  (float)sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
-        // temp.velocity = {-direction.y, direction.x};
+        direction = sf::Vector2f({640, 360}) - temp.position;
+        std::ignore = direction.rotatedBy(sf::degrees(180));
+        direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
+        direction *=  (float)sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
+        temp.velocity = {-direction.y, direction.x};
         temp.velocity = {0.f, 0.f};
         temp.acceleration = {0.f, 0.f};
         galaxy[i] = temp;
@@ -98,7 +101,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle)
 /**
  * @brief Initialization of the galaxy with a random numeber of planets and a sun or a black hole at the center (Celestial bodies as Points).
  */
-void setUp(Celestial_body *galaxy, sf::VertexArray &points)
+void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "default")
 {
 
     std::random_device rd;
@@ -111,6 +114,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points)
     sf::Vector2f direction;
 
     // Black hole in the center of the screen
+    if(type == "default" || type == "black_hole_centered"){
         Black_hole bh = Black_hole();
         bh.set_mass();
         bh.radius = 5;
@@ -121,19 +125,21 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points)
         galaxy[0] = bh;
         points[0].position = bh.position;
         points[0].color = sf::Color(255, 0, 0);
-
+    }
     // Sun in the center of the screen
-        // Sun s = Sun();
-        // s.set_mass();
-        // s.radius = 109;
-        // s.position = {620, 360};
-        // s.prev_position = s.position;
-        // s.velocity = {0.f, 0.f};
-        // s.acceleration = {0.f, 0.f};
-        // galaxy[0] = s;
-        // points[0].position = s.position;
-        // points[0].color = sf::Color(255, 0, 0);
-
+    else if(type == "sun_centered"){
+        Sun s = Sun();
+        s.set_mass();
+        s.radius = 109;
+        s.position = {620, 360};
+        s.prev_position = s.position;
+        s.velocity = {0.f, 0.f};
+        s.acceleration = {0.f, 0.f};
+        galaxy[0] = s;
+        points[0].position = s.position;
+        points[0].color = sf::Color(255, 0, 0);
+    }
+    
     for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
 
         rand_1 = distribution1(eng);
@@ -225,7 +231,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 /**
  * @brief Variant of function setUp for setting up the Solar System with the Sun at the center and the 8 main planets in orbit.
  */
-void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
+void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
 
     sf::Vector2f direction;
 
@@ -387,5 +393,42 @@ void set_up_Solar_System(Celestial_body *galaxy, sf::CircleShape *circle){
     circle[8].setOrigin({galaxy[8].radius * RADIUS_SCALE, galaxy[8].radius * RADIUS_SCALE});
 
 }
+
+
+
+/**
+ * @brief Generalized setup function to choose between different rendering types and celestial body initializations.
+ * @param galaxy Pointer to an array of Celestial_body objects representing the galaxy.
+ * @param circle Pointer to an array of sf::CircleShape objects for rendering celestial bodies as circles.
+ * @param points Reference to an sf::VertexArray for rendering celestial bodies as points.
+ * @param render_type String specifying the rendering type ("CircleShape" or "Points").
+ * @param planetary_system String specifying the type of planetary system initialization ("random", "solar_system", "sun_centered", "black_hole_centered").
+ */
+void setUp(Celestial_body *galaxy, sf::CircleShape *circle, sf::VertexArray &points, std::string render_type, std::string planetary_system){
+
+    if(render_type == "CircleShape"){
+        if(planetary_system == "random"){
+            setUp_rand(galaxy, circle);
+        }
+        else if(planetary_system == "solar_system"){
+            setUp_solar_system(galaxy, circle);
+        }
+        else if(planetary_system == "sun_centered"){
+            setUp(galaxy, circle);
+        }
+        else if(planetary_system == "black_hole_centered"){
+            setUp(galaxy, circle);
+        }
+    }
+    else if(render_type == "Points"){
+        if(planetary_system == "sun_centered"){
+            setUp(galaxy, points);
+        }
+        else if(planetary_system == "black_hole_centered"){
+            setUp(galaxy, points);
+        }
+    }
+}
+
 
 #endif // SETUP_HPP

@@ -42,3 +42,12 @@ The Newton:: compute_forces(...) method has a time complexity of O(n^2) which me
 
 Some functions are working in progress : Merge(...) , Runge_Kutta::update_position(...) and Euler::update_position_solar_system().
 
+```bash 
+  _   _                        __ ___                     _      
+ | | | |                      / /|__ \                   | |     
+ | |_| |__   __ _ _ __ _   _ / /_   ) |      ___ ___   __| | ___ 
+ | __| '_ \ / _` | '__| | | | '_ \ / /      / __/ _ \ / _` |/ _ \
+ | |_| | | | (_| | |  | |_| | (_) / /_     | (_| (_) | (_| |  __/
+  \__|_| |_|\__,_|_|   \__,_|\___/____|     \___\___/ \__,_|\___|
+```                                                               
+                                                                 

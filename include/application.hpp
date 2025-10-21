@@ -25,12 +25,12 @@ class Application
     unsigned int height;
     
     private:
-    // unused var
+
     char setter;
-    // <mooving> and <oldPos> are used for view movement
     bool moving = false;
     bool paused = false;
     sf::Vector2f oldPos;
+
     Celestial_body *galaxy;
     sf::CircleShape *circle;
     sf::VertexArray points;
@@ -84,7 +84,7 @@ class Application
         std::cout << "Simulator running!" << std::endl;
         
         auto window = sf::RenderWindow(sf::VideoMode(sf::Vector2u{width, height}), "Gravity Simulator");
-        sf::View view(sf::FloatRect({0.f, 0.f}, {1280.f, 720.f}));
+        sf::View view(sf::FloatRect({0.f, 0.f}, {(float)width, (float)height}));
         sf::View view2(sf::FloatRect({0.f, 0.f}, {40.f, 30.f}));
         view2.setViewport(sf::FloatRect({0.f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
@@ -99,10 +99,10 @@ class Application
         framerate.setPosition({0.f, 0.f});
 
         galaxy = new Celestial_body[GALAXY_DIMENSION];
-        // circle = new sf::CircleShape[GALAXY_DIMENSION];
-        points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
+        circle = new sf::CircleShape[GALAXY_DIMENSION];
+        // points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
-        setUp(galaxy, circle, points, "Points", "black_hole_centered");
+        setUp(galaxy, circle, points, "CircleShape", "solar_system");
         // sort(galaxy, points);
         q = new Barnes_Hut_struct::Quadtree();
         
@@ -123,24 +123,25 @@ class Application
 
                 // Collision detection, merge and sort methods
                     // collision_detecion(galaxy);
-                    // merge(galaxy);
+                    // merge(galaxy);                                       // no implementation yet
                     // sort(galaxy, points);
                     // sort_all(galaxy, points);
                 
                 // Acceleration update methods
                     // Newton::compute_forces(galaxy);
-                    Burnes_Hut::compute_forces(galaxy, *q);
+                    Newton::compute_forces_solar_system(galaxy);
+                    // Burnes_Hut::compute_forces(galaxy, *q);
     
                 // Position update methods (CircleShape)
                     // Verlet::update_position(galaxy, circle);
                     // Euler::update_position(galaxy, circle);
-                    // Runge_Kutta::update_position(galaxy, circle);
+                    Euler::update_position_solar_system(galaxy, circle);
+                    // Runge_Kutta::update_position(galaxy, circle);        // no implementation yet
                 
                 // Position update methods (Points)
                     // Verlet::update_position(galaxy, points);
-                    Euler::update_position(galaxy, points);
-                    // Euler::update_position_solar_system(galaxy, circle);
-                    // Runge_Kutta::update_position(galaxy, points);
+                    // Euler::update_position(galaxy, points);
+                    // Runge_Kutta::update_position(galaxy, points);        // no implementation yet
 
             }
 
@@ -151,11 +152,11 @@ class Application
             window.draw(framerate);
             
             window.setView(view);
-            window.draw(points);
-                // for(int i = 0; i < GALAXY_DIMENSION; ++i){
-                //     window.draw(circle[i]);
-                // }
-                
+            // window.draw(points);
+            for(int i = 0; i < GALAXY_DIMENSION; ++i){
+                window.draw(circle[i]);
+            }
+
                 // for(int i=0; i<q->qtree.size(); ++i){
                 //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
                 // }

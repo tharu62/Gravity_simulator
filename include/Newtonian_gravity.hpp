@@ -6,9 +6,6 @@
 #include "SFML/GpuPreference.hpp"
 #include "celestial_body.hpp"
 
-// #define G 6.6743e-11
-#define G 1
-
 extern int GALAXY_DIMENSION;
 
 namespace Newton{
@@ -18,6 +15,7 @@ namespace Newton{
      */
     void compute_forces(Celestial_body *galaxy){
 
+        float G = 1.f;
         float magnitude;            // Magnitude of the direction vector 
         float magnitude_sq;         // Magnitude squared 
         sf::Vector2f direction;     // Direction vector between two celestial bodies   
@@ -33,6 +31,36 @@ namespace Newton{
                     direction = galaxy[j].position - galaxy[i].position;
                     magnitude_sq = (direction.x*direction.x + direction.y*direction.y);
                     if(magnitude_sq >= 0.1f){
+                        magnitude = sqrt(magnitude_sq);
+                        galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
+                    }
+
+                }
+            }
+        }
+    }
+
+        /**
+     * @brief Computes the Gravitational forces between each celestial body to update the acceleration of each celestial body in the solar_system.
+     */
+    void compute_forces_solar_system(Celestial_body *galaxy){
+
+        float G = 6.6743e-11;
+        float magnitude;            // Magnitude of the direction vector 
+        float magnitude_sq;         // Magnitude squared 
+        sf::Vector2f direction;     // Direction vector between two celestial bodies   
+    
+        for(int i=0; i < GALAXY_DIMENSION; ++i){
+
+            galaxy[i].acceleration = {0.f, 0.f};
+
+            for(int j=0; j < GALAXY_DIMENSION; ++j){
+    
+                if(i != j){
+
+                    direction = galaxy[j].position - galaxy[i].position;
+                    magnitude_sq = (direction.x*direction.x + direction.y*direction.y);
+                    if(magnitude_sq >= 0.001f){
                         magnitude = sqrt(magnitude_sq);
                         galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
                     }

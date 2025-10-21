@@ -2,6 +2,7 @@
 #define MATH_OPERATOR_HPP
 
 #include "SFML/Graphics.hpp"
+#include <cmath>
 
 // template<typename T>
 sf::Vector2f operator *(sf::Vector2f left, int right){
@@ -79,6 +80,75 @@ sf::Vector2f operator /(const sf::Vector2f left, const long double right)
     long double temp = 1.f / right;
     long double X = left.x * temp;
     long double Y = left.y * temp;
+    return sf::Vector2f(X,Y);
+}
+
+float sign(float arg)
+{
+    if(arg > 0.f) return 1.f;
+    else if(arg < 0.f) return -1.f;
+    else return 0.f;
+}
+
+float log_safe(float arg)
+{
+    if(arg <= 1.f && arg >= -1.f){
+        return 1.f*sign(arg);
+    } 
+    else {
+        return (float)log((float)abs(arg))*sign(arg);
+    }
+}
+
+sf::Vector2f log(sf::Vector2f arg)
+{
+    float X;
+    float Y;
+
+    // if(arg.x < -1.f){
+    //     X = -1.f*log(-1.f*arg.x);
+    // } 
+    // else if(arg.x > 1.f){
+    //     X = (float)log(arg.x);
+    // }
+    // else if(arg.x > -1.f && arg.x < 1.f){
+    //     X = arg.x;
+    // }
+    // else{
+    //     X = 0.f;
+    // }
+
+    // if(arg.y < -1.f){
+    //     Y = -1.f*log(-1.f*arg.y);
+    // } 
+    // else if(arg.y > 1.f){
+    //     Y = (float)log(arg.y);
+    // }
+    // else if(arg.y > -1.f && arg.y < 1.f){
+    //     Y = arg.y;
+    // }
+    // else{
+    //     Y = 0.f;
+    // }
+    if(arg.x < 0.f){
+        X = -1.f*log(-1.f*arg.x + 1.f);
+    } 
+    else if(arg.x > 0.f){
+        X = (float)log(arg.x + 1.f);
+    }
+    else{
+        X = 0.f;
+    }
+
+    if(arg.y < 0.f){
+        Y = -1.f*log(-1.f*arg.y + 1.f);
+    } 
+    else if(arg.y > 0.f){
+        Y = (float)log(arg.y + 1.f);
+    }
+    else{
+        Y = 0.f;
+    }
     return sf::Vector2f(X,Y);
 }
 

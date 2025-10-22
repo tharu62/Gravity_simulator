@@ -100,10 +100,9 @@ class Application
 
         galaxy = new Celestial_body[GALAXY_DIMENSION];
         circle = new sf::CircleShape[GALAXY_DIMENSION];
-        // points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
+        points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
-        setUp(galaxy, circle, points, "CircleShape", "solar_system");
-        // sort(galaxy, points);
+        setUp(galaxy, circle, points, "Points", "solar_system");
         q = new Barnes_Hut_struct::Quadtree();
         
         clock_t start = 0;
@@ -118,7 +117,8 @@ class Application
                 EventHandler(event, view, window, oldPos, moving, paused);
             }
             
-            // Code to handle simulation and drawing on window. You can add your own code here. (use Pause key = p to pause or resume the simulation)
+            // Code to handle simulation and drawing on window. You can add your own code here. 
+            // (use Pause key = p to pause or resume the simulation)
             if(!paused){
 
                 // Collision detection, merge and sort methods
@@ -157,16 +157,16 @@ class Application
                 window.draw(circle[i]);
             }
 
-                // for(int i=0; i<q->qtree.size(); ++i){
-                //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
-                // }
-                // sf::VertexArray point(sf::PrimitiveType::Points, 1);
-                // point[0].position = q->qtree[0].centerOfMass;
-                // point[0].color = sf::Color::Green;
-                // window.draw(point);
-                
-                // double elapsed = double(end - start)/CLOCKS_PER_SEC;
-                // std::cout << elapsed << std::endl;
+            // for(int i=0; i<q->qtree.size(); ++i){
+            //     draw_box(window, q->qtree[i].center, q->qtree[i].size);
+            // }
+            // sf::VertexArray point(sf::PrimitiveType::Points, 1);
+            // point[0].position = q->qtree[0].centerOfMass;
+            // point[0].color = sf::Color::Green;
+            // window.draw(point);
+            
+            // double elapsed = double(end - start)/CLOCKS_PER_SEC;
+            // std::cout << elapsed << std::endl;
                     
             end = clock();
             framerate.setString(std::to_string((int) (CLOCKS_PER_SEC / double(end - start))));

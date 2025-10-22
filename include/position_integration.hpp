@@ -92,14 +92,14 @@ namespace Euler{
      */
     void update_position_solar_system(Celestial_body *body, sf::CircleShape *circle){
 
-        const float dt = 1.f;
+        const float dt = 1000.f;
 
         for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
             
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
 
-            circle[i].setPosition(log(body[i].position) + sf::Vector2f(640.f, 360.f));
+            circle[i].setPosition(body[i].position * 10.0f / AU + sf::Vector2f(640.f, 360.f));
             // std::cout << "body " << i <<" Position X: " << circle[i].getPosition().x << " Position Y: " << circle[i].getPosition().y << std::endl;
     
         }

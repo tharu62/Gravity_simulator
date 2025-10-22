@@ -11,8 +11,8 @@
 #include "vector_operator.hpp"
 #include "celestial_body.hpp"
 
-float G  = 6.6743e-11f;
-float AU = 149597870700.f;
+#define G 6.6743e-11
+#define AU 149597870700.f
 
 extern int GALAXY_DIMENSION;
 
@@ -288,10 +288,9 @@ void setUp_rand(Celestial_body *galaxy, sf::VertexArray &points)
 
 
 sf::Vector2f circle_coordinate(double angle, float radius){
-    float rad = angle * static_cast<float>(M_PI) / 180.0f;
+    float rad = static_cast<float>(angle) * static_cast<float>(M_PI) / 180.0f;
     float x = radius * std::cos(angle);
     float y = - radius * std::sin(angle);
-    // std::cout << "x: " << x << " y: " << y << std::endl;
     return sf::Vector2f(x, y);
 }
 
@@ -312,7 +311,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[0].acceleration = {0.f, 0.f};
     circle[0].setRadius((float)log(galaxy[0].radius)/15);
     circle[0].setFillColor(sf::Color(255, 255, 255));
-    circle[0].setPosition(log(galaxy[0].position));
     circle[0].setOrigin({(float)log(galaxy[0].radius)/15, (float)log(galaxy[0].radius)/15});
 
     // Mercury
@@ -331,9 +329,9 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[1].acceleration = galaxy[1].velocity * (galaxy[0].position - galaxy[1].position).lengthSquared();
     circle[1].setRadius((float)log(galaxy[1].radius)/20);
     circle[1].setFillColor(sf::Color(183, 184, 185));    
-    circle[1].setPosition(log(galaxy[1].position));
-    circle[1].setOrigin({(float)log(galaxy[1].radius)/20, (float)log(galaxy[1].radius)/20});
+    circle[1].setOrigin({circle[1].getRadius(), circle[1].getRadius()});
 
+    
     // Venus
     galaxy[2] = Planet();
     galaxy[2].mass = 4.867e24;
@@ -350,8 +348,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[2].acceleration = galaxy[2].velocity * (galaxy[0].position - galaxy[2].position).lengthSquared();
     circle[2].setRadius((float)log(galaxy[2].radius)/20);
     circle[2].setFillColor(sf::Color(238,203,139));
-    circle[2].setPosition(log(galaxy[2].position));
-    circle[2].setOrigin({(float)log(galaxy[2].radius)/20, (float)log(galaxy[2].radius)/20});
+    circle[2].setOrigin({circle[2].getRadius(), circle[2].getRadius()});
 
     // Earth
     galaxy[3] = Planet();
@@ -369,8 +366,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[3].acceleration = galaxy[3].velocity * (galaxy[0].position - galaxy[3].position).lengthSquared();
     circle[3].setRadius((float)log(galaxy[3].radius)/20);
     circle[3].setFillColor(sf::Color(79,76,176));
-    circle[3].setPosition(log(galaxy[3].position));
-    circle[3].setOrigin({(float)log(galaxy[3].radius)/20, (float)log(galaxy[3].radius)/20});
+    circle[3].setOrigin({circle[3].getRadius(), circle[3].getRadius()});
 
     // Mars
     galaxy[4] = Planet();
@@ -388,8 +384,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[4].acceleration = galaxy[4].velocity * (galaxy[0].position - galaxy[4].position).lengthSquared();   
     circle[4].setRadius((float)log(galaxy[4].radius)/20);
     circle[4].setFillColor(sf::Color(193,68,14));
-    circle[4].setPosition(log(galaxy[4].position));
-    circle[4].setOrigin({(float)log(galaxy[4].radius)/20, (float)log(galaxy[4].radius)/20});
+    circle[4].setOrigin({circle[4].getRadius(), circle[4].getRadius()});
 
     // Jupiter
     galaxy[5] = Planet();
@@ -407,8 +402,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[5].acceleration = galaxy[5].velocity * (galaxy[0].position - galaxy[5].position).lengthSquared();
     circle[5].setRadius((float)log(galaxy[5].radius)/20);
     circle[5].setFillColor(sf::Color(201,144,57));
-    circle[5].setPosition(log(galaxy[5].position));
-    circle[5].setOrigin({(float)log(galaxy[5].radius)/20, (float)log(galaxy[5].radius)/20});  
+    circle[5].setOrigin({circle[5].getRadius(), circle[5].getRadius()});  
 
     // Saturn
     galaxy[6] = Planet();
@@ -427,8 +421,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[6].acceleration = {0.f, 0.f};
     circle[6].setRadius((float)log(galaxy[6].radius)/20);
     circle[6].setFillColor(sf::Color(206,184,184));
-    circle[6].setPosition(log(galaxy[6].position));
-    circle[6].setOrigin({(float)log(galaxy[6].radius)/20, (float)log(galaxy[6].radius)/20});
+    circle[6].setOrigin({circle[6].getRadius(), circle[6].getRadius()});
 
     // Uranus
     galaxy[7] = Planet();
@@ -446,8 +439,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[7].acceleration = galaxy[7].velocity * (galaxy[0].position - galaxy[7].position).lengthSquared();
     circle[7].setRadius((float)log(galaxy[7].radius)/20);
     circle[7].setFillColor(sf::Color(172, 229, 238));
-    circle[7].setPosition(log(galaxy[7].position));
-    circle[7].setOrigin({(float)log(galaxy[7].radius)/20, (float)log(galaxy[7].radius)/20});
+    circle[7].setOrigin({circle[7].getRadius(), circle[7].getRadius()});
 
     // Neptune
     galaxy[8] = Planet();
@@ -465,8 +457,7 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[8].acceleration = galaxy[8].velocity * (galaxy[0].position - galaxy[8].position).lengthSquared();
     circle[8].setRadius((float)log(galaxy[8].radius)/20);
     circle[8].setFillColor(sf::Color(91,93,223));
-    circle[8].setPosition(log(galaxy[8].position));
-    circle[8].setOrigin({(float)log(galaxy[8].radius)/20, (float)log(galaxy[8].radius)/20});
+    circle[8].setOrigin({circle[8].getRadius(), circle[8].getRadius()});
 
 }
 
@@ -499,7 +490,6 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, sf::VertexArray &poi
             setUp_rand(galaxy, points);
         }
         else if(planetary_system == "solar_system"){
-            // Solar system setup not implemented for Points rendering
             std::cerr << "Solar system setup not implemented for Points rendering." << std::endl;
         }
         else if(planetary_system == "sun_centered"){

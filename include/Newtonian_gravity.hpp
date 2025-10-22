@@ -7,6 +7,7 @@
 #include "celestial_body.hpp"
 
 extern int GALAXY_DIMENSION;
+#define G1 1.f
 
 namespace Newton{
 
@@ -15,7 +16,6 @@ namespace Newton{
      */
     void compute_forces(Celestial_body *galaxy){
 
-        float G = 1.f;
         float magnitude;            // Magnitude of the direction vector 
         float magnitude_sq;         // Magnitude squared 
         sf::Vector2f direction;     // Direction vector between two celestial bodies   
@@ -32,7 +32,7 @@ namespace Newton{
                     magnitude_sq = (direction.x*direction.x + direction.y*direction.y);
                     if(magnitude_sq >= 0.1f){
                         magnitude = sqrt(magnitude_sq);
-                        galaxy[i].acceleration += direction * G * (galaxy[j].mass/(magnitude_sq * magnitude));
+                        galaxy[i].acceleration += direction * G1 * (galaxy[j].mass/(magnitude_sq * magnitude));
                     }
 
                 }
@@ -40,12 +40,11 @@ namespace Newton{
         }
     }
 
-        /**
+    /**
      * @brief Computes the Gravitational forces between each celestial body to update the acceleration of each celestial body in the solar_system.
      */
     void compute_forces_solar_system(Celestial_body *galaxy){
 
-        float G = 6.6743e-11;
         float magnitude;            // Magnitude of the direction vector 
         float magnitude_sq;         // Magnitude squared 
         sf::Vector2f direction;     // Direction vector between two celestial bodies   

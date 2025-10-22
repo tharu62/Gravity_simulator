@@ -4,9 +4,6 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#include <ctime>
-#include <map>
-#include <unistd.h>
 #include "SFML/Graphics.hpp"
 #include "vector_operator.hpp"
 #include "celestial_body.hpp"
@@ -161,7 +158,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
 }
 
 /**
- * @brief Variant of function setUp with all celestial bodies in random positions.
+ * @brief Variant of function setUp with all celestial bodies in random positions (Celestial bodies as CircleShape).
  */
 void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 {
@@ -226,7 +223,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 }
 
 /**
- * @brief Variant of function setUp with all celestial bodies in random positions.
+ * @brief Variant of function setUp with all celestial bodies in random positions (Celestial bodies as Points).
  */
 void setUp_rand(Celestial_body *galaxy, sf::VertexArray &points)
 {
@@ -286,7 +283,13 @@ void setUp_rand(Celestial_body *galaxy, sf::VertexArray &points)
     }
 }
 
-
+/**
+ * @brief Calculate the position of a celestial body in circular orbit.
+ * 
+ * @param angle Angle in degrees.
+ * @param radius Radius of the circular orbit.
+ * @return sf::Vector2f Position vector (y-axis is inverted).
+ */
 sf::Vector2f circle_coordinate(double angle, float radius){
     float rad = static_cast<float>(angle) * static_cast<float>(M_PI) / 180.0f;
     float x = radius * std::cos(angle);
@@ -306,18 +309,17 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[0].mass = 1.989e30;
     galaxy[0].radius = 696340000;
     galaxy[0].position = {0.f, 0.f};
-    galaxy[0].prev_position = galaxy[1].position;
+    galaxy[0].prev_position = galaxy[0].position;
     galaxy[0].velocity = {0, 0};
     galaxy[0].acceleration = {0.f, 0.f};
     circle[0].setRadius((float)log(galaxy[0].radius)/15);
     circle[0].setFillColor(sf::Color(255, 255, 255));
-    circle[0].setOrigin({(float)log(galaxy[0].radius)/15, (float)log(galaxy[0].radius)/15});
+    circle[0].setOrigin({circle[0].getRadius(), circle[0].getRadius()});
 
     // Mercury
     galaxy[1] = Planet();
     galaxy[1].mass = 3.285e23;
     galaxy[1].radius = 2439700;
-    // galaxy[1].position = {-0.4f * AU, 0.f};
     galaxy[1].position = circle_coordinate(40.0, (0.4f * AU));
     galaxy[1].prev_position = galaxy[1].position;
     direction = galaxy[0].position - galaxy[1].position;
@@ -325,7 +327,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass / (0.4 * AU));
     galaxy[1].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[1].velocity = sf::Vector2f{-direction.y, direction.x} * 47870.f;
     galaxy[1].acceleration = galaxy[1].velocity * (galaxy[0].position - galaxy[1].position).lengthSquared();
     circle[1].setRadius((float)log(galaxy[1].radius)/20);
     circle[1].setFillColor(sf::Color(183, 184, 185));    
@@ -336,7 +337,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[2] = Planet();
     galaxy[2].mass = 4.867e24;
     galaxy[2].radius = 6052000;
-    // galaxy[2].position = {0.72f * (float) AU, 0.f};
     galaxy[2].position = circle_coordinate(80.0, (0.72f * AU));
     galaxy[2].prev_position = galaxy[2].position;
     direction = galaxy[0].position - galaxy[2].position;
@@ -344,7 +344,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(0.72 * AU));
     galaxy[2].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[2].velocity = sf::Vector2f{-direction.y, direction.x} * 35020.f;
     galaxy[2].acceleration = galaxy[2].velocity * (galaxy[0].position - galaxy[2].position).lengthSquared();
     circle[2].setRadius((float)log(galaxy[2].radius)/20);
     circle[2].setFillColor(sf::Color(238,203,139));
@@ -354,7 +353,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[3] = Planet();
     galaxy[3].mass = 5.972e24;
     galaxy[3].radius = 6378000;
-    // galaxy[3].position = {-AU, 0.f};
     galaxy[3].position = circle_coordinate(120.0, (1.f * AU));
     galaxy[3].prev_position = galaxy[3].position;
     direction = galaxy[0].position - galaxy[3].position;
@@ -362,7 +360,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(AU));
     galaxy[3].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[3].velocity = sf::Vector2f{-direction.y, direction.x} * 29780.f;
     galaxy[3].acceleration = galaxy[3].velocity * (galaxy[0].position - galaxy[3].position).lengthSquared();
     circle[3].setRadius((float)log(galaxy[3].radius)/20);
     circle[3].setFillColor(sf::Color(79,76,176));
@@ -372,7 +369,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[4] = Planet();
     galaxy[4].mass = 6.39e23;
     galaxy[4].radius = 3389500;
-    // galaxy[4].position = {1.52f * (float) AU, 0.f};
     galaxy[4].position = circle_coordinate(160.0, (1.52f * AU));
     galaxy[4].prev_position = galaxy[4].position;
     direction = galaxy[0].position - galaxy[4].position;
@@ -380,7 +376,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(1.52 * AU));
     galaxy[4].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[4].velocity = sf::Vector2f{-direction.y, direction.x} * 24070.f;
     galaxy[4].acceleration = galaxy[4].velocity * (galaxy[0].position - galaxy[4].position).lengthSquared();   
     circle[4].setRadius((float)log(galaxy[4].radius)/20);
     circle[4].setFillColor(sf::Color(193,68,14));
@@ -390,7 +385,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[5] = Planet();
     galaxy[5].mass = 1.89813e27;
     galaxy[5].radius = 69911000;
-    // galaxy[5].position = {-5.2f * (float) AU, 0.f};
     galaxy[5].position = circle_coordinate(200.0, (5.2f * AU));
     galaxy[5].prev_position = galaxy[5].position;
     direction = galaxy[0].position - galaxy[5].position;
@@ -398,7 +392,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(5.2 * AU));
     galaxy[5].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[5].velocity = sf::Vector2f{-direction.y, direction.x} * 13070.f;
     galaxy[5].acceleration = galaxy[5].velocity * (galaxy[0].position - galaxy[5].position).lengthSquared();
     circle[5].setRadius((float)log(galaxy[5].radius)/20);
     circle[5].setFillColor(sf::Color(201,144,57));
@@ -408,15 +401,12 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[6] = Planet();
     galaxy[6].mass = 5.683e26;
     galaxy[6].radius = 60268000;
-    // galaxy[6].position = {9.5f * (float) AU, 0.f};
     galaxy[6].position = circle_coordinate(240.0, (9.5f * AU));
     galaxy[6].prev_position = galaxy[6].position;
     direction = galaxy[0].position - galaxy[6].position;
     std::ignore = direction.rotatedBy(sf::degrees(180));
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(9.5 * AU));
-    galaxy[6].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[6].velocity = sf::Vector2f{-direction.y, direction.x} * 9680.f;
     galaxy[6].acceleration = galaxy[6].velocity * (galaxy[0].position - galaxy[6].position).lengthSquared();
     galaxy[6].acceleration = {0.f, 0.f};
     circle[6].setRadius((float)log(galaxy[6].radius)/20);
@@ -427,7 +417,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[7] = Planet();
     galaxy[7].mass = 8.681e25;
     galaxy[7].radius = 25362000;
-    // galaxy[7].position = {-19.2f * (float) AU, 0.f};
     galaxy[7].position = circle_coordinate(280.0, (19.2f * AU));
     galaxy[7].prev_position = galaxy[7].position;
     direction = galaxy[0].position - galaxy[7].position;
@@ -435,7 +424,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(19.2 * AU));
     galaxy[7].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[7].velocity = sf::Vector2f{-direction.y, direction.x} * 6800.f;
     galaxy[7].acceleration = galaxy[7].velocity * (galaxy[0].position - galaxy[7].position).lengthSquared();
     circle[7].setRadius((float)log(galaxy[7].radius)/20);
     circle[7].setFillColor(sf::Color(172, 229, 238));
@@ -445,7 +433,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     galaxy[8] = Planet();
     galaxy[8].mass = 1.024e26;
     galaxy[8].radius = 24622000;
-    // galaxy[8].position = {30.1f * (float) AU, 0.f};
     galaxy[8].position = circle_coordinate(320.0, (30.1f * AU));
     galaxy[8].prev_position = galaxy[8].position;
     direction = galaxy[0].position - galaxy[8].position;
@@ -453,7 +440,6 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(30.1 * AU));
     galaxy[8].velocity = sf::Vector2f{-direction.y, direction.x};
-    // galaxy[8].velocity = sf::Vector2f{-direction.y, direction.x} * 5430.f;
     galaxy[8].acceleration = galaxy[8].velocity * (galaxy[0].position - galaxy[8].position).lengthSquared();
     circle[8].setRadius((float)log(galaxy[8].radius)/20);
     circle[8].setFillColor(sf::Color(91,93,223));

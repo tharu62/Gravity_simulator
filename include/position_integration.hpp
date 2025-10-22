@@ -54,6 +54,8 @@ namespace Verlet{
 namespace Euler{
 
     const float dt = 0.001;
+    const float dt_ss = 1000.f;
+    #define SCALE_FACTOR 10.0f / AU
     
     /**
      * @brief Updates the position of any kind of celestial body using Euler's Method with velocities.
@@ -92,37 +94,16 @@ namespace Euler{
      */
     void update_position_solar_system(Celestial_body *body, sf::CircleShape *circle){
 
-        const float dt = 1000.f;
-
         for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
             
-            body[i].velocity += body[i].acceleration * dt;
-            body[i].position += body[i].velocity * dt;
-
-            circle[i].setPosition(body[i].position * 10.0f / AU + sf::Vector2f(640.f, 360.f));
-            // std::cout << "body " << i <<" Position X: " << circle[i].getPosition().x << " Position Y: " << circle[i].getPosition().y << std::endl;
+            body[i].velocity += body[i].acceleration * dt_ss;
+            body[i].position += body[i].velocity * dt_ss;
+            circle[i].setPosition(body[i].position * SCALE_FACTOR + sf::Vector2f(640.f, 360.f));
     
         }
         
     }
 
-}
-
-namespace Runge_Kutta{
-
-    /**
-     * @todo
-     */
-    void update_position(Celestial_body *body, sf::CircleShape *circle){
-
-    }
-
-    /**
-     * @todo
-     */
-    void update_position(Celestial_body *body, sf::VertexArray &circle){
-
-    }
 }
 
 #endif // POSINTEGRATION_HPP

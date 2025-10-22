@@ -4,7 +4,7 @@
 #include "SFML/Graphics.hpp"
 #include <cmath>
 
-// template<typename T>
+
 sf::Vector2f operator *(sf::Vector2f left, int right){
     int X = left.x * right;
     int Y = left.y * right;

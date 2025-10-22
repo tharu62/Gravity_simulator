@@ -85,7 +85,7 @@ class Application
         
         auto window = sf::RenderWindow(sf::VideoMode(sf::Vector2u{width, height}), "Gravity Simulator");
         sf::View view(sf::FloatRect({0.f, 0.f}, {(float)width, (float)height}));
-        sf::View view2(sf::FloatRect({0.f, 0.f}, {40.f, 30.f}));
+        sf::View view2(sf::FloatRect({0.f, 0.f}, {50.f, 50.f}));
         view2.setViewport(sf::FloatRect({0.f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
 
@@ -102,7 +102,7 @@ class Application
         circle = new sf::CircleShape[GALAXY_DIMENSION];
         points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
-        setUp(galaxy, circle, points, "Points", "solar_system");
+        setUp(galaxy, circle, points, "CircleShape", "solar_system");
         q = new Barnes_Hut_struct::Quadtree();
         
         clock_t start = 0;
@@ -136,12 +136,10 @@ class Application
                     // Verlet::update_position(galaxy, circle);
                     // Euler::update_position(galaxy, circle);
                     Euler::update_position_solar_system(galaxy, circle);
-                    // Runge_Kutta::update_position(galaxy, circle);        // no implementation yet
                 
                 // Position update methods (Points)
                     // Verlet::update_position(galaxy, points);
                     // Euler::update_position(galaxy, points);
-                    // Runge_Kutta::update_position(galaxy, points);        // no implementation yet
 
             }
 

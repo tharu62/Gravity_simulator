@@ -21,12 +21,10 @@ void EventHandler(std::optional<sf::Event> event, sf::View &view, sf::RenderWind
     if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()){
         
         if(mouseWheelScrolled->delta > 0){
-            view.zoom(0.5);
-            // std::cout << "zoom down" << std::endl;
+            view.zoom(0.5); // zoom down
 
         }else{
-            view.zoom(2);
-            // std::cout << "zoom up" << std::endl;
+            view.zoom(2); // zoom up
         }
     }
 

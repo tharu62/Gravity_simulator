@@ -54,7 +54,7 @@ namespace Verlet{
 namespace Euler{
 
     const float dt = 0.001;
-    const float dt_ss = 1000.f;
+    const float dt_ss = 100000.f;
     #define SCALE_FACTOR 10.0f / AU
     
     /**

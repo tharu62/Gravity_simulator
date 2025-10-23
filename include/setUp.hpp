@@ -407,8 +407,8 @@ void setUp_solar_system(Celestial_body *galaxy, sf::CircleShape *circle){
     std::ignore = direction.rotatedBy(sf::degrees(180));
     direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
     direction *=  (float) sqrt(G * galaxy[0].mass/(9.5 * AU));
+    galaxy[6].velocity = sf::Vector2f{-direction.y, direction.x};
     galaxy[6].acceleration = galaxy[6].velocity * (galaxy[0].position - galaxy[6].position).lengthSquared();
-    galaxy[6].acceleration = {0.f, 0.f};
     circle[6].setRadius((float)log(galaxy[6].radius)/20);
     circle[6].setFillColor(sf::Color(206,184,184));
     circle[6].setOrigin({circle[6].getRadius(), circle[6].getRadius()});

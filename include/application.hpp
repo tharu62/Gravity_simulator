@@ -26,7 +26,10 @@ class Application
     
     private:
 
-    char setter;
+    std::string setter;
+    std::string render_type = "CircleShape";
+    std::string planetary_system = "solar_system";
+    bool using_points = false;
     bool moving = false;
     bool paused = false;
     sf::Vector2f oldPos;
@@ -37,12 +40,59 @@ class Application
     Barnes_Hut_struct::Quadtree *q;
 
     public:
+
+    void initilize_parameters_from_setter(std::string setter, std::string &render_type, std::string &planetary_system){
+        if(setter == "so"){
+            render_type = "CircleShape";
+            planetary_system = "solar_system";
+            GALAXY_DIMENSION = 9;
+            std::cout << "Simulation set on Solar System with CircleShape!" << std::endl;
+        }
+        else if(setter == "s"){
+            render_type = "CircleShape";
+            planetary_system = "sun_centered";
+            std::cout << "Simulation set on Sun centered galaxy with CircleShape!" << std::endl;
+        }
+        else if(setter == "b"){
+            render_type = "CircleShape";
+            planetary_system = "black_hole_centered";
+            std::cout << "Simulation set on Black hole centered galaxy with CircleShape!" << std::endl;
+        }
+        else if(setter == "r"){
+            render_type = "CircleShape";
+            planetary_system = "random";
+            std::cout << "Simulation set on Random body simulation with CircleShape!" << std::endl;
+        }
+        else if(setter == "ss"){
+            render_type = "Points";
+            planetary_system = "sun_centered";
+            using_points = true;
+            std::cout << "Simulation set on Sun centered galaxy with Points!" << std::endl;
+        }
+        else if(setter == "bb"){
+            render_type = "Points";
+            planetary_system = "black_hole_centered";
+            using_points = true;
+            std::cout << "Simulation set on Black hole centered galaxy with Points!" << std::endl;
+        }
+        else if(setter == "rr"){
+            render_type = "Points";
+            planetary_system = "random";
+            using_points = true;
+            std::cout << "Simulation set on Random body simulation with Points!" << std::endl;
+        }
+        else{
+            std::cout << "Invalid setter provided. Using default parameters: render_type = CircleShape , planetary_system = solar_system ." << std::endl;
+        }
+    }
     
     /**
-     * @todo add setter functionality for different initial galaxy setups.
+     * @brief Main constructor with setter functionality for different initial galaxy setups.
      */
-    Application(unsigned int x, unsigned int y, int nob, char *set): width(x), height(y), setter(*set){
+    Application(unsigned int x, unsigned int y, int nob, std::string set): width(x), height(y), setter(set){
         GALAXY_DIMENSION = nob;
+        initilize_parameters_from_setter(setter, render_type, planetary_system);
+        std::cout << "Simulator constructed!" << std::endl;
     }
 
     /**
@@ -50,6 +100,7 @@ class Application
      */
     Application(unsigned int x, unsigned int y, int nob): width(x), height(y){
         GALAXY_DIMENSION = nob;
+        std::cout << "Using default parameters : render_type = CircleShape , planetary_system = solar_system ." << std::endl;
         std::cout << "Simulator constructed!" << std::endl;
     }
 
@@ -97,12 +148,17 @@ class Application
         framerate.setFillColor(sf::Color::Red);
         framerate.setStyle(sf::Text::Bold);
         framerate.setPosition({0.f, 0.f});
-
-        galaxy = new Celestial_body[GALAXY_DIMENSION];
-        circle = new sf::CircleShape[GALAXY_DIMENSION];
-        points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
         
-        setUp(galaxy, circle, points, "CircleShape", "solar_system");
+        
+        galaxy = new Celestial_body[GALAXY_DIMENSION];
+        if(using_points){
+            points = sf::VertexArray{sf::PrimitiveType::Points, (std::size_t) GALAXY_DIMENSION};
+        }
+        else{
+            circle = new sf::CircleShape[GALAXY_DIMENSION];
+        }
+                
+        setUp(galaxy, circle, points, render_type, planetary_system);
         q = new Barnes_Hut_struct::Quadtree();
         
         clock_t start = 0;
@@ -123,23 +179,50 @@ class Application
 
                 // Collision detection, merge and sort methods
                     // collision_detecion(galaxy);
-                    // merge(galaxy);                                       // no implementation yet
+                    // merge(galaxy);                 // no implementation yet
                     // sort(galaxy, points);
                     // sort_all(galaxy, points);
                 
                 // Acceleration update methods
-                    // Newton::compute_forces(galaxy);
+                if(planetary_system == "solar_system")
+                {
                     Newton::compute_forces_solar_system(galaxy);
-                    // Burnes_Hut::compute_forces(galaxy, *q);
-    
-                // Position update methods (CircleShape)
-                    // Verlet::update_position(galaxy, circle);
-                    // Euler::update_position(galaxy, circle);
-                    Euler::update_position_solar_system(galaxy, circle);
+                }
+                else
+                {
+                    if(using_points){
+                        Burnes_Hut::compute_forces(galaxy, *q); // Barnes-Hut algorithm very unstable with CircleShape rendering
+                    }else{
+                        Newton::compute_forces(galaxy);
+                    }
+                }
                 
-                // Position update methods (Points)
-                    // Verlet::update_position(galaxy, points);
-                    // Euler::update_position(galaxy, points);
+                /**
+                 * @todo 1) correction needed for CircleShape rendering when using Barnes-Hut algorithm, currently unstable.
+                 *       2) ss not working properly (sun escaping from center very fast).
+                 *       3) ...
+                 */
+                if(using_points)
+                {
+                    /****** Position update methods (Points) **********/
+                        // Verlet::update_position(galaxy, points);
+                        Euler::update_position(galaxy, points);
+                    /*************************************************/
+                }
+                else
+                {
+                    /****** Position update methods (CircleShape) *****/
+                        if(planetary_system == "solar_system")
+                        {
+                            Euler::update_position_solar_system(galaxy, circle);
+                        }
+                        else
+                        {
+                            // Verlet::update_position(galaxy, circle); 
+                            Euler::update_position(galaxy, circle);
+                        }
+                    /*************************************************/
+                }   
 
             }
 
@@ -150,9 +233,15 @@ class Application
             window.draw(framerate);
             
             window.setView(view);
-            // window.draw(points);
-            for(int i = 0; i < GALAXY_DIMENSION; ++i){
-                window.draw(circle[i]);
+            if(using_points)
+            {
+                window.draw(points);
+            }
+            else
+            {   
+                for(int i = 0; i < GALAXY_DIMENSION; ++i){
+                    window.draw(circle[i]);
+                }
             }
 
             // for(int i=0; i<q->qtree.size(); ++i){
@@ -162,9 +251,6 @@ class Application
             // point[0].position = q->qtree[0].centerOfMass;
             // point[0].color = sf::Color::Green;
             // window.draw(point);
-            
-            // double elapsed = double(end - start)/CLOCKS_PER_SEC;
-            // std::cout << elapsed << std::endl;
                     
             end = clock();
             framerate.setString(std::to_string((int) (CLOCKS_PER_SEC / double(end - start))));

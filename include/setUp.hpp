@@ -97,7 +97,6 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
  */
 void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "default")
 {
-
     std::random_device rd;
     std::mt19937 eng(rd());
     std::normal_distribution<double> distribution1{640.0, 640.0};
@@ -154,6 +153,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
         points[i].position = temp.position;
         points[i].color = sf::Color(255, 255, 255);
     }
+
 
 }
 
@@ -465,10 +465,10 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, sf::VertexArray &poi
             setUp_solar_system(galaxy, circle);
         }
         else if(planetary_system == "sun_centered"){
-            setUp(galaxy, circle);
+            setUp(galaxy, circle, "sun_centered");
         }
         else if(planetary_system == "black_hole_centered"){
-            setUp(galaxy, circle);
+            setUp(galaxy, circle, "black_hole_centered");
         }
     }
     else if(render_type == "Points"){
@@ -476,13 +476,12 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, sf::VertexArray &poi
             setUp_rand(galaxy, points);
         }
         else if(planetary_system == "solar_system"){
-            std::cerr << "Solar system setup not implemented for Points rendering." << std::endl;
         }
         else if(planetary_system == "sun_centered"){
-            setUp(galaxy, points);
+            setUp(galaxy, points, "sun_centered");
         }
         else if(planetary_system == "black_hole_centered"){
-            setUp(galaxy, points);
+            setUp(galaxy, points, "black_hole_centered");
         }
     }
 }

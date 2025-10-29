@@ -19,28 +19,28 @@ void handle(int size, char* input[])
         std::cout << "  <arg1> = number of bodies to simulate. " << std::endl;
         std::cout << "  <arg2> = type of simulation : " << std::endl;
         std::cout << std::endl;
-        std::cout << "      S  = sun centered galaxy             (Exact Newton gravity acceleration update)" << std::endl;
-        std::cout << "      B  = black hole centered galaxy      (Exact Newton gravity acceleration update)" << std::endl;
-        std::cout << "      R  = pure random body simulation     (Exact Newton gravity acceleration update)" << std::endl;
-        std::cout << "      SO = Solar System with CircleShape   (Exact Newton gravity acceleration update)" << std::endl;
+        std::cout << "      s  = sun centered galaxy             (Exact Newton gravity acceleration update)" << std::endl;
+        std::cout << "      b  = black hole centered galaxy      (Exact Newton gravity acceleration update)" << std::endl;
+        std::cout << "      r  = pure random body simulation     (Exact Newton gravity acceleration update)" << std::endl;
+        std::cout << "      so = Solar System with CircleShape   (Exact Newton gravity acceleration update)" << std::endl;
         std::cout << std::endl;
         std::cout << "      **RECOMENDED FOR HIGH NUMBER OF BODIES** " << std::endl;
-        std::cout << "      SS = S with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
-        std::cout << "      BB = B with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
-        std::cout << "      RR = R with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
+        std::cout << "      ss = S with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
+        std::cout << "      bb = B with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
+        std::cout << "      rr = R with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
         std::cout << std::endl;
 
         exit(0);
     }
 
-    // if((std::string) input[2] != "s" && (std::string) input[2] != "B" && (std::string) input[2] != "R"){
-    //     if((std::string) input[2] != "Ps" && (std::string) input[2] != "PB" && (std::string) input[2] != "PR"){
+    if((std::string) input[2] != "s" && (std::string) input[2] != "b" && (std::string) input[2] != "r" && (std::string) input[2] != "so"){
+        if((std::string) input[2] != "ss" && (std::string) input[2] != "bb" && (std::string) input[2] != "rr"){
         
-    //         std::cout << "error: invalid parameter value." << std::endl;
-    //         std::cout << "Use the command <help> to check all possible correct parameter values" << std::endl;
-    //         exit(0);
-    //     }
-    // }
+            std::cout << "error: invalid argument." << std::endl;
+            std::cout << "Use the command 'help' to check all possible arguments" << std::endl;
+            exit(0);
+        }
+    }
 
     return;
 }

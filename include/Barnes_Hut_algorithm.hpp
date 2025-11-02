@@ -85,7 +85,7 @@ namespace Barnes_Hut_struct {
         }
 
         // -----------------------------------------------------------
-        // Insert single mass into tree
+        // Insert single mass into tree using Stack
         // -----------------------------------------------------------
         void insertBodyStack(float mass, const sf::Vector2f& pos, std::uint32_t qtree_idx) {
             while(!stack.empty()) stack.pop();
@@ -140,7 +140,7 @@ namespace Barnes_Hut_struct {
         }
 
         // -----------------------------------------------------------
-        // Insert single mass into tree
+        // Insert single mass into tree using Heap
         // -----------------------------------------------------------
         void insertBodyHeap(float mass, const sf::Vector2f& pos, std::uint32_t qtree_idx) {
             heap_stack.clear();

@@ -40,8 +40,9 @@ class Application
     sf::VertexArray points;
     Barnes_Hut_struct::Quadtree *q;
 
-    public:
-
+    /**
+     * @brief Set up of parameters for correct rendering of celestial bodies as VertexArray of Points or array of CircleShape.
+     */
     void initilize_parameters_from_setter(std::string setter, std::string &render_type, std::string &planetary_system){
         if(setter == "ss"){
             render_type = "CircleShape";
@@ -86,7 +87,24 @@ class Application
             std::cout << "Invalid setter provided. Using default parameters: render_type = CircleShape , planetary_system = solar_system ." << std::endl;
         }
     }
-    
+
+    /**
+     * @brief Debug function that draws the bounding boxes of the quadtree produced by the Barnes-Hut method for updating acceleration.
+     */
+    void draw_box(sf::RenderWindow &window, sf::Vector2f pos, float size){
+        sf::RectangleShape box;
+        box.setSize({size*2, size*2});
+        box.setOrigin({size, size});
+        box.setPosition(pos);
+        box.setOutlineColor(sf::Color::Red);
+        box.setOutlineThickness(1.f);
+        box.setFillColor(sf::Color::Transparent);
+        window.draw(box);
+    }
+
+
+    public:
+
     /**
      * @brief Main constructor with setter functionality for different initial galaxy setups.
      */
@@ -113,20 +131,6 @@ class Application
         delete[] circle;
         delete q;
         std::cout << "Simulator deconstracted!" << std::endl; 
-    }
-
-    /**
-     * @brief Debug function that draws the bounding boxes of the quadtree produced by the Barnes-Hut method for updating acceleration.
-     */
-    void draw_box(sf::RenderWindow &window, sf::Vector2f pos, float size){
-        sf::RectangleShape box;
-        box.setSize({size*2, size*2});
-        box.setOrigin({size, size});
-        box.setPosition(pos);
-        box.setOutlineColor(sf::Color::Red);
-        box.setOutlineThickness(1.f);
-        box.setFillColor(sf::Color::Transparent);
-        window.draw(box);
     }
 
     /**
@@ -199,17 +203,12 @@ class Application
                 else
                 {
                     if(using_points){
-                        Barnes_Hut::compute_forces(galaxy, *q); // Barnes-Hut algorithm very unstable with CircleShape rendering
+                        Barnes_Hut::compute_forces(galaxy, *q);
                     }else{
                         Newton::compute_forces(galaxy);
                     }
                 }
                 
-                /**
-                 * @todo 1) correction needed for CircleShape rendering when using Barnes-Hut algorithm, currently unstable.
-                 *       2) sp not working properly (sun escaping from center very fast).
-                 *       3) rp not working properly (simulation crashes randomly)
-                 */
                 if(using_points)
                 {
                     /****** Position update methods (Points) **********/

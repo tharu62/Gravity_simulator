@@ -6,6 +6,7 @@
 #include "SFML/GpuPreference.hpp"
 #include "celestial_body.hpp"
 
+extern float MAX_VISIBLE_SIZE;
 extern int GALAXY_DIMENSION;
 
 namespace Newton{
@@ -23,19 +24,27 @@ namespace Newton{
 
             galaxy[i].acceleration = {0.f, 0.f};
 
-            for(int j=0; j < GALAXY_DIMENSION; ++j){
-    
-                if(i != j){
+            if(abs(galaxy[i].position.x) <= MAX_VISIBLE_SIZE && abs(galaxy[i].position.y) <= MAX_VISIBLE_SIZE)
+            {
+                for(int j=0; j < GALAXY_DIMENSION; ++j){
+        
+                    if(i != j){
 
-                    direction = galaxy[j].position - galaxy[i].position;
-                    magnitude_sq = (direction.x*direction.x + direction.y*direction.y);
-                    if(magnitude_sq >= 0.1f){
-                        magnitude = sqrt(magnitude_sq);
-                        galaxy[i].acceleration += direction * (galaxy[j].mass/(magnitude_sq * magnitude));
+                        direction = galaxy[j].position - galaxy[i].position;
+                        magnitude_sq = (direction.x*direction.x + direction.y*direction.y);
+                        if(magnitude_sq >= 0.1f){
+                            magnitude = sqrt(magnitude_sq);
+                            galaxy[i].acceleration += direction * (galaxy[j].mass/(magnitude_sq * magnitude));
+                        }
+
                     }
-
                 }
             }
+            else
+            {
+                galaxy[i].velocity = {0.f, 0.f};
+            }
+            
         }
     }
 

@@ -14,6 +14,7 @@
 #include "collision&merge.hpp"
 #include "sort_celestial_body.hpp"
 
+float MAX_VISIBLE_SIZE = 4000.f;
 int GALAXY_DIMENSION;
 
 
@@ -42,40 +43,40 @@ class Application
     public:
 
     void initilize_parameters_from_setter(std::string setter, std::string &render_type, std::string &planetary_system){
-        if(setter == "so"){
+        if(setter == "ss"){
             render_type = "CircleShape";
             planetary_system = "solar_system";
             GALAXY_DIMENSION = 9;
             std::cout << "Simulation set on Solar System with CircleShape!" << std::endl;
         }
-        else if(setter == "s"){
+        else if(setter == "sc"){
             render_type = "CircleShape";
             planetary_system = "sun_centered";
             std::cout << "Simulation set on Sun centered galaxy with CircleShape!" << std::endl;
         }
-        else if(setter == "b"){
+        else if(setter == "bc"){
             render_type = "CircleShape";
             planetary_system = "black_hole_centered";
             std::cout << "Simulation set on Black hole centered galaxy with CircleShape!" << std::endl;
         }
-        else if(setter == "r"){
+        else if(setter == "rc"){
             render_type = "CircleShape";
             planetary_system = "random";
             std::cout << "Simulation set on Random body simulation with CircleShape!" << std::endl;
         }
-        else if(setter == "ss"){
+        else if(setter == "sp"){
             render_type = "Points";
             planetary_system = "sun_centered";
             using_points = true;
             std::cout << "Simulation set on Sun centered galaxy with Points!" << std::endl;
         }
-        else if(setter == "bb"){
+        else if(setter == "bp"){
             render_type = "Points";
             planetary_system = "black_hole_centered";
             using_points = true;
             std::cout << "Simulation set on Black hole centered galaxy with Points!" << std::endl;
         }
-        else if(setter == "rr"){
+        else if(setter == "rp"){
             render_type = "Points";
             planetary_system = "random";
             using_points = true;
@@ -135,10 +136,17 @@ class Application
         std::cout << "Simulator running!" << std::endl;
         
         auto window = sf::RenderWindow(sf::VideoMode(sf::Vector2u{width, height}), "Gravity Simulator");
-        sf::View view(sf::FloatRect({0.f, 0.f}, {(float)width, (float)height}));
-        sf::View view2(sf::FloatRect({0.f, 0.f}, {50.f, 50.f}));
-        view2.setViewport(sf::FloatRect({0.f, 0.f}, {0.04f, 0.04f}));
         window.setVerticalSyncEnabled(true);
+
+        // Main view
+        sf::View view(sf::FloatRect({0.f, 0.f}, {(float)width, (float)height}));
+        view.setCenter({0.f, 0.f});
+
+        // Mini view (e.g. for overview)
+        sf::View view2(sf::FloatRect({0.f, 0.f}, {50.f, 50.f}));
+        view2.setCenter({0.f, 0.f});
+        view2.setViewport(sf::FloatRect({0.f, 0.f}, {0.04f, 0.04f}));
+
 
         sf::Font font;
         std::ignore = font.openFromFile("/home/deshan/Documents/Code/C++/Gravity_simulator/include/arial_narrow_7/arial_narrow_7.ttf");
@@ -191,7 +199,7 @@ class Application
                 else
                 {
                     if(using_points){
-                        Burnes_Hut::compute_forces(galaxy, *q); // Barnes-Hut algorithm very unstable with CircleShape rendering
+                        Barnes_Hut::compute_forces(galaxy, *q); // Barnes-Hut algorithm very unstable with CircleShape rendering
                     }else{
                         Newton::compute_forces(galaxy);
                     }
@@ -199,8 +207,8 @@ class Application
                 
                 /**
                  * @todo 1) correction needed for CircleShape rendering when using Barnes-Hut algorithm, currently unstable.
-                 *       2) ss not working properly (sun escaping from center very fast).
-                 *       3) ...
+                 *       2) sp not working properly (sun escaping from center very fast).
+                 *       3) rp not working properly (simulation crashes randomly)
                  */
                 if(using_points)
                 {

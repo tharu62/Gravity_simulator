@@ -98,7 +98,7 @@ namespace Euler{
             
             body[i].velocity += body[i].acceleration * dt_ss;
             body[i].position += body[i].velocity * dt_ss;
-            circle[i].setPosition(body[i].position * SCALE_FACTOR + sf::Vector2f(640.f, 360.f));
+            circle[i].setPosition(body[i].position * SCALE_FACTOR);
     
         }
         

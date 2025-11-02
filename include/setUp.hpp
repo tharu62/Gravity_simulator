@@ -21,8 +21,8 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
 
     std::random_device rd;
     std::mt19937 eng(rd());
-    std::normal_distribution<double> distribution1{640.0, 640.0};
-    std::normal_distribution<double> distribution2(360.0, 360.0);
+    std::normal_distribution<double> distribution1{0.0, 640.0};
+    std::normal_distribution<double> distribution2(0.0, 360.0);
 
     float rand_1;
     float rand_2;
@@ -33,7 +33,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
         Black_hole bh = Black_hole();
         bh.set_mass();
         bh.radius = 5;
-        bh.position = {640, 360};
+        bh.position = {0, 0};
         bh.prev_position = bh.position;
         bh.velocity = {0.f, 0.f};
         bh.acceleration = {0.f, 0.f};
@@ -44,7 +44,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
         Sun s = Sun();
         s.set_mass();
         s.radius = 109;
-        s.position = {640, 360};
+        s.position = {0, 0};
         s.prev_position = s.position;
         s.velocity = {0.f, 0.f};
         s.acceleration = {0.f, 0.f};
@@ -61,13 +61,12 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
         temp.radius = 2;
         temp.position = {rand_1, rand_2};
         temp.prev_position = temp.position;
-        direction = sf::Vector2f({640, 360}) - temp.position;
+        direction = sf::Vector2f({0, 0}) - temp.position;
         std::ignore = direction.rotatedBy(sf::degrees(180));
         direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y); 
-        direction *=  (float)sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
+        direction *= (float) sqrt(galaxy[0].mass/(sf::Vector2f({0, 0}) - temp.position).length());
         temp.velocity = {-direction.y, direction.x};
-        temp.velocity = {0.f, 0.f};
-        temp.acceleration = {0.f, 0.f};
+        temp.acceleration = temp.velocity * (sf::Vector2f({0, 0}) - temp.position).lengthSquared();
         galaxy[i] = temp;
 
     }
@@ -99,8 +98,8 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
 {
     std::random_device rd;
     std::mt19937 eng(rd());
-    std::normal_distribution<double> distribution1{640.0, 640.0};
-    std::normal_distribution<double> distribution2(360.0, 360.0);
+    std::normal_distribution<double> distribution1{0.0, 640.0};
+    std::normal_distribution<double> distribution2(0.0, 360.0);
 
     float rand_1;
     float rand_2;
@@ -111,7 +110,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
         Black_hole bh = Black_hole();
         bh.set_mass();
         bh.radius = 5;
-        bh.position = {640, 360};
+        bh.position = {0, 0};
         bh.prev_position = bh.position;
         bh.velocity = {0.f, 0.f};
         bh.acceleration = {0.f, 0.f};
@@ -124,7 +123,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
         Sun s = Sun();
         s.set_mass();
         s.radius = 109;
-        s.position = {620, 360};
+        s.position = {0, 0};
         s.prev_position = s.position;
         s.velocity = {0.f, 0.f};
         s.acceleration = {0.f, 0.f};
@@ -143,12 +142,12 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
         temp.radius = 2;
         temp.position = {rand_1, rand_2};
         temp.prev_position = temp.position;
-        direction = sf::Vector2f({640, 360}) - temp.position;
+        direction = sf::Vector2f({0, 0}) - temp.position;
         std::ignore = direction.rotatedBy(sf::degrees(180));
         direction /= (float) sqrt(direction.x*direction.x + direction.y*direction.y);
-        direction *=  (float) sqrt(galaxy[0].mass/(sf::Vector2f({640, 360}) - temp.position).length());
+        direction *= (float) sqrt(galaxy[0].mass/(sf::Vector2f({0, 0}) - temp.position).length());
         temp.velocity = {-direction.y, direction.x};
-        temp.acceleration = temp.velocity * (sf::Vector2f({640, 360}) - temp.position).lengthSquared();
+        temp.acceleration = temp.velocity * (sf::Vector2f({0, 0}) - temp.position).lengthSquared();
         galaxy[i] = temp;
         points[i].position = temp.position;
         points[i].color = sf::Color(255, 255, 255);
@@ -163,14 +162,17 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
 void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 {
 
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::normal_distribution<double> distribution1{0.0, 640.0};
     float rand_1;
     float rand_2;
     srand(time(0));
 
     for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
         int seed = rand()%100;
-        rand_1 = rand()%1280;
-        rand_2 = rand()%720;
+        rand_1 = distribution1(eng);
+        rand_2 = distribution1(eng);
 
         if(seed == 0 || seed > 2){
             Planet temp = Planet();
@@ -228,14 +230,18 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
 void setUp_rand(Celestial_body *galaxy, sf::VertexArray &points)
 {
 
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::normal_distribution<double> distribution1{0.0, 640.0};
+    
     float rand_1;
     float rand_2;
     srand(time(0));
 
     for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
         int seed = rand()%100;
-        rand_1 = rand()%1280;
-        rand_2 = rand()%720;
+        rand_1 = distribution1(eng);
+        rand_2 = distribution1(eng);
 
         if(seed == 0 || seed > 2){
             Planet temp = Planet();

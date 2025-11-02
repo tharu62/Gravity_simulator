@@ -19,25 +19,25 @@ void handle(int size, char* input[])
         std::cout << "  <arg1> = number of bodies to simulate. " << std::endl;
         std::cout << "  <arg2> = type of simulation : " << std::endl;
         std::cout << std::endl;
-        std::cout << "      s  = sun centered galaxy             (Exact Newton gravity acceleration update)" << std::endl;
-        std::cout << "      b  = black hole centered galaxy      (Exact Newton gravity acceleration update)" << std::endl;
-        std::cout << "      r  = pure random body simulation     (Exact Newton gravity acceleration update)" << std::endl;
-        std::cout << "      so = Solar System with CircleShape   (Exact Newton gravity acceleration update)" << std::endl;
+        std::cout << "      sc  = sun centered galaxy with CircleShape          (Exact Newtonian gravity acceleration update)" << std::endl;
+        std::cout << "      bc  = black hole centered galaxy with CircleShape   (Exact Newtonian gravity acceleration update)" << std::endl;
+        std::cout << "      rc  = pure random body simulation with CircleShape  (Exact Newtonian gravity acceleration update)" << std::endl;
+        std::cout << "      ss = Solar System with CircleShape (only)           (Exact Newtonian gravity acceleration update)" << std::endl;
         std::cout << std::endl;
         std::cout << "      **RECOMENDED FOR HIGH NUMBER OF BODIES** " << std::endl;
-        std::cout << "      ss = S with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
-        std::cout << "      bb = B with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
-        std::cout << "      rr = R with ArrayVertex of Points instead of CircleShape for bodies (Barnes-Hut algorithm for acceleration update) " << std::endl;
+        std::cout << "      sp = sun centered galaxy with ArrayVertex of Points             (Barnes-Hut algorithm for acceleration update) " << std::endl;
+        std::cout << "      bp = black hole centered galaxy with ArrayVertex of Points      (Barnes-Hut algorithm for acceleration update) " << std::endl;
+        std::cout << "      rp = pure random body simulation with ArrayVertex of Points     (Barnes-Hut algorithm for acceleration update) " << std::endl;
         std::cout << std::endl;
 
         exit(0);
     }
 
-    if((std::string) input[2] != "s" && (std::string) input[2] != "b" && (std::string) input[2] != "r" && (std::string) input[2] != "so"){
-        if((std::string) input[2] != "ss" && (std::string) input[2] != "bb" && (std::string) input[2] != "rr"){
+    if((std::string) input[2] != "sc" && (std::string) input[2] != "bc" && (std::string) input[2] != "rc" && (std::string) input[2] != "ss"){
+        if((std::string) input[2] != "sp" && (std::string) input[2] != "bp" && (std::string) input[2] != "rp"){
         
-            std::cout << "error: invalid argument." << std::endl;
-            std::cout << "Use the command 'help' to check all possible arguments" << std::endl;
+            std::cerr << "\033[0;31m" << "error: invalid argument." << std::endl;
+            std::cerr << "Use the command 'help' to check all possible correct arguments" << std::endl;
             exit(0);
         }
     }

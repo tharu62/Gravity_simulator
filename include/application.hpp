@@ -153,7 +153,7 @@ class Application
 
 
         sf::Font font;
-        std::ignore = font.openFromFile("/home/deshan/Documents/Code/C++/Gravity_simulator/include/arial_narrow_7/arial_narrow_7.ttf");
+        std::ignore = font.openFromFile("./include/arial_narrow_7/arial_narrow_7.ttf");
         sf::Text framerate(font);
         framerate.setString("0");
         framerate.setCharacterSize(20);

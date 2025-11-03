@@ -51,7 +51,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
         galaxy[0] = s;
     }
 
-    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 1; i < GALAXY_DIMENSION; ++i){
 
         rand_1 = distribution1(eng);
         rand_2 = distribution2(eng);
@@ -71,7 +71,7 @@ void setUp(Celestial_body *galaxy, sf::CircleShape *circle, std::string type = "
 
     }
 
-    for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
 
         circle[i].setRadius(galaxy[i].radius);
         if(galaxy[i].radius == 2){
@@ -132,7 +132,7 @@ void setUp(Celestial_body *galaxy, sf::VertexArray &points, std::string type = "
         points[0].color = sf::Color(255, 0, 0);
     }
     
-    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 1; i < GALAXY_DIMENSION; ++i){
 
         rand_1 = distribution1(eng);
         rand_2 = distribution2(eng);
@@ -169,7 +169,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
     float rand_2;
     srand(time(0));
 
-    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 1; i < GALAXY_DIMENSION; ++i){
         int seed = rand()%100;
         rand_1 = distribution1(eng);
         rand_2 = distribution1(eng);
@@ -206,7 +206,7 @@ void setUp_rand(Celestial_body *galaxy, sf::CircleShape *circle)
         }
     }
 
-    for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
         circle[i].setRadius(galaxy[i].radius);
         if(galaxy[i].radius == 2){
             circle[i].setFillColor(sf::Color(255, 255, 255));
@@ -238,7 +238,7 @@ void setUp_rand(Celestial_body *galaxy, sf::VertexArray &points)
     float rand_2;
     srand(time(0));
 
-    for(u_int32_t i = 1; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 1; i < GALAXY_DIMENSION; ++i){
         int seed = rand()%100;
         rand_1 = distribution1(eng);
         rand_2 = distribution1(eng);
@@ -275,7 +275,7 @@ void setUp_rand(Celestial_body *galaxy, sf::VertexArray &points)
         }
     }
 
-    for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+    for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
         points[i].position = galaxy[i].position;
         if(galaxy[i].radius == 2){
             points[i].color = sf::Color(255, 255, 255);

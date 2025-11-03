@@ -19,7 +19,7 @@ namespace Verlet{
      */
     void update_position(Celestial_body *body, sf::CircleShape *circle){
         
-        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+        for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
             temp = body[i].position;
 
             body[i].position.x = (temp.x * 2) - body[i].prev_position.x + (body[i].acceleration.x * (dt * dt));
@@ -36,7 +36,7 @@ namespace Verlet{
      */
     void update_position(Celestial_body *body, sf::VertexArray &points){
 
-        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+        for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
             temp = body[i].position;
 
             body[i].position.x = (temp.x * 2) - body[i].prev_position.x + (body[i].acceleration.x * (dt * dt));
@@ -62,7 +62,7 @@ namespace Euler{
      */
     void update_position(Celestial_body *body, sf::CircleShape *circle){
 
-        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+        for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
 
@@ -76,7 +76,7 @@ namespace Euler{
     void update_position(Celestial_body *body, sf::VertexArray &points){
  
 
-        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+        for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
             
             body[i].velocity += body[i].acceleration * dt;
             body[i].position += body[i].velocity * dt;
@@ -94,7 +94,7 @@ namespace Euler{
      */
     void update_position_solar_system(Celestial_body *body, sf::CircleShape *circle){
 
-        for(u_int32_t i = 0; i < GALAXY_DIMENSION; ++i){
+        for(uint32_t i = 0; i < GALAXY_DIMENSION; ++i){
             
             body[i].velocity += body[i].acceleration * dt_ss;
             body[i].position += body[i].velocity * dt_ss;

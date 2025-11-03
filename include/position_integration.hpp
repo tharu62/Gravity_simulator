@@ -26,7 +26,6 @@ namespace Verlet{
             body[i].position.y = (temp.y * 2) - body[i].prev_position.y + (body[i].acceleration.y * (dt * dt));
 
             body[i].prev_position = temp;
-
             circle[i].setPosition(body[i].position);
         }
     }
@@ -43,7 +42,6 @@ namespace Verlet{
             body[i].position.y = (temp.y * 2) - body[i].prev_position.y + (body[i].acceleration.y * (dt * dt));
 
             body[i].prev_position = temp;
-
             points[i].position = body[i].position;
         }
         
